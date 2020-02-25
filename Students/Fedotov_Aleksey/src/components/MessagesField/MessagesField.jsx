@@ -30,12 +30,11 @@ export default class Messages extends Component {
 
     addFixMessageHandle(e) {
         e.preventDefault();
-        let msgArr =  this.state.msgArray;
-        msgArr.push({
+        this.setState({msgArray: [...this.state.msgArray, {
             user: 'Bot',
             text: 'It\'s my first react app'
+            }]
         });
-        this.setState({msgArray: msgArr});
     }
 
     render() {
