@@ -32,9 +32,7 @@ export default class Messages extends Component {
     }
 
     handleChanges(event, value) {
-        const newObj = {};
-        newObj[value] = event.target.value;
-        this.setState(Object.assign({}, this.state, newObj));
+        this.setState({...this.state, [event.target.name]: event.target.value});
     }
 
     newMessage() {
@@ -50,8 +48,8 @@ export default class Messages extends Component {
         return (
             <div className="wrapper">
                 <h2>ReactGram &copy;</h2>
-                <input type="text" value={this.state.name} placeholder="user" onChange={(event) => this.handleChanges(event, 'name')}/>
-                <input type="text" value={this.state.text} placeholder="text" onChange={(event) => this.handleChanges(event, 'text')}/>
+                <input type="text" value={this.state.name} placeholder="user" name="user" onChange={this.handleChanges}/>
+                <input type="text" value={this.state.text} placeholder="text" name="text" onChange={this.handleChanges}/>
                 <button onClick={() => this.newMessage()}>Send Message</button>
                 {renderMessages}
             </div>
