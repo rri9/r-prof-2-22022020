@@ -31,7 +31,7 @@ export default class Messages extends Component {
         this.handleChanges = this.handleChanges.bind(this);
     }
 
-    handleChanges(event, value) {
+    handleChanges(event) {
         this.setState({...this.state, [event.target.name]: event.target.value});
     }
 
@@ -48,7 +48,7 @@ export default class Messages extends Component {
         return (
             <div className="wrapper">
                 <h2>ReactGram &copy;</h2>
-                <input type="text" value={this.state.name} placeholder="user" name="user" onChange={this.handleChanges}/>
+                <input type="text" value={this.state.name} placeholder="user" name="name" onChange={this.handleChanges}/>
                 <input type="text" value={this.state.text} placeholder="text" name="text" onChange={this.handleChanges}/>
                 <button onClick={() => this.newMessage()}>Send Message</button>
                 {renderMessages}
