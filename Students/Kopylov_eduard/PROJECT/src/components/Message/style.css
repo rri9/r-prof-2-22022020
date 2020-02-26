@@ -1,0 +1,23 @@
+.msg{
+    background: lightblue;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+}
+
+.btn{
+    padding: 7px;
+    font-size: 25px;
+    border:none;
+    background-color: brown;
+    border-radius: 7px;
+}
+
+.inpt
+{
+    padding: 7px;
+   margin-right: 10px;
+   border-radius: 7px;
+    
+}
