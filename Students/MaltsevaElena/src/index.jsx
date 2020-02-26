@@ -4,7 +4,7 @@ import 'bootstrap'
 
 import Messages from './components/MessagesField/MessageField.jsx'
 
-let user = 'Darth Vader'
+let user = 'You'
 
 ReactDom.render (
    <Messages usr={user}/>,

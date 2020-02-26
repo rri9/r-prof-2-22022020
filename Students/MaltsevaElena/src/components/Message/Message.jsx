@@ -5,7 +5,7 @@ import './style.css'
 let msg = (props) => {
    let { sender, text} = props
    sender ? sender = sender : sender = 'bot'
-   text ? text = text : text = 'Go away!'
+   text ? text = text : text = 'Trolololo'
    return (
       <div className="d-flex flex-column msg">
          <strong>{ sender }</strong>
