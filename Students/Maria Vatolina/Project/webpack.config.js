@@ -4,20 +4,35 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: {
-        main: path.resolve (__dirname, 'src', 'index.js') //'./src/index.js
+        main: path.resolve (__dirname, 'src', 'index.jsx') //'./src/index.js
     },
     output: {
-        path: path.join (__dirname, 'dist', 'public'),
+        path: path.join (__dirname, 'dist'),
         publicPath: '',
         filename: 'js/bundle.js'
     },
-    target: 'web', //'node'
+    mode: 'development', 
+    // mode: 'production',
+    devServer: {
+        contentBase: './dist',
+        port: 3000,
+        hot: true,
+        open: false
+    },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
+                options: {
+                    presets: ["@babel/preset-env", "@babel/preset-react"],
+                    plugins: [
+                        [
+                            "@babel/plugin-proposal-class-properties", {"loose": true}
+                        ]
+                    ]
+                }
             },
             {
                 test: /\.css$/,
@@ -41,8 +56,8 @@ module.exports = {
           ignoreOrder: false,
         }),
         new HtmlWebpackPlugin({ 
-            filename: 'test.html',
-            template: 'src/public/index.html'
+            filename: 'index.html',
+            template: 'src/index.html'
           })
       ]
 }
