@@ -6,6 +6,7 @@ import Messages from './components/MessagesField/MessagesField.jsx';
 
 let user = 'Darth Vader';
 
+/* jshint ignore:start */
 ReactDom.render (
     <Messages usr={ user }/>,
     document.getElementById('app')
