@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Message from './components/Message/Message.jsx';
+import MessageField from './components/MessageField/MessageField.jsx';
 
-const Msgs = [
+const msgs = [
   {
     sender: 'Me',
     text: 'Hello!',
@@ -12,10 +12,17 @@ const Msgs = [
     sender: null,
     text: null,
   },
+  {
+    sender: 'Me',
+    text: 'How are You?',
+  },
+  {
+    sender: null,
+    text: null,
+  },
 ];
-const msg = {sender: 'Me', text: 'Hello!',};
 
 ReactDOM.render(
-  <Message msg = { msg } />,
+  <MessageField msgs = { msgs } />,
   document.getElementById('app'),
 );
