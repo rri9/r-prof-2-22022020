@@ -1,11 +1,13 @@
 import React, {Component } from 'react';
 import ReactDom from 'react-dom';
+import './style.css';
 
 import Message from '../Message/Message.jsx';
 
 export default class Messages extends Component {
     constructor(props) {
         super(props);
+        this.user = props.usr;
         this.state = {
             messages: [
                 {
@@ -25,20 +27,36 @@ export default class Messages extends Component {
                     text: null
                 }
             ],
-            name: '',
-            text: ''
+            msg: ''
         }
-        this.handleChanges = this.handleChanges.bind(this);
     }
 
-    handleChanges(event) {
-        this.setState({...this.state, [event.target.name]: event.target.value});
+    handleChanges = (event) => {
+        event.keyCode !== 13 ?
+            this.setState({msg: event.target.value}) :
+            this.newMessage();
     }
 
-    newMessage() {
-        const newMessages = this.state.messages.slice();
-        newMessages.push({user: this.state.name, text: this.state.text});
-        this.setState({messages: newMessages});
+    componentDidUpdate() {
+        const msgs = this.state.messages;
+        if (msgs.length % 2 === 1) {
+            setTimeout(() => {
+                this.setState(
+                    {
+                        messages: [...this.state.messages, {user: null, text: 'NOOOOOOOOO'}]
+                    }
+                );
+            }, 500);
+        }
+    }
+
+    newMessage = () => {
+        this.setState(
+            {
+                messages: [...this.state.messages, {user: this.user, text: this.state.msg}],
+                msg: ''
+            }
+        );
     }
 
     render() {
@@ -48,10 +66,9 @@ export default class Messages extends Component {
         return (
             <div className="wrapper">
                 <h2>ReactGram &copy;</h2>
-                <input type="text" value={this.state.name} placeholder="user" name="name" onChange={this.handleChanges}/>
-                <input type="text" value={this.state.text} placeholder="text" name="text" onChange={this.handleChanges}/>
-                <button onClick={() => this.newMessage()}>Send Message</button>
                 {renderMessages}
+                <input type="text" value={this.state.msg} placeholder="text" name="text" onChange={this.handleChanges} onKeyUp={this.handleChanges}/>
+                <button onClick={() => this.newMessage()}>Send Message</button>
             </div>
         )
     }

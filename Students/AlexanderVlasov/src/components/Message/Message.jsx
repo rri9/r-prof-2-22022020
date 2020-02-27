@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import './style.css';
 
 export default class Message extends Component {
     constructor(props) {
         super(props);
+        this.sender = this.props.sender ? this.props.sender : 'Bot'
+        this.text = this.props.text ? this.props.text : 'go away';
     }
     render() {
-        let { sender, text } = this.props;
-        sender ? sender = sender : sender = 'Bot';
-        text ? text = text : text = 'go away';
         return (
         <div className="d-flex flex-column msg">
-            <strong>{sender}</strong>
-            <p>{text}</p>
+            <strong>{this.sender}</strong>
+            <p>{this.text}</p>
         </div>
         )
     }
