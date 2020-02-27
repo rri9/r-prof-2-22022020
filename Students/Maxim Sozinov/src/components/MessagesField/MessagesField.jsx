@@ -46,8 +46,9 @@ export default class Messages extends Component {
     componentDidUpdate () {
 
         let msgs = this.state.msgArray
+        const lastMsg = msgs[msgs.length - 1]
 
-        if (msgs.length % 2 === 1) {
+        if (lastMsg.user === this.props.usr) {
             setTimeout(() => {
                 this.setState ({
                     msgArray: [...msgs, { user: null, text: 'NOOOOOOOOOO...' }],
@@ -61,7 +62,7 @@ export default class Messages extends Component {
         let { usr } = this.props;
         
 
-        let MessagesArr = this.state.msgArray.map(message => <Message sender={ message.user } text={ message.text }/>)
+        let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
 
         return (
             <div className="wrapper">
