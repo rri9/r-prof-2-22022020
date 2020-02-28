@@ -68,15 +68,15 @@ export default class Messages extends Component {
         let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
 
         return (
-            <Container className="d-flex flex-column ewq ">
-                <h2>ReactGram &copy;</h2>
-                <p>Hello { usr }!</p>
+            <Container className="d-flex flex-column justify-content-end h-75">
+                
 
-                <div className="d-flex flex-column qwe">
+
+                <div className="d-flex flex-column overflow-auto">
                     { MessagesArr }
                 </div>
                
-                <Row className="flex-nowrap m-auto">
+                <Row className="flex-nowrap">
                     <Form.Control
                         type="text"
                         className="m-2"
