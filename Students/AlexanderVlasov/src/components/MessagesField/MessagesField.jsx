@@ -3,6 +3,8 @@ import ReactDom from 'react-dom';
 import './style.css';
 
 import Message from '../Message/Message.jsx';
+import { Input, Fab, TextField } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send'; 
 
 export default class Messages extends Component {
     constructor(props) {
@@ -64,11 +66,23 @@ export default class Messages extends Component {
             return <Message key={index} sender={obj.user} text={obj.text}/>
         })
         return (
-            <div className="wrapper">
-                <h2>ReactGram &copy;</h2>
+            <div className="wrapper flex-grow-1">
                 {renderMessages}
-                <input type="text" value={this.state.msg} placeholder="text" name="text" onChange={this.handleChanges} onKeyUp={this.handleChanges}/>
-                <button onClick={() => this.newMessage()}>Send Message</button>
+                <div className="d-flex">
+                    <TextField 
+                        className="flex-grow-1"
+                        label="Новое сообщение"
+                        value={this.state.msg}
+                        onChange={this.handleChanges} 
+                        onKeyUp={this.handleChanges}
+                        variant="outlined"
+                    />
+                    <Fab 
+                        color="primary" 
+                        onClick={this.newMessage} >
+                        <SendIcon />
+                    </Fab>
+                </div>
             </div>
         )
     }
