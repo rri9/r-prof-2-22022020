@@ -13,13 +13,13 @@ import './style.css';
 
   export default class Button extends Component {
 
-        state = {user: "Darth", text: "Feel the Force!"}
+        states = {user: "Darth", text: "Feel the Force!"}
   
 
 
     render() {
         return (
-            <button className="btn btn-primary" type="button" onClick={() => {this.props.sendMessage(this.state.text, this.state.user)}}>Запостить</button>
+            <button className="btn btn-primary" type="button" onClick={() => {this.props.sendMessage(this.states.text, this.states.user)}}>Запостить</button>
         )
     }
 }
