@@ -1,7 +1,16 @@
-.msg {
+.msgAuthor {
     background-color: lightblue;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 18px;
     margin: 5px;
+    align-self: flex-end;
+}
+.msgBot {
+    background-color: lawngreen;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+    align-self: flex-start;
 }

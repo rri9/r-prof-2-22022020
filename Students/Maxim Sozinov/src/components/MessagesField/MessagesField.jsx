@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
+import { Button, Form, Row, Container } from 'react-bootstrap';
+
 // import ReactDom from 'react-dom';
+import './style.css';
 
 import Message from '../Message/Message.jsx';
 
@@ -65,20 +68,30 @@ export default class Messages extends Component {
         let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
 
         return (
-            <div className="wrapper">
-                <h2>ReactGram &copy;</h2>
-                <p>Hello { usr }!</p>
-                <textarea
-                    className="d-block m-2"
-                    onChange={ this.handleChange }
-                    onKeyUp= { this.handleChange }
-                    value = { this.state.newMessage }
-                    rows="3"
-                    cols="40"
-                />
-                <button className="btn btn-primary mx-2 mb-4" onClick={ this.addNewMessage }>Send Message</button>
-                { MessagesArr }
-            </div>
+            <Container className="d-flex flex-column justify-content-end h-75">
+                
+
+
+                <div className="d-flex flex-column overflow-auto">
+                    { MessagesArr }
+                </div>
+               
+                <Row className="flex-nowrap">
+                    <Form.Control
+                        type="text"
+                        className="m-2"
+                        placeholder="type here"
+                        onChange={ this.handleChange }
+                        onKeyUp= { this.handleChange }
+                        value = { this.state.newMessage }
+                    />
+                    
+                    <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
+                </Row>
+
+
+
+            </Container>
         )
 
     }
