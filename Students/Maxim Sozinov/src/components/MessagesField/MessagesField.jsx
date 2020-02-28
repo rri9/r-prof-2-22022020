@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Form, Row, Container } from 'react-bootstrap';
 
 // import ReactDom from 'react-dom';
+import './style.css';
 
 import Message from '../Message/Message.jsx';
 
@@ -67,9 +68,13 @@ export default class Messages extends Component {
         let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
 
         return (
-            <div className="wrapper">
+            <Container className="d-flex flex-column ewq ">
                 <h2>ReactGram &copy;</h2>
                 <p>Hello { usr }!</p>
+
+                <div className="d-flex flex-column qwe">
+                    { MessagesArr }
+                </div>
                
                 <Row className="flex-nowrap m-auto">
                     <Form.Control
@@ -84,12 +89,9 @@ export default class Messages extends Component {
                     <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
                 </Row>
 
-                <div className="d-flex flex-column">
-                    { MessagesArr }
-                </div>
 
-            </
-        div>
+
+            </Container>
         )
 
     }
