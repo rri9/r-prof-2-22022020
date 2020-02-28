@@ -8,6 +8,7 @@ export default class Messages extends Component {
         super(props)
         //где-то тут...
         this.state = {
+            msg: "",
             msgArray: [{
                     user: 'Darth Vader',
                     text: 'Hallo'
@@ -29,26 +30,54 @@ export default class Messages extends Component {
     }
 
     addFixMessageHandle(e) {
-        e.preventDefault();
         this.setState({msgArray: [...this.state.msgArray, {
-            user: 'Bot',
-            text: 'It\'s my first react app'
-            }]
+            user: 'I',
+            text: this.state.msg
+            }],
+            msg: ""
         });
+        //e.target.value = "";
     }
 
+    handleChange = (e) => {
+        e.keyCode !== 13 ? //не нажимаем enter
+            this.setState({msg: e.target.value}) : 
+            this.addFixMessageHandle(e);
+    }
+
+    //hooks
+        componentDidUpdate() {
+            // console.log('updated');
+            let msgs = this.state.msgArray;
+            if (msgs.length % 2 === 1) {
+                setTimeout(() => {
+                    this.setState({msgArray: [...this.state.msgArray, {
+                        user: 'Bot',
+                        text: 'any answer'
+                        }]
+                    });
+                }, 500)
+            }
+        }
+    //
     render() {
-        //let user = this.props.usr
         let { usr } = this.props
 
-        let MessagesArr = this.state.msgArray.map(message => <Message sender={ message.user } text={ message.text }/>)
+        let MessagesArr = this.state.msgArray.map((message, index) => <Message key = {index} sender={ message.user } text={ message.text }/>)
 
         return (
             <div className="wrapper">
                 <h2>ReactGram &copy;</h2>
                 <p>Hello { usr }!</p>
+                <div>
+                    { MessagesArr }
+                </div>
+                <input type="text" 
+                    onChange = {this.handleChange} 
+                    onKeyUp = {this.handleChange}
+                    value = {this.state.msg}
+                />
                 <button onClick = {this.addFixMessageHandle}>add fixMessage</button>
-                { MessagesArr }
             </div>
         )
     }
