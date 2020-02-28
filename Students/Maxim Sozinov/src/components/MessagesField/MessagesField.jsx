@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { Button, Form, Row } from 'react-bootstrap';
+
 // import ReactDom from 'react-dom';
 
 import Message from '../Message/Message.jsx';
@@ -68,15 +70,20 @@ export default class Messages extends Component {
             <div className="wrapper">
                 <h2>ReactGram &copy;</h2>
                 <p>Hello { usr }!</p>
-                <textarea
-                    className="d-block m-2"
-                    onChange={ this.handleChange }
-                    onKeyUp= { this.handleChange }
-                    value = { this.state.newMessage }
-                    rows="3"
-                    cols="40"
-                />
-                <button className="btn btn-primary mx-2 mb-4" onClick={ this.addNewMessage }>Send Message</button>
+               
+                <Row className="flex-nowrap m-auto">
+                    <Form.Control
+                        type="text"
+                        className="m-2"
+                        placeholder="type here"
+                        onChange={ this.handleChange }
+                        onKeyUp= { this.handleChange }
+                        value = { this.state.newMessage }
+                    />
+                    
+                    <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
+                </Row>
+
                 { MessagesArr }
             </div>
         )
