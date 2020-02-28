@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { ThemeProvider, createMuiTheme, CssBaseline, Container, Fab } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import { ThemeProvider, createMuiTheme, CssBaseline, Container, Fab, Grid } from "@material-ui/core";
 
 import '../node_modules/bootstrap/dist/css/bootstrap-grid.css';
 import 'typeface-roboto';
 
 import Messages from './components/MessagesField/MessagesField.jsx';
 import Header from './components/Header/Header.jsx';
+import ChatList from './components/ChatList/ChatList.jsx';
 
 const theme = createMuiTheme({
     typography: {
@@ -32,15 +32,20 @@ ReactDom.render(
         <CssBaseline></CssBaseline>
         <Container maxWidth="lg">
             <Header usr={ user }/>
-            <div className="d-flex">
-                <div className="chat-list">
-                <Fab color="primary" aria-label="add">
-                    <AddIcon />
-                </Fab>
-                Создать чат
-                </div>
-                <Messages usr={ user }/>
-            </div>
+            <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="flex-start"
+                spacing={1}
+            >
+                <Grid item xs={3}>
+                    <ChatList />
+                </Grid>
+                <Grid item xs={9}>
+                    <Messages usr={ user }/>
+                </Grid>
+            </Grid>
         </Container>
     </ThemeProvider>, 
     document.getElementById("app")
