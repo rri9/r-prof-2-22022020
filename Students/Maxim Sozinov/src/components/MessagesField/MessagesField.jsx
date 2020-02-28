@@ -84,8 +84,12 @@ export default class Messages extends Component {
                     <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
                 </Row>
 
-                { MessagesArr }
-            </div>
+                <div className="d-flex flex-column">
+                    { MessagesArr }
+                </div>
+
+            </
+        div>
         )
 
     }
