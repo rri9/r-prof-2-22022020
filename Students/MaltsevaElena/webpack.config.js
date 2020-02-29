@@ -46,6 +46,10 @@ module.exports = {
                },
                'css-loader',
             ],
+         },
+         {
+            test: /\.(ttf|woff|woff2|eot)$/,
+            use: ['file-loader'],
          }
       ]
    },
