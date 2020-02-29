@@ -1,64 +1,115 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import './style.css';
+
+import { TextField, FloatingActionButton } from '@material-ui/core';
+import Input from '@material-ui/core/Input';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
 
 import Message from '../Message/Message.jsx'
 
 export default class Messages extends Component {
     constructor(props) {
         super(props)
-        //где-то тут... 
+        
         this.state = {
           msgArray: [
             {
                 user: 'Darth Vader',
-                body: 'Hallo'
+                text: 'Hallo'
             },
             {
                 user: null,
-                body: null
+                text: null
             },
             {
                 user: 'Darth Vader',
-                body: 'I am your father'
+                text: 'I am your father'
             },
             {
                 user: null,
-                body: 'NOOOOOOOOO'
+                text: 'NOOOOOOOOO'
             }
           ]
         }
     }
 
-    sendMessage = () => {
+    sendMessage = (e) => {
         this.setState ({
             msgArray: [...this.state.msgArray, {
-              user: 'SysAdmin',
-              text: document.querySelector(".msg_body").value
-            }]
+              user: this.props.usr,
+              text: this.state.msg
+            }],
+            msg: '' // clear input field
         })
-        // clear input field
-        document.querySelector(".msg_body").value = '';
     }
 
+    handleChange = (e) => {
+        e.keyCode === 13 ? this.sendMessage(e)
+          : this.setState ({msg: e.target.value})
+    }
+    
+    componentDidUpdate () {
+        if (this.state.msgArray.length % 2 === 1) {
+            setTimeout(() => {
+                this.setState ({
+                    msgArray: [...this.state.msgArray, 
+                      {
+                        user: null,
+                        text: 'у меня все ходы записаны, кстати...' 
+                      }
+                    ],
+                    msg: ''
+                })
+            }, 500)
+        }
+    }
+    
     render() {
-        //let user = this.props.usr
         let { usr } = this.props
-        let MessagesArr = this.state.msgArray.map(
-          message => <Message sender={ message.user } text={ message.text }/>
+        const placeholder = `Пишите, ${usr}`
+        let MessagesArr = this.state.msgArray.map( (message, index) => 
+          <Message
+            sender={ message.user }
+            text={ message.text }
+            key={ index }
+          />
         )
 
         return (
             <div className="wrapper">
+            
                 <h2>ReactGram&trade;</h2>
+                
                 <p>Hello { usr }!</p>
+                
                 { MessagesArr }
-                <footer class="fixed-bottom">
-                    <div class="d-flex justify-center align-center">
-                        <input type="text" class="msg_body" placeholder="Введите cвоё сообщение" />
-                        <button class="msg_btn" type="button" onClick = { this.sendMessage }>Отправить</button>
+                
+                <footer className="fixed-bottom">
+                
+                    <div className="d-flex justify-center align-center">
+                    
+                        
+                        <TextField
+                          variant = "outlined"
+                          placeholder = { placeholder }
+                          onChange = { this.handleChange }
+                          onKeyUp = { this.handleChange }
+                          value = { this.state.msg || ''}
+                        />
+                        &nbsp;
+                        <Fab
+                          color="primary"
+                          aria-label="add"
+                          onClick = { this.sendMessage }
+                        >
+                          <Icon>send</Icon>
+                        </Fab>
+
                     </div>
+                    
                 </footer>
+                
             </div>
         )
     }
