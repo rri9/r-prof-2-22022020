@@ -4,35 +4,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: {
-        main: path.resolve (__dirname, 'src', 'index.jsx') //'./src/index.jsx
+        main: path.resolve (__dirname, 'src', 'index.js') //'./src/index.js
     },
     output: {
-        path: path.join (__dirname, 'dist'),
+        path: path.join (__dirname, 'dist', 'public'),
         publicPath: '',
         filename: 'js/bundle.js'
     },
-    mode: 'development', //'production'
-    // mode: 'production',
-    devServer: {
-        contentBase: './dist',
-        port: 3000,
-        hot: true,
-        open: true
-    },
+    target: 'web', //'node'
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-                options: {
-                    presets: ["@babel/preset-env", "@babel/preset-react"],
-                    plugins: [
-                        [
-                            "@babel/plugin-proposal-class-properties", {"loose": true}
-                        ]
-                    ]
-                }
+                loader: 'babel-loader'
             },
             {
                 test: /\.css$/,
@@ -40,7 +25,7 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: '../', //?
+                            publicPath: '../',
                             hmr: process.env.NODE_ENV === 'development',
                         },
                     },
@@ -56,8 +41,8 @@ module.exports = {
           ignoreOrder: false,
         }),
         new HtmlWebpackPlugin({ 
-            filename: 'index.html',
-            template: 'src/index.html'
+            filename: 'test.html',
+            template: 'src/public/index.html'
           })
       ]
 }
