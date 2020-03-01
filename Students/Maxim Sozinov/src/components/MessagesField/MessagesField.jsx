@@ -1,64 +1,98 @@
 import React, {Component} from 'react';
-import ReactDom from 'react-dom';
+import { Button, Form, Row, Container } from 'react-bootstrap';
+
+// import ReactDom from 'react-dom';
+import './style.css';
 
 import Message from '../Message/Message.jsx';
 
 export default class Messages extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-         msgArray: [{
-                user: 'Darth Vader',
-                text: 'Hallo'
-            },
-            {
-                user: null,
-                text: null
-            },
-            {
-                user: 'Darth Vader',
-                text: 'I am your father'
-            },
-            {
-                user: null,
-                text: 'NOOOOOOOOO'
-            }],
+    }
+    state = {
+        msgArray: [{
+               user: 'Darth Vader',
+               text: 'Hallo'
+           },
+           {
+               user: null,
+               text: null
+           },
+           {
+               user: 'Darth Vader',
+               text: 'I am your father'
+           },
+           {
+               user: null,
+               text: 'NOOOOOOOOO'
+           }],
 
+           newMessage: ''
+       };
+/* jshint ignore:start */
+    addNewMessage = () => {
+        this.setState({
+            msgArray: this.state.msgArray.concat({user: this.props.usr, text: this.state.newMessage}),
             newMessage: ''
-        };
-
-        this.addNewMessage = this.addNewMessage.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    addNewMessage () {
-        this.setState({
-            msgArray: this.state.msgArray.concat({user: 'Darth Vader', text: this.state.newMessage})
         });
     }
 
-    handleChange (event) {
-        this.setState({
-            newMessage: event.target.value
-        });
+    handleChange = (event) => {
+        event.keyCode !== 13 ?
+            this.setState({
+                newMessage: event.target.value
+            }) :
+            this.addNewMessage()
+    }
+
+    componentDidUpdate () {
+
+        let msgs = this.state.msgArray
+        const lastMsg = msgs[msgs.length - 1]
+
+        if (lastMsg.user === this.props.usr) {
+            setTimeout(() => {
+                this.setState ({
+                    msgArray: [...msgs, { user: null, text: 'NOOOOOOOOOO...' }],
+                })
+            }, 500)
+        }
     }
 
     render() {
         //let user = this.props.usr
         let { usr } = this.props;
         
-/* jshint ignore:start */
-        let MessagesArr = this.state.msgArray.map(message => <Message sender={ message.user } text={ message.text }/>)
+
+        let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
 
         return (
-            <div className="wrapper">
-                <h2>ReactGram &copy;</h2>
-                <p>Hello { usr }!</p>
-                <textarea className="d-block m-2" onChange={ this.handleChange } value = { this.state.newMessage } rows="3" cols="40" />
-                <button className="btn btn-primary mx-2 mb-4" onClick={ this.addNewMessage }>Send Message</button>
-                { MessagesArr }
-            </div>
+            <Container className="d-flex flex-column justify-content-end h-75">
+                
+
+
+                <div className="d-flex flex-column overflow-auto">
+                    { MessagesArr }
+                </div>
+               
+                <Row className="flex-nowrap">
+                    <Form.Control
+                        type="text"
+                        className="m-2"
+                        placeholder="type here"
+                        onChange={ this.handleChange }
+                        onKeyUp= { this.handleChange }
+                        value = { this.state.newMessage }
+                    />
+                    
+                    <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
+                </Row>
+
+
+
+            </Container>
         )
-/* jshint ignore:end */
+
     }
 }
