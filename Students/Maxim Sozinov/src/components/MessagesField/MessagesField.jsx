@@ -6,31 +6,19 @@ import './style.css';
 
 import Message from '../Message/Message.jsx';
 
-export default class Messages extends Component {
+import { sendMessage } from '../../store/actions/messages_actions.js';
+
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+
+class Messages extends Component {
     constructor(props) {
         super(props);
     }
     state = {
-        msgArray: [{
-               user: 'Darth Vader',
-               text: 'Hallo'
-           },
-           {
-               user: null,
-               text: null
-           },
-           {
-               user: 'Darth Vader',
-               text: 'I am your father'
-           },
-           {
-               user: null,
-               text: 'NOOOOOOOOO'
-           }],
-
            newMessage: ''
        };
-/* jshint ignore:start */
+
     addNewMessage = () => {
         this.setState({
             msgArray: this.state.msgArray.concat({user: this.props.usr, text: this.state.newMessage}),
@@ -63,9 +51,15 @@ export default class Messages extends Component {
     render() {
         //let user = this.props.usr
         let { usr } = this.props;
+        let { messages } = this.props;
         
 
-        let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
+        let MessagesArr = [];
+
+        Object.keys(messages).forEach(key => {
+            MessagesArr.push( <Message key={ key } sender={ messages[key].user } text={ messages[key].text }/> )
+        })
+
 
         return (
             <Container className="d-flex flex-column justify-content-end h-75">
@@ -96,3 +90,11 @@ export default class Messages extends Component {
 
     }
 }
+
+const mapStateToProps = ({ msgReducer }) => ({
+    messages: msgReducer.messages
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch )
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messages)
