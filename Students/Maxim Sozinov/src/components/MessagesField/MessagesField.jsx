@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { Button, Form, Row, Container } from 'react-bootstrap';
-
 // import ReactDom from 'react-dom';
+
+import { Button, Form, Row, Container } from 'react-bootstrap';
 import './style.css';
 
 import Message from '../Message/Message.jsx';
@@ -19,9 +19,12 @@ class Messages extends Component {
            newMessage: ''
        };
 
-    addNewMessage = () => {
+    addNewMessage = (text, sender) => {
+        const { messages } = this.props;
+        const messageId = Object.keys(messages).length + 1;
+
+        this.props.sendMessage(messageId, sender, text);
         this.setState({
-            msgArray: this.state.msgArray.concat({user: this.props.usr, text: this.state.newMessage}),
             newMessage: ''
         });
     }
@@ -31,28 +34,25 @@ class Messages extends Component {
             this.setState({
                 newMessage: event.target.value
             }) :
-            this.addNewMessage()
+            this.addNewMessage(this.state.newMessage, this.props.usr)
     }
 
     componentDidUpdate () {
 
-        let msgs = this.state.msgArray
-        const lastMsg = msgs[msgs.length - 1]
+        const { messages } = this.props;
+        const lastMsg = messages[Object.keys(messages).length]
 
         if (lastMsg.user === this.props.usr) {
             setTimeout(() => {
-                this.setState ({
-                    msgArray: [...msgs, { user: null, text: 'NOOOOOOOOOO...' }],
-                })
+                    this.addNewMessage( 'NOOOOOOOOOO...', null)
             }, 500)
         }
     }
 
     render() {
-        //let user = this.props.usr
+
         let { usr } = this.props;
         let { messages } = this.props;
-        
 
         let MessagesArr = [];
 
@@ -63,13 +63,11 @@ class Messages extends Component {
 
         return (
             <Container className="d-flex flex-column justify-content-end h-75">
-                
-
 
                 <div className="d-flex flex-column overflow-auto">
                     { MessagesArr }
                 </div>
-               
+
                 <Row className="flex-nowrap">
                     <Form.Control
                         type="text"
@@ -79,11 +77,9 @@ class Messages extends Component {
                         onKeyUp= { this.handleChange }
                         value = { this.state.newMessage }
                     />
-                    
-                    <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
+
+                    <Button className="m-2" onClick={ () => this.addNewMessage (this.state.newMessage, usr) }>Send&nbsp;Message</Button>
                 </Row>
-
-
 
             </Container>
         )
