@@ -5,3 +5,10 @@
     font-size: 18px;
     margin: 5px;
 }
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+  }
+.header{
+    text-align: center;
+}
