@@ -27,5 +27,6 @@ module.exports = {
         "semi": "warn",
         "no-unused-vars": "warn",
         "react/state-in-constructor": "off",
+        "react/no-string-refs": "warn",
     }
 };

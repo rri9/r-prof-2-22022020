@@ -38,7 +38,7 @@ class Messages extends Component {
     }
 
     componentDidMount() {
-        let block = document.getElementById("block");
+        let block = this.refs["msgBlock"];
         block.scrollTop = block.scrollHeight;
     }
 
@@ -52,7 +52,7 @@ class Messages extends Component {
                     this.addNewMessage( 'NOOOOOOOOOO...', null);
             }, 500);
         }
-        let block = document.getElementById("block");
+        let block = this.refs["msgBlock"];
         block.scrollTop = block.scrollHeight;
     }
 
@@ -69,9 +69,9 @@ class Messages extends Component {
 
 
         return (
-            <Container className="d-flex flex-column justify-content-end h-75">
+            <Container className="d-flex flex-column justify-content-end h-100 col-10">
 
-                <div className="d-flex flex-column overflow-auto" id="block">
+                <div className="d-flex flex-column overflow-auto" ref="msgBlock">
                     { MessagesArr }
                 </div>
 
