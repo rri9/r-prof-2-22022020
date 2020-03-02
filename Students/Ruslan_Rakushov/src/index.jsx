@@ -1,7 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
 import MessageField from './components/MessageField/MessageField.jsx';
+
+const theme = createMuiTheme({
+  //TODO add some theme styles
+});
 
 const msgs = [
   {
@@ -23,6 +28,8 @@ const msgs = [
 ];
 
 ReactDOM.render(
-  <MessageField msgs = { msgs } />,
+  <MuiThemeProvider theme={theme}>
+    <MessageField msgs={msgs} />
+  </MuiThemeProvider>,
   document.getElementById('app'),
 );

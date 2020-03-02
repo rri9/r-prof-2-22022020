@@ -1,8 +1,25 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 
-import './MessageField.css';
 import Message from '../Message/Message.jsx';
+
+//UI Components
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import {IconButton, TextField, Tooltip } from '@material-ui/core';
+// import SendOutlinedIcon from '@material-ui/icons/SendOutlinedIcon';
+import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
+import { Card, CardContent} from '@material-ui/core';
+
+const useStyles = (theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '400px',
+    padding: '5px',
+  }
+}));
 
 class MessageField extends React.Component {
   constructor(props) {
@@ -47,24 +64,36 @@ class MessageField extends React.Component {
   }
 
   render() {
-    let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg}/>);
+    const { classes } = this.props;
+    let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg} />);
     return (
       <div className="wrapper">
         <h2>ReactGram &copy;</h2>
-        <div className="sendMsgField">
-          <input type="text" name="msg" id="msg" placeholder="Введите сообщение"
-            onChange={this.handleChange}
-            onKeyUp = {this.handleChange}
-            value = {this.state.msgText}
-          />
-          <button type="button" name="sendMsg" onClick={ this.sendMsg }>
-            Отправить
-          </button>
+        <div className={classes.root}>
+          { MessagesArr }
         </div>
-        { MessagesArr }
+        <div className="sendMsgField">
+          <Tooltip title="Введите текст сообщения">
+            <TextField
+              variant="outlined"
+              size="small"
+              onChange={this.handleChange}
+              onKeyUp = {this.handleChange}
+              value = {this.state.msgText}
+              />
+          </Tooltip>
+          <Tooltip title="Отправить">
+              <IconButton
+              // size="small"
+              name="sendMsgUI"
+              onClick={this.sendMsg}>
+                <SendOutlinedIcon />
+              </IconButton>
+          </Tooltip>
+        </div>
       </div>
     );
   }
 }
 
-export default MessageField;
+export default withStyles(useStyles)(MessageField);
