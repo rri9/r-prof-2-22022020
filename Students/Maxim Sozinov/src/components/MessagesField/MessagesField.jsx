@@ -17,7 +17,7 @@ class Messages extends Component {
     }
     state = {
            newMessage: ''
-       };
+       }
 
     addNewMessage = (text, sender) => {
         const { messages } = this.props;
@@ -34,19 +34,26 @@ class Messages extends Component {
             this.setState({
                 newMessage: event.target.value
             }) :
-            this.addNewMessage(this.state.newMessage, this.props.usr)
+            this.addNewMessage(this.state.newMessage, this.props.usr);
+    }
+
+    componentDidMount() {
+        let block = document.getElementById("block");
+        block.scrollTop = block.scrollHeight;
     }
 
     componentDidUpdate () {
 
         const { messages } = this.props;
-        const lastMsg = messages[Object.keys(messages).length]
+        const lastMsg = messages[Object.keys(messages).length];
 
         if (lastMsg.user === this.props.usr) {
             setTimeout(() => {
-                    this.addNewMessage( 'NOOOOOOOOOO...', null)
-            }, 500)
+                    this.addNewMessage( 'NOOOOOOOOOO...', null);
+            }, 500);
         }
+        let block = document.getElementById("block");
+        block.scrollTop = block.scrollHeight;
     }
 
     render() {
@@ -57,14 +64,14 @@ class Messages extends Component {
         let MessagesArr = [];
 
         Object.keys(messages).forEach(key => {
-            MessagesArr.push( <Message key={ key } sender={ messages[key].user } text={ messages[key].text }/> )
-        })
+            MessagesArr.push( <Message key={ key } sender={ messages[key].user } text={ messages[key].text }/> );
+        });
 
 
         return (
             <Container className="d-flex flex-column justify-content-end h-75">
 
-                <div className="d-flex flex-column overflow-auto">
+                <div className="d-flex flex-column overflow-auto" id="block">
                     { MessagesArr }
                 </div>
 
@@ -82,7 +89,7 @@ class Messages extends Component {
                 </Row>
 
             </Container>
-        )
+        );
 
     }
 }
@@ -91,6 +98,6 @@ const mapStateToProps = ({ msgReducer }) => ({
     messages: msgReducer.messages
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch )
+const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Messages)
+export default connect(mapStateToProps, mapDispatchToProps)(Messages);

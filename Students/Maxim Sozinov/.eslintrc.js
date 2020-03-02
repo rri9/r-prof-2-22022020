@@ -21,9 +21,11 @@ module.exports = {
     "plugins": [
         "react"
     ],
+    "parser": "babel-eslint",
     "rules": {
         "react/prop-types": "off",
         "semi": "warn",
         "no-unused-vars": "warn",
+        "react/state-in-constructor": "off",
     }
 };

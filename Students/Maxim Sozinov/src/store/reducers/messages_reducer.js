@@ -1,33 +1,58 @@
 import update from 'immutability-helper';
 
-import { SEND_MSG, } from '../actions/messages_actions.js';
+import {
+   SEND_MSG,
+} from '../actions/messages_actions.js';
 
 const initialStore = {
    messages: {
       1: {
          user: 'Darth Vader',
          text: 'Hallo'
-     },
-     2: {
+      },
+      2: {
          user: null,
          text: null
-     },
-     3: {
+      },
+      3: {
          user: 'Darth Vader',
          text: 'I am your father'
-     },
-     4: {
+      },
+      4: {
          user: null,
          text: 'NOOOOOOOOO'
-     }
+      },
+      5: {
+         user: 'Darth Vader',
+         text: 'Hallo'
+      },
+      6: {
+         user: null,
+         text: null
+      },
+      7: {
+         user: 'Darth Vader',
+         text: 'I am your father'
+      },
+      8: {
+         user: null,
+         text: 'NOOOOOOOOO'
+      }
    },
 };
 
-export default function msgReducer ( store = initialStore, action ) {
-   switch ( action.type ) {
+export default function msgReducer(store = initialStore, action) {
+   switch (action.type) {
       case SEND_MSG: {
-         return update( store, {
-            messages: { $merge: { [action.messageId]: { user: action.sender, text: action.text } } }
+         return update(store, {
+            messages: {
+               $merge: {
+                  [action.messageId]: {
+                     user: action.sender,
+                     text: action.text
+                  }
+               }
+            }
          });
       }
       default:

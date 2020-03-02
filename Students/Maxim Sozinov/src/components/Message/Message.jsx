@@ -13,8 +13,8 @@ let msg = (props) => {
 
     return  (
     <div className={`d-flex flex-column ${position}`}>
-        <strong>{ sender }</strong>
-        <p>{ props.sender || (!props.sender && text) ? text : 'go away plz...' }</p>
+        <p className="font-weight-bold">{ sender }</p>
+        <p className="">{ props.sender || (!props.sender && text) ? text : 'go away plz...' }</p>
     </div>
     );
 
