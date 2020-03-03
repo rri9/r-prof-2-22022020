@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
-import MessageField from './components/MessageField/MessageField.jsx';
+import Layout from './components/layout/Layout.jsx';
+
 
 const theme = createMuiTheme({
   //TODO add some theme styles
@@ -29,7 +30,7 @@ const msgs = [
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
-    <MessageField msgs={msgs} />
+    <Layout msgs={msgs} />
   </MuiThemeProvider>,
   document.getElementById('app'),
 );

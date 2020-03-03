@@ -6,32 +6,40 @@ import { red } from '@material-ui/core/colors';
   
 // import './Message.css';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((props) => ({
   root: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 'fit-content',
     backgroundColor: 'skyblue',
     padding: '5px',
     margin: '5px 0',
     '& span': {
       fontWeight: 'bold',
-    }
-    //TODO display flex и выровнять отправителя Me по правому краю
+    },
+    '& p': {
+      margin: '5px 0 0 0',
+    },
+    alignSelf: props => 
+      props.msg.sender ? 'flex-end' : 'flex-start',
   },
   userAnswer: {
-    float: 'right',
+    alignSelf: 'flex-end',
   },
   botAnswer: {
-
+    alignSelf: 'flex-start',
   }
 }));
 
 const Message = (props) => {
-  const classes = useStyles();
+  const classes = useStyles(props);
   const sender = props.msg.sender ? props.msg.sender : 'Bot';
   const text = (props.msg.sender || props.msg.text) ? props.msg.text : 'Bot answering smth...';
   const msgStyle = props.msg.sender ? classes.userAnswer : classes.botAnswer;
+
   return (
-    <Paper className={classes.root}>
-      <span className={msgStyle}> { sender } </span>
+    <Paper className = {classes.root}>
+      <span className={msgStyle}> { sender }: </span>
         <p>{ text }</p>
     </Paper>
   );

@@ -5,21 +5,39 @@ import Message from '../Message/Message.jsx';
 
 //UI Components
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 import {IconButton, TextField, Tooltip } from '@material-ui/core';
-// import SendOutlinedIcon from '@material-ui/icons/SendOutlinedIcon';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
-import { Card, CardContent} from '@material-ui/core';
 
 const useStyles = (theme => ({
+  wrapper: {
+    width: '70vh',
+  },
   root: {
-    width: '400px',
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '75vh',
     padding: '5px',
-  }
+    border: '1px solid grey',
+    borderRadius: '5px',
+    backgroundColor: 'lightgrey',
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+    //TODO Scroll to bottom
+  },
+  sendMsgField: {
+    width: '400px',
+    margin: '10px 0px',
+    display: 'flex',
+  },
+  sendText: {
+    width: 'inherit',
+  },
+  sendBtn: {
+    padding: '8px',
+  },
 }));
 
-class MessageField extends React.Component {
+class MessageField extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,13 +84,13 @@ class MessageField extends React.Component {
     let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg} />);
     return (
       <div className="wrapper">
-        <h2>ReactGram &copy;</h2>
         <div className={classes.root}>
           { MessagesArr }
         </div>
-        <div className="sendMsgField">
+        <div className={classes.sendMsgField}>
           <Tooltip title="Введите текст сообщения">
             <TextField
+              className={classes.sendText}
               variant="outlined"
               size="small"
               onChange={this.handleChange}
@@ -81,7 +99,8 @@ class MessageField extends React.Component {
               />
           </Tooltip>
           <Tooltip title="Отправить">
-              <IconButton
+            <IconButton 
+              className={classes.sendBtn}
               // size="small"
               name="sendMsgUI"
               onClick={this.sendMsg}>
