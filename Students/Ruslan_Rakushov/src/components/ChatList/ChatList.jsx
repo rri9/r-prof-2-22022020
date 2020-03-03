@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import { withStyles } from '@material-ui/core/styles';
-// import { AppBar, Toolbar, IconButton, Typography, Badge } from '@material-ui/core';
-import { List, ListItem, ListItemText } from '@material-ui/core';
-// import MenuIcon from '@material-ui/icons/Menu';
-// import NotificationsIcon from '@material-ui/icons/Notifications';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
+import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
+import AssistantIcon from '@material-ui/icons/Assistant';
 
 const useStyles = (theme => ({
   root: {
@@ -23,13 +20,22 @@ class ChatList extends Component {
       <div className={classes.root}>
         <List>
           <ListItem>
-            <ListItemText primary='chat1'/>
+            <ListItemIcon>
+              <AssistantIcon />
+            </ListItemIcon>
+            <ListItemText primary='Chat 1'/>
           </ListItem>
           <ListItem>
-            <ListItemText primary='chat2'/>
+          <ListItemIcon>
+              <AssistantIcon />
+            </ListItemIcon>
+            <ListItemText primary='Chat 2'/>
           </ListItem>
           <ListItem>
-            <ListItemText primary='chat3'/>
+          <ListItemIcon>
+              <AssistantIcon />
+            </ListItemIcon>
+            <ListItemText primary='Chat 3'/>
           </ListItem>
         </List>
       </div>
