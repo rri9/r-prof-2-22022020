@@ -22,7 +22,6 @@ const useStyles = (theme => ({
     backgroundColor: 'lightgrey',
     boxSizing: 'border-box',
     overflowY: 'auto',
-    //TODO Scroll to bottom
   },
   sendMsgField: {
     width: '400px',
@@ -45,6 +44,7 @@ class MessageField extends Component {
       msgs: props.msgs,
     };
   }
+  messageFieldEndRef = React.createRef();
   //methods
   sendMsg = () => {
     // const msg = document.querySelector('#msg'); //Так плохо, потому что не логично обращаться к DOM напрямую!!!
@@ -63,10 +63,17 @@ class MessageField extends Component {
       this.sendMsg();
     }
   };
+  scrollToBottom = () => {
+    this.messageFieldEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+  };
 
   //hooks
+  componentDidMount() {
+    this.scrollToBottom();
+  };
+
   componentDidUpdate() {
-    //Отвечаем на каждое нечетное сообщение через 1 сек
+    //Отвечаем на каждое нечетное сообщение через 0.1 сек
     if(this.state.msgs.length %2 === 1) {
       setTimeout(() => {
         this.setState({
@@ -77,14 +84,15 @@ class MessageField extends Component {
         });
       }, 100);
     }
-  }
+    this.scrollToBottom();
+  };
 
   render() {
     const { classes } = this.props;
     let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg} />);
     return (
       <div className="wrapper">
-        <div className={classes.root}>
+        <div className={classes.root} ref={this.messageFieldEndRef}>
           { MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
