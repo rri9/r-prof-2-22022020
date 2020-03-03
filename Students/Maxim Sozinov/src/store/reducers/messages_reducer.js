@@ -22,22 +22,6 @@ const initialStore = {
          user: null,
          text: 'NOOOOOOOOO'
       },
-      5: {
-         user: 'Darth Vader',
-         text: 'Hallo'
-      },
-      6: {
-         user: null,
-         text: null
-      },
-      7: {
-         user: 'Darth Vader',
-         text: 'I am your father'
-      },
-      8: {
-         user: null,
-         text: 'NOOOOOOOOO'
-      }
    },
 };
 

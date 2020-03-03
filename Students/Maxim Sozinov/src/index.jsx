@@ -12,7 +12,6 @@ import Messages from './components/MessagesField/MessagesField.jsx';
 
 let user = 'Darth Vader';
 
-/* jshint ignore:start */
 ReactDom.render (
     <Provider store = { initStore() }>
         <Container className="vh-100 overflow-hidden d-flex flex-column justify-content-between">
