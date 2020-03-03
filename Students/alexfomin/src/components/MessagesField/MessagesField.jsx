@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-
+import { Row, Col, InputGroup, InputGroupAddon, Button, Input } from 'reactstrap';
+import './style.css';
 
 import Message from '../Message/Message.jsx'
-import SendButton from '../Button/Button.jsx';
+import Chatlist from '../Chatlist/ChatList.jsx'
+
+
 
 export default class Messages extends Component {
     constructor(props) {
         super(props)
-        //где-то тут... 
         this.state = {
             msg: '',
             msgArray: [{
@@ -26,9 +28,108 @@ export default class Messages extends Component {
             {
                 user: null,
                 text: 'NOOOOOOOOO'
-            }]
+            },
+            {
+                user: 'Darth Vader',
+                text: 'Hallo'
+            },
+            {
+                user: null,
+                text: null
+            },
+            {
+                user: 'Darth Vader',
+                text: 'I am your father'
+            },
+            {
+                user: null,
+                text: 'NOOOOOOOOO'
+            },
+            {
+                user: 'Darth Vader',
+                text: 'Hallo'
+            },
+            {
+                user: null,
+                text: null
+            },
+            {
+                user: 'Darth Vader',
+                text: 'I am your father'
+            },
+            {
+                user: null,
+                text: 'NOOOOOOOOO'
+            },
+            {
+                user: 'Darth Vader',
+                text: 'Hallo'
+            },
+            {
+                user: null,
+                text: null
+            },
+            {
+                user: 'Darth Vader',
+                text: 'I am your father'
+            },
+            {
+                user: null,
+                text: 'NOOOOOOOOO'
+            },
+            {
+                user: 'Darth Vader',
+                text: 'Hallo'
+            },
+            {
+                user: null,
+                text: null
+            },
+            {
+                user: 'Darth Vader',
+                text: 'I am your father'
+            },
+            {
+                user: null,
+                text: 'NOOOOOOOOO'
+            },
+            {
+                user: 'Darth Vader',
+                text: 'Hallo'
+            },
+            {
+                user: null,
+                text: null
+            },
+            {
+                user: 'Darth Vader',
+                text: 'I am your father'
+            },
+            {
+                user: null,
+                text: 'NOOOOOOOOO'
+            },
+            {
+                user: 'Darth Vader',
+                text: 'Hallo'
+            },
+            {
+                user: null,
+                text: null
+            },
+            {
+                user: 'Darth Vader',
+                text: 'I am your father'
+            },
+            {
+                user: null,
+                text: 'NOOOOOOOOO'
+            }
+        ]
         }
     }
+
+
     //methods
     sendMessage = (e) => {
         this.setState ({
@@ -63,26 +164,34 @@ export default class Messages extends Component {
     
 
     render() {
-        //let user = this.props.usr
         let { usr } = this.props
         let { msgArray } = this.state
-        
         let MessagesArr = msgArray.map(message => <Message sender={ message.user } text={ message.text }/>)
 
         return (
-            <div className="wrapper">
-                <h2>ReactGram &copy;</h2>
-                <p>Hello { usr }!</p>
-                <div>
-                    { MessagesArr }
-                </div>
-                {/* <input type="text" 
-                onChange = { this.handleChange } 
-                onKeyUp = { this.handleChange }
-                value = { this.state.msg }/>
-                <button onClick = { this.sendMessage }>Send</button> */}
-                <SendButton/>
-            </div>
-        )
+            <>
+            <Row className="rowContent">
+            <Col sm={{ size: 7, offset: 2 }} md={{ size: 6, offset: 2 }} lg={{ size: 6, offset: 3 }} ><div class="scrollContainer"><div class="MessagesContainer">{ MessagesArr }</div></div></Col>
+            <Col sm="3"  md="4" lg="3"><Chatlist/></Col>
+        </Row>
+        <Row className="rowSendButton">
+          <Col sm="0" md="2" lg="3"></Col>
+          <Col sm="12"  md="10" lg="6">       
+            <InputGroup>
+                <Input />
+                <InputGroupAddon addonType="append" >
+                <Button color="warning" >Отправить</Button>
+                </InputGroupAddon>
+                </InputGroup>
+            </Col>
+        </Row>
+        </>
+
+                //   <input type="text" 
+                // onChange = { this.handleChange } 
+                // onKeyUp = { this.handleChange }
+                // value = { this.state.msg }/>
+                // <button onClick = { this.sendMessage }>Send</button> <p>Hello { usr }!</p>
+        );
     }
 }
