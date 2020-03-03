@@ -123,7 +123,7 @@ class Messages extends Component {
           <Col sm="0" md="2" lg="3"></Col>
           <Col sm="12"  md="10" lg="6">       
             <InputGroup>
-                <Input onChange = {() => {this.handleChange() }}/>
+                <Input onChange = {this.handleChange}/>
                 <InputGroupAddon addonType="append" >
                 <Button color="warning" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Отправить</Button>
                 </InputGroupAddon>
