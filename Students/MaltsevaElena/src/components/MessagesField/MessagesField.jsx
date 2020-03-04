@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
+import './style.css'
 import { Input, IconButton, Box } from '@material-ui/core'
 import { Send, SentimentVerySatisfiedRounded, AttachmentRounded } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
@@ -15,21 +16,22 @@ import { bindActionCreators } from 'redux'
 import connect from 'react-redux/es/connect/connect'
 
 const useStyles = (theme => ({
-   root: {
-      heigth: '100vh',
-      width: "100%"
-   },
-   msgList: {
-      height: 'calc(100vh - 163px)',
+   msgBlock: {
+      height: 'calc(100vh - 160px)',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
       padding: theme.spacing(2)
    },
+   msgList: {
+      overflow: 'auto'
+   },
    sendForm: {
+      maxHeight: '64px',
       position: 'static',
       display: 'flex',
       justifyContent: 'space-between',
+      padding: theme.spacing(1, 2, 0, 2)
    }
 }))
 
@@ -38,7 +40,12 @@ class Messages extends Component {
       super(props)
       this.state = { 
          msg: '',
-      }
+      },
+      this.msgList = React.createRef()
+   }
+
+   scrollToNewMsg () {
+      this.msgList.current.lastChild.scrollIntoView({block: 'end', behavior: 'smooth'})
    }
 
    sendMsg = ( text, sender ) => {
@@ -69,6 +76,7 @@ class Messages extends Component {
             this.sendMsg("We'll call you back") 
          }, 500)
       }
+      this.scrollToNewMsg()
    }
 
    render() {
@@ -87,15 +95,17 @@ class Messages extends Component {
       })
 
       return (
-         <div className={classes.root}>
+         <div>
             <Navbar />
 
-            <Box className={classes.msgList}>
-               { MessagesArr }
+            <Box className={classes.msgBlock}>
+               <Box className={classes.msgList} ref={this.msgList}>
+                  { MessagesArr }
+               </Box>
             </Box>
 
             {/* to have create new component for send message */}
-            <Box className={classes.sendForm} p={2}>
+            <Box className={classes.sendForm}>
                <Box width="85%" mr={2}>
                   <Input placeholder="Type your message..."
                      fullWidth={ true }

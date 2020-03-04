@@ -9,9 +9,6 @@ import TabBar from '../ChatsTabbar/ChatsTabbar.jsx'
 
 const useStyles = (theme => ({
    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
       borderRight: '4px solid rgba(0, 0, 0, .1)',
    }
 }))

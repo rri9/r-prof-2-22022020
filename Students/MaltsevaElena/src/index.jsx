@@ -39,16 +39,16 @@ const darkTheme = createMuiTheme({
 ReactDom.render (
    <Provider store={ initStore() }>
       <ThemeProvider theme={ darkTheme }>
-         <Container fixed>
+         <div className="container">
             <Grid container spacing={0}>
-               <Grid item xs={3} style={{height: 100 + 'vh'}}>
+               <Grid item xs={3}>
                   <Chats />
                </Grid>
-               <Grid item xs={9} style={{height: 100 + 'vh'}}>
+               <Grid item xs={9}>
                   <Messages usr={user} />
                </Grid>
             </Grid>
-         </Container>
+         </div>
       </ThemeProvider>
    </Provider>,
    document.getElementById('app')
