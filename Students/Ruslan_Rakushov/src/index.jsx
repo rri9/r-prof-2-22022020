@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
-import Layout from './components/layout/Layout.jsx';
+import Layout from './components/Layout/Layout.jsx';
 
 
 const theme = createMuiTheme({
