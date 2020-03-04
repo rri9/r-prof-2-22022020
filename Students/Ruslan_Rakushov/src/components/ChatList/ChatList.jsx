@@ -7,6 +7,10 @@ import AssistantIcon from '@material-ui/icons/Assistant';
 const useStyles = (theme => ({
   root: {
     width: '30vh',
+    marginTop: '50px',
+  },
+  itemIcon: {
+    minWidth: '35px',
   },
 }));
 
@@ -20,19 +24,19 @@ class ChatList extends Component {
       <div className={classes.root}>
         <List>
           <ListItem>
-            <ListItemIcon>
+            <ListItemIcon className={classes.itemIcon}>
               <AssistantIcon />
             </ListItemIcon>
             <ListItemText primary='Chat 1'/>
           </ListItem>
           <ListItem>
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
               <AssistantIcon />
             </ListItemIcon>
             <ListItemText primary='Chat 2'/>
           </ListItem>
           <ListItem>
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
               <AssistantIcon />
             </ListItemIcon>
             <ListItemText primary='Chat 3'/>

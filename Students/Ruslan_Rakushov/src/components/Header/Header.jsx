@@ -7,8 +7,11 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const useStyles = (theme => ({
-  root: {
-    // width: '100%',
+  root: {},
+  appbar: {
+    backgroundColor: 'skyblue',
+    maxWidth: '600px',
+    right: 'auto',
   },
   menuButton: {},
   title: {},
@@ -25,8 +28,7 @@ class Header extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <AppBar
-          color='inherit'>
+        <AppBar className={classes.appbar}>
           <Toolbar>
             <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />

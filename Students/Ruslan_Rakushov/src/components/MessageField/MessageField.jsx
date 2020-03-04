@@ -11,6 +11,7 @@ import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 const useStyles = (theme => ({
   wrapper: {
     width: '70vh',
+    marginTop: '70px',
   },
   root: {
     display: 'flex',
@@ -91,7 +92,7 @@ class MessageField extends Component {
     const { classes } = this.props;
     let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg} />);
     return (
-      <div className="wrapper">
+      <div className={classes.wrapper}>
         <div className={classes.root} ref={this.messageFieldEndRef}>
           { MessagesArr }
         </div>
