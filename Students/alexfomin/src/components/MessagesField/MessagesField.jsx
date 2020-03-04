@@ -1,52 +1,150 @@
-import React, {
-    Component
-} from 'react';
+import React, {Component} from 'react';
 import ReactDom from 'react-dom';
+import { Row, Col, InputGroup, InputGroupAddon, Button, Input } from 'reactstrap';
+import './style.css';
 
 import Message from '../Message/Message.jsx'
-import Button from '../Button/Button.jsx'
+import Chatlist from '../Chatlist/ChatList.jsx'
 
-export default class Messages extends Component {
+import { sendMessage } from '../../store/actions/messages_actions.js'
+
+//redux
+import { bindActionCreators } from 'redux'
+import connect from 'react-redux/es/connect/connect'
+
+
+class Messages extends Component {
     constructor(props) {
-       super(props)
-        this.state = {list:[{
-                user: 'Darth Vader',
-                text: 'Hallo'
-            },
-            {
-                user: null,
-                text: null
-            },
-            {
-                user: 'Darth Vader',
-                text: 'I am your father'
-            },
-            {
-                user: null,
-                text: 'NOOOOOOOOO'
-            }
-        ]}
+        super(props)
+        this.state = {
+            msg: '',
+        //     msgArray: [{
+        //         user: 'Darth Vader',
+        //         text: 'Hallo'
+        //     },
+        //     {
+        //         user: null,
+        //         text: null
+        //     },
+        //     {
+        //         user: 'Darth Vader',
+        //         text: 'I am your father'
+        //     },
+        //     {
+        //         user: null,
+        //         text: 'NOOOOOOOOO'
+        //     },
+        //     {
+        //         user: 'Darth Vader',
+        //         text: 'Hallo'
+        //     },
+        //     {
+        //         user: null,
+        //         text: null
+        //     },
+        //     {
+        //         user: 'Darth Vader',
+        //         text: 'I am your father'
+        //     },
+        //     {
+        //         user: null,
+        //         text: 'NOOOOOOOOO'
+        //     },
+        //     {
+        //         user: 'Darth Vader',
+        //         text: 'Hallo'
+        //     }
+        // ]
+        }
     }
 
-    sendMessage = (value, user) => {
-        this.setState((state) => {
-           state.list.push({
-                user: user,
-                text: value
-            })
-            this.render()
-        }
-        )
-       
+
+    //methods
+    sendMessage = (text, sender) => {
+        const { messages } = this.props
+        const messageId = Object.keys(messages).length + 1;
+        this.props.sendMessage(messageId, sender, text)
+        // this.setState ({
+        //     msgArray: [...this.state.msgArray, { user: this.props.usr, text: this.state.msg }], //ЯМы Дартвейдер
+        //     msg: ''
+        // })
     }
+
+    handleChange = (evt) => {
+        if (evt.keyCode !== 13) {
+            this.setState ({msg: evt.target.value})
+        }
+    }
+
+    handleSendMessage = (message, sender) => {
+        this.setState({ msg: '' })
+        if (sender == 'Darth Vader') {
+            this.sendMessage(message, sender)
+        }
+    }
+
+    //hooks
+    // componentDidUpdate () {
+    //     // console.log ('updated')
+    //     let msgs = this.state.msgArray
+
+    //     if (msgs.length % 2 === 1) {
+    //         setTimeout(() => {
+    //             this.setState ({
+    //                 msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
+    //                 msg: ''
+    //             })
+    //         }, 500)
+    //     }
+    // }
+
+    //
+    
 
     render() {
-        //let user = this.props.usr
         let { usr } = this.props
-        console.log(this.state)
-            let MessagesArr = this.state.list.map((message, index) => <Message key={index} sender = {message.user}  text = {message.text} /> )
+        let { messages } = this.props
+        let MessagesArr = []
+        Object.keys(messages).forEach(key => {
+            MessagesArr.push(<Message 
+                sender={ messages[key].user } 
+                text={ messages[key].text }
+                key={ key }
+            />)
+        })
+        
+        return (
+            <>
+            <Row className="rowContent">
+            <Col sm={{ size: 7, offset: 2 }} md={{ size: 6, offset: 2 }} lg={{ size: 6, offset: 3 }} ><div class="scrollContainer"><div class="MessagesContainer">{ MessagesArr }</div></div></Col>
+            <Col sm="3"  md="4" lg="3"><Chatlist/></Col>
+        </Row>
+        <Row className="rowSendButton">
+          <Col sm="0" md="2" lg="3"></Col>
+          <Col sm="12"  md="10" lg="6">       
+            <InputGroup>
+                <Input onChange = {this.handleChange}/>
+                <InputGroupAddon addonType="append" >
+                <Button color="warning" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Отправить</Button>
+                </InputGroupAddon>
+                </InputGroup>
+            </Col>
+        </Row>
+        </>
 
-        return ( <div className = "wrapper" ><h2> ReactGram & copy; </h2> <p> Hello {usr}! </p> { MessagesArr} < Button sendMessage = { this.sendMessage}/> </div >
-            )
-        }
+                //   <input type="text" 
+                // onChange = { this.handleChange } 
+                // onKeyUp = { this.handleChange }
+                // value = { this.state.msg }/>
+                // <button onClick = { this.sendMessage }>Send</button> <p>Hello { usr }!</p>
+        );
     }
+}
+
+const mapStateToProps = ({ msgReducer }) => ({
+    messages: msgReducer.messages
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch )
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messages)
