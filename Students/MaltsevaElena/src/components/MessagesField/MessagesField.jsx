@@ -38,12 +38,6 @@ class Messages extends Component {
       super(props)
       this.state = { 
          msg: '',
-         // msgArray: [
-         //    { user: null, text: "Any problems?" },
-         //    { user: "Me", text: "I clicked something and everything disappeared" },
-         //    { user: null, text: null },
-         //    { user: "Me", text: "And what?" },
-         // ] 
       }
    }
 
@@ -52,10 +46,6 @@ class Messages extends Component {
       const messageId = Object.keys(messages).length + 1
 
       this.props.sendMessage(messageId, sender, text)
-      // this.setState({ 
-      //    msgArray: [...this.state.msgArray, {user: this.props.usr, text: this.state.msg}],
-      //    msg: ''
-      // }) 
    }
 
    handleSendMsg = (text, sender) => {
@@ -66,35 +56,34 @@ class Messages extends Component {
    handleChange = (event) => {
       if (event.keyCode !== 13) {
          this.setState({ msg: event.target.value })
+      } else {
+         this.sendMsg(this.state.msg, this.props.usr)
+         this.setState({ msg: ''})
       }
-      // event.keyCode !== 13 ?
-      //    this.setState({ msg: event.target.value }) :
-         // this.sendMsg()
    }
 
-   // componentDidUpdate () {
-   //    let msgs = this.state.msgArray
-   //    if (msgs.length % 2 === 1) {
-   //       setTimeout(() => {
-   //          this.setState({ 
-   //             msgArray: [...this.state.msgArray, {user: null, text: "We'll call you back"}],
-   //             msg: ''
-   //          }) 
-   //       }, 500)
-   //    }
-   // }
+   componentDidUpdate () {
+      const { messages } = this.props
+      if (Object.keys(messages).length % 2 === 1) {
+         setTimeout(() => {
+            this.sendMsg("We'll call you back") 
+         }, 500)
+      }
+   }
 
    render() {
       let { usr, messages, classes } = this.props
-      console.log(messages)
+      // console.log(messages)
 
       let MessagesArr = []
       Object.keys(messages).forEach(messageId => {
-         MessagesArr.push( <Message 
-            sender={ messages[messageId].user } 
-            text={ messages[messageId].text } 
-            key={ messageId }
-         /> )
+         MessagesArr.push( 
+            <Message 
+               sender={ messages[messageId].user } 
+               text={ messages[messageId].text } 
+               key={ messageId }
+            /> 
+         )
       })
 
       return (
@@ -130,11 +119,11 @@ class Messages extends Component {
    }
 }
 
+// export default withStyles(useStyles)(Messages)
+
 const mapStateToProps = ({ msgReducer }) => ({
    messages: msgReducer.messages
 })
 const mapDespatchToProps = dispatch => bindActionCreators( {sendMessage}, dispatch)
 
 export default connect(mapStateToProps, mapDespatchToProps)(withStyles(useStyles)(Messages))
-
-// export default withStyles(useStyles)(Messages)
