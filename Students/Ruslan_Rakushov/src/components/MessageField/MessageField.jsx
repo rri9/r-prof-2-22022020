@@ -47,12 +47,12 @@ class MessageField extends Component {
   }
   messageFieldEndRef = React.createRef();
   //methods
-  sendMsg = () => {
+  sendMsg = (message) => {
     // const msg = document.querySelector('#msg'); //Так плохо, потому что не логично обращаться к DOM напрямую!!!
     this.setState ({
       msgs : [...this.state.msgs, {
         sender: 'Me',
-        text: this.state.msgText,
+        text: message,
       }],
       msgText: '',
     });
@@ -61,7 +61,7 @@ class MessageField extends Component {
     if (evt.keyCode !== 13) {
       this.setState({ msgText: evt.target.value });
     } else {
-      this.sendMsg();
+      this.sendMsg(evt.target.value);
     }
   };
   scrollToBottom = () => {
@@ -112,7 +112,7 @@ class MessageField extends Component {
               className={classes.sendBtn}
               // size="small"
               name="sendMsgUI"
-              onClick={this.sendMsg}>
+              onClick={() => this.sendMsg(this.state.msgText)}>
                 <SendOutlinedIcon />
               </IconButton>
           </Tooltip>
