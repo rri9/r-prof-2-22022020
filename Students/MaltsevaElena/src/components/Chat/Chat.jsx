@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
    root: {
       width: '100%',
+      height: 'calc(100vh - 145px)',
+      padding: theme.spacing(1),
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.common.white
    },
@@ -19,9 +21,6 @@ const useStyles = makeStyles(theme => ({
       '&:hover, &:active': {
          backgroundColor: theme.palette.primary.main,
       },
-      '.Mui-selected': {
-         backgroundColor: theme.palette.primary.main,
-      }
    },
    selected: {
       backgroundColor: theme.palette.primary.main,
