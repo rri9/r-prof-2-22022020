@@ -59,7 +59,7 @@ class MessageField extends Component {
   };
   handleChange = (evt) => {
     if (evt.keyCode !== 13) {
-      this.setState({ msgText: evt.target.value });
+      this.setState({ [evt.target.name]: evt.target.value });
     } else {
       this.sendMsg(evt.target.value);
     }
@@ -97,14 +97,15 @@ class MessageField extends Component {
           { MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
-          <Tooltip title="Введите текст сообщения">
+          <Tooltip title = "Введите текст сообщения">
             <TextField
-              className={classes.sendText}
-              variant="outlined"
-              size="small"
-              onChange={this.handleChange}
+              className = {classes.sendText}
+              variant = "outlined"
+              size = "small"
+              onChange = {this.handleChange}
               onKeyUp = {this.handleChange}
               value = {this.state.msgText}
+              name = 'msgText'
               />
           </Tooltip>
           <Tooltip title="Отправить">
