@@ -3,8 +3,16 @@ import ReactDom from 'react-dom'
 import { Input, IconButton, Box } from '@material-ui/core'
 import { Send, SentimentVerySatisfiedRounded, AttachmentRounded } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
+
 import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
 import Message from '../Message/Message.jsx'
+
+//actions
+import { sendMessage } from '../../store/actions/messages_action.js'
+
+//redux
+import { bindActionCreators } from 'redux'
+import connect from 'react-redux/es/connect/connect'
 
 const useStyles = (theme => ({
    root: {
@@ -30,45 +38,53 @@ class Messages extends Component {
       super(props)
       this.state = { 
          msg: '',
-         msgArray: [
-            { user: null, text: "Any problems?" },
-            { user: "Me", text: "I clicked something and everything disappeared" },
-            { user: null, text: null },
-            { user: "Me", text: "And what?" },
-         ] 
       }
    }
 
-   sendMsg = () => {
-      this.setState({ 
-         msgArray: [...this.state.msgArray, {user: this.props.usr, text: this.state.msg}],
-         msg: ''
-      }) 
+   sendMsg = ( text, sender ) => {
+      const { messages } = this.props
+      const messageId = Object.keys(messages).length + 1
+
+      this.props.sendMessage(messageId, sender, text)
+   }
+
+   handleSendMsg = (text, sender) => {
+      this.setState({ msg: ''})
+      if (text.length > 0) this.sendMsg(text, sender)
    }
 
    handleChange = (event) => {
-      event.keyCode !== 13 ?
-         this.setState({ msg: event.target.value }) :
-         this.sendMsg()
+      if (event.keyCode !== 13) {
+         this.setState({ msg: event.target.value })
+      } else {
+         this.sendMsg(this.state.msg, this.props.usr)
+         this.setState({ msg: ''})
+      }
    }
 
    componentDidUpdate () {
-      let msgs = this.state.msgArray
-      if (msgs.length % 2 === 1) {
+      const { messages } = this.props
+      if (Object.keys(messages).length % 2 === 1) {
          setTimeout(() => {
-            this.setState({ 
-               msgArray: [...this.state.msgArray, {user: null, text: "We'll call you back"}],
-               msg: ''
-            }) 
+            this.sendMsg("We'll call you back") 
          }, 500)
       }
    }
 
    render() {
-      let { usr, classes } = this.props
-      let { msgArray } = this.state
+      let { usr, messages, classes } = this.props
+      // console.log(messages)
 
-      let MessagesArr = msgArray.map((message, index) => <Message sender={ message.user } text={ message.text } key={ index }/>)
+      let MessagesArr = []
+      Object.keys(messages).forEach(messageId => {
+         MessagesArr.push( 
+            <Message 
+               sender={ messages[messageId].user } 
+               text={ messages[messageId].text } 
+               key={ messageId }
+            /> 
+         )
+      })
 
       return (
          <div className={classes.root}>
@@ -87,7 +103,7 @@ class Messages extends Component {
                      onKeyUp={ this.handleChange }
                      value={ this.state.msg }/>
                </Box>
-               <IconButton aria-label="send" onClick={ this.sendMsg }>
+               <IconButton aria-label="send" onClick={ () => this.handleSendMsg(this.state.msg, usr ) }>
                   <Send />
                </IconButton>
                <IconButton aria-label="smile">
@@ -103,4 +119,11 @@ class Messages extends Component {
    }
 }
 
-export default withStyles(useStyles)(Messages)
+// export default withStyles(useStyles)(Messages)
+
+const mapStateToProps = ({ msgReducer }) => ({
+   messages: msgReducer.messages
+})
+const mapDespatchToProps = dispatch => bindActionCreators( {sendMessage}, dispatch)
+
+export default connect(mapStateToProps, mapDespatchToProps)(withStyles(useStyles)(Messages))
