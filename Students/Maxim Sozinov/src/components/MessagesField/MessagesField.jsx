@@ -1,39 +1,30 @@
 import React, {Component} from 'react';
-import { Button, Form, Row, Container } from 'react-bootstrap';
-
 // import ReactDom from 'react-dom';
+
+import { Button, Form, Row, Container } from 'react-bootstrap';
 import './style.css';
 
 import Message from '../Message/Message.jsx';
 
-export default class Messages extends Component {
+import { sendMessage } from '../../store/actions/messages_actions.js';
+
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+
+class Messages extends Component {
     constructor(props) {
         super(props);
     }
     state = {
-        msgArray: [{
-               user: 'Darth Vader',
-               text: 'Hallo'
-           },
-           {
-               user: null,
-               text: null
-           },
-           {
-               user: 'Darth Vader',
-               text: 'I am your father'
-           },
-           {
-               user: null,
-               text: 'NOOOOOOOOO'
-           }],
-
            newMessage: ''
-       };
-/* jshint ignore:start */
-    addNewMessage = () => {
+       }
+
+    addNewMessage = (text, sender) => {
+        const { messages } = this.props;
+        const messageId = Object.keys(messages).length + 1;
+
+        this.props.sendMessage(messageId, sender, text);
         this.setState({
-            msgArray: this.state.msgArray.concat({user: this.props.usr, text: this.state.newMessage}),
             newMessage: ''
         });
     }
@@ -43,39 +34,47 @@ export default class Messages extends Component {
             this.setState({
                 newMessage: event.target.value
             }) :
-            this.addNewMessage()
+            this.addNewMessage(this.state.newMessage, this.props.usr);
+    }
+
+    componentDidMount() {
+        let block = this.refs["msgBlock"];
+        block.scrollTop = block.scrollHeight;
     }
 
     componentDidUpdate () {
 
-        let msgs = this.state.msgArray
-        const lastMsg = msgs[msgs.length - 1]
+        const { messages } = this.props;
+        const lastMsg = messages[Object.keys(messages).length];
 
         if (lastMsg.user === this.props.usr) {
             setTimeout(() => {
-                this.setState ({
-                    msgArray: [...msgs, { user: null, text: 'NOOOOOOOOOO...' }],
-                })
-            }, 500)
+                    this.addNewMessage( 'NOOOOOOOOOO...', null);
+            }, 500);
         }
+        let block = this.refs["msgBlock"];
+        block.scrollTop = block.scrollHeight;
     }
 
     render() {
-        //let user = this.props.usr
-        let { usr } = this.props;
-        
 
-        let MessagesArr = this.state.msgArray.map( (message, index) => <Message key={ index } sender={ message.user } text={ message.text }/>)
+        let { usr } = this.props;
+        let { messages } = this.props;
+
+        let MessagesArr = [];
+
+        Object.keys(messages).forEach(key => {
+            MessagesArr.push( <Message key={ key } sender={ messages[key].user } text={ messages[key].text }/> );
+        });
+
 
         return (
-            <Container className="d-flex flex-column justify-content-end h-75">
-                
+            <Container className="d-flex flex-column justify-content-end h-100 col-10">
 
-
-                <div className="d-flex flex-column overflow-auto">
+                <div className="d-flex flex-column overflow-auto" ref="msgBlock">
                     { MessagesArr }
                 </div>
-               
+
                 <Row className="flex-nowrap">
                     <Form.Control
                         type="text"
@@ -85,14 +84,20 @@ export default class Messages extends Component {
                         onKeyUp= { this.handleChange }
                         value = { this.state.newMessage }
                     />
-                    
-                    <Button className="m-2" onClick={ this.addNewMessage }>Send&nbsp;Message</Button>
+
+                    <Button className="m-2" onClick={ () => this.addNewMessage (this.state.newMessage, usr) }>Send&nbsp;Message</Button>
                 </Row>
 
-
-
             </Container>
-        )
+        );
 
     }
 }
+
+const mapStateToProps = ({ msgReducer }) => ({
+    messages: msgReducer.messages
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messages);

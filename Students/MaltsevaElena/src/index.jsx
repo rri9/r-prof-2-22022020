@@ -9,6 +9,9 @@ import './index.css'
 import Messages from './components/MessagesField/MessagesField.jsx'
 import Chats from './components/ChatsField/ChatsField.jsx'
 
+import { Provider } from 'react-redux'
+import initStore from './store/store.js'
+
 let user = 'Me'
 
 const darkTheme = createMuiTheme({
@@ -34,17 +37,19 @@ const darkTheme = createMuiTheme({
 })
 
 ReactDom.render (
-   <ThemeProvider theme={darkTheme}>
-      <Container fixed>
-         <Grid container spacing={0}>
-            <Grid item xs={3} style={{height: 100 + 'vh'}}>
-               <Chats />
+   <Provider store={ initStore() }>
+      <ThemeProvider theme={ darkTheme }>
+         <Container fixed>
+            <Grid container spacing={0}>
+               <Grid item xs={3} style={{height: 100 + 'vh'}}>
+                  <Chats />
+               </Grid>
+               <Grid item xs={9} style={{height: 100 + 'vh'}}>
+                  <Messages usr={user} />
+               </Grid>
             </Grid>
-            <Grid item xs={9} style={{height: 100 + 'vh'}}>
-               <Messages usr={user} />
-            </Grid>
-         </Grid>
-      </Container>
-   </ThemeProvider>,
+         </Container>
+      </ThemeProvider>
+   </Provider>,
    document.getElementById('app')
 )
