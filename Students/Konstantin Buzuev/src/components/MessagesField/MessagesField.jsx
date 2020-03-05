@@ -1,12 +1,17 @@
 import React, { Component } from "react";
 import ReactDom from "react-dom";
+// ACTIONS
+import { sendMessage } from "../../store/actions/messages_actions.js";
+// REDUX
+import { bindActionCreators } from "redux";
+import connect from "react-redux/es/connect/connect";
+// COMPONENTS
+import Message from "../Message/Message.jsx";
+// STYLES
 import { withStyles } from "@material-ui/core/styles";
 import styles from "./style.css";
 import { Box, Fab, TextField, GridList, Grid } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
-
-import Message from "../Message/Message.jsx";
-
 const useStyles = theme => ({
   root: {
     display: "flex",
@@ -33,29 +38,27 @@ class Messages extends Component {
     super(props);
     this.user = props.user;
     this.state = {};
-    this.state.messages = [
-      { user: "Darth Vader", text: "Hello, Luke!" },
-      { user: null, text: null },
-      { user: "Darth Vader", text: "I am your father" },
-      { user: null, text: "NOOOOOOOOO" }
-    ];
     this.state.message = "";
   }
-  newMessage = () => {
-    this.setState({
-      messages: [
-        ...this.state.messages,
-        { user: this.user, text: this.state.message }
-      ],
-      message: ""
-    });
-    console.log(this.state.messsages);
+  sendMessage = (text, sender) => {
+    const { messages } = this.props;
+    const messageID = Object.keys(messages).length + 1;
+    this.props.sendMessage(messageID, sender, text);
   };
 
-  handleChanges = event => {
-    event.keyCode !== 13
-      ? this.setState({ message: event.target.value })
-      : this.newMessage();
+  handleSendMessage(message, sender) {
+    this.sendMessage(message, sender);
+    if (sender === this.user) {
+      setTimeout(() => {
+        this.sendMessage(null, null);
+      }, 300);
+    }
+    this.setState({ message: "" });
+  }
+
+  handleChange = event => {
+    if (event.keyCode !== 13) this.setState({ message: event.target.value });
+    else this.handleSendMessage(this.state.message, this.user);
   };
 
   scrollToBottom = () => {
@@ -69,21 +72,21 @@ class Messages extends Component {
   }
 
   componentDidUpdate() {
-    const msgs = this.state.messages;
-    if (msgs.length % 2 === 1) {
-      setTimeout(() => {
-        this.setState({
-          messages: [...this.state.messages, { user: null, text: "Hello!" }]
-        });
-      }, 500);
-    }
     this.scrollToBottom();
   }
 
   render() {
     const { classes } = this.props;
-    let Messages = this.state.messages.map(obj => {
-      return <Message sender={obj.user} text={obj.text} />;
+    let { messages } = this.props;
+    let Messages = [];
+    Object.keys(messages).forEach(key => {
+      Messages.push(
+        <Message
+          key={key}
+          sender={messages[key].user}
+          text={messages[key].text}
+        />
+      );
     });
     return (
       <div className={classes.root}>
@@ -107,11 +110,16 @@ class Messages extends Component {
             className="flex-grow-1"
             label="Новое сообщение"
             value={this.state.message}
-            onChange={this.handleChanges}
-            onKeyUp={this.handleChanges}
+            onChange={this.handleChange}
+            onKeyUp={this.handleChange}
             variant="outlined"
           />
-          <Fab color="primary" onClick={this.newMessage}>
+          <Fab
+            color="primary"
+            onClick={() =>
+              this.handleSendMessage(this.state.message, this.user)
+            }
+          >
             <SendIcon />
           </Fab>
         </Grid>
@@ -120,4 +128,14 @@ class Messages extends Component {
   }
 }
 
-export default withStyles(useStyles)(Messages);
+const mapStateToProps = ({ msgReducer }) => ({
+  messages: msgReducer.messages
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ sendMessage }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(useStyles)(Messages));
