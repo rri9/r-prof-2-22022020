@@ -75,7 +75,7 @@ class MessageField extends Component {
 
   componentDidUpdate() {
     //Отвечаем на каждое нечетное сообщение через 0.1 сек
-    if(this.state.msgs.length %2 === 1) {
+    if(this.state.msgs[this.state.msgs.length-1].sender === 'Me') {
       setTimeout(() => {
         this.setState({
           msgs: [...this.state.msgs, {
