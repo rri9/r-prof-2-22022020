@@ -69,9 +69,10 @@ class Messages extends Component {
       }
    }
 
-   componentDidUpdate () {
-      const { messages } = this.props
-      if (Object.keys(messages).length % 2 === 1) {
+   componentDidUpdate (prevProps) {
+      const { messages, usr } = this.props
+      if (Object.keys(prevProps.messages).length < Object.keys(messages).length &&
+         messages[Object.keys(messages).length].user === usr) {
          setTimeout(() => {
             this.sendMsg("We'll call you back") 
          }, 500)
