@@ -1,0 +1,239 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --- Only for design stage --- */
+/* blocks elements and containers */
+address,
+article,
+aside,
+blockquote,
+dd,
+div,
+dl,
+dt,
+details,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1, h2, h3, h4, h5, h6,
+header,
+hr,
+li,
+legend,
+nav,
+noscript,
+ol,
+output,
+optgroup,
+option,
+p,
+pre,
+section,
+summary,
+table,
+ul {
+  outline: 1px dotted blue;
+}
+
+/* inline elements and containers */
+a,
+area,
+b,
+bdo,
+bdi,
+cite,
+code,
+dfn,
+del,
+em,
+i,
+iframe,
+img,
+ins,
+kbd,
+label,
+map,
+mark,
+s,
+samp,
+small,
+span,
+strong,
+sub,
+sup,
+time,
+q,
+ruby,
+u,
+var {
+  outline: 1px dotted green;
+}
+
+/* inline-blocks elements and containers */
+audio,
+button,
+canvas,
+embed,
+input,
+keygen,
+meter,
+object,
+progress,
+select,
+textarea,
+video {
+  outline: 1px dotted red;
+}
+/* --- +++ --- */
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: #aaa;
+}
+
+.chats {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "chats-head"
+    "chats-list"
+    "chats-foot";
+  grid-area: chats;
+  overflow-y: auto;
+}
+
+.msgs {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "msgs-head"
+    "msgs-body";
+  grid-area: msgs;
+  overflow: auto;
+}
+
+.msgs-body {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "msgs-list"
+    "msgs-foot";
+  grid-area: msgs-body;
+  overflow: auto;
+}
+
+.grid {
+  min-width: 256px;
+  max-width: 800px;
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: 1fr;
+  grid-template-columns: 200px 1fr;
+  grid-template-areas: "chats msgs";
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "chats"
+    "msgs";
+  }
+  
+  .chats {
+    grid-template-rows: auto auto auto;
+  }  
+}
+
+header,
+.chats-list,
+.msgs-list,
+footer {
+  /* padding: 8px; */
+}
+
+.chat-item,
+.msg-item {
+  margin-bottom: 8px;
+}
+
+.chats-list,
+.msgs-list {
+  overflow-y: auto;
+}
+
+.chats-head {
+  grid-area: chats-head;
+}
+
+.chats-list {
+  grid-area: chats-list;
+  background-color: #e8eaf6; /* theme.background.paper */
+}
+
+.chat-item {
+  padding: 8px;
+}
+
+.chats-foot {
+  grid-area: chats-foot;
+}
+
+.msgs-head {
+  grid-area: msgs-head;
+}
+.msgs-list {
+  grid-area: msgs-list;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.msg-item {
+  min-width: 240px;
+  max-width: 80%;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.msg-self {
+  align-self: flex-end;
+  width: 100%;
+  border-radius: 8px 8px 0 8px;
+}
+
+.msg-robot {
+  background-color: #D1C4E9;
+  color: #4527A0;
+}
+
+.msgs-foot {
+  grid-area: msgs-foot;
+  display: flex;
+  padding: 8px;
+}
+
+.msg-input {
+  flex-grow: 1;
+}
+

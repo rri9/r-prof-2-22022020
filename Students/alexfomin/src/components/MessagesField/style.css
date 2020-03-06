@@ -1,0 +1,33 @@
+.rowContent {
+    flex: 1 0 70vh;
+}
+
+.rowSendButton {
+    flex: 0 0 20vh;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    height: 5rem;
+}
+
+.MessagesContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.scrollContainer {
+    overflow-y: auto;
+    height: 70vh;
+    padding-right: 10px;
+}
+
+/* width */
+.scrollContainer::-webkit-scrollbar {
+    width: 10px;
+  }
+    
+  /* Handle */
+  .scrollContainer::-webkit-scrollbar-thumb {
+    background: -webkit-linear-gradient(90deg, rgba(34,193,195,0.8) 0%, rgba(81, 187, 189, 0.8) 100%);
+    border-radius: 5px;
+
+  }

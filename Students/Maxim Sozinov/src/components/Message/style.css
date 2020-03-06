@@ -5,6 +5,7 @@
     font-size: 18px;
     margin: 5px;
     align-self: flex-end;
+    align-items: flex-end;
 }
 .msgBot {
     background-color: lawngreen;
