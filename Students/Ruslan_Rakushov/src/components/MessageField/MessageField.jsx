@@ -44,8 +44,9 @@ class MessageField extends Component {
       msgText: '',
       msgs: props.msgs,
     };
+    this.msgTextInput = React.createRef()
+    this.messageFieldEndRef = React.createRef();
   }
-  messageFieldEndRef = React.createRef();
   //methods
   sendMsg = (message) => {
     // const msg = document.querySelector('#msg'); //Так плохо, потому что не логично обращаться к DOM напрямую!!!
@@ -67,10 +68,14 @@ class MessageField extends Component {
   scrollToBottom = () => {
     this.messageFieldEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
   };
+  setFocusOnInput = () => {
+    this.msgTextInput.current.focus();
+  }
 
   //hooks
   componentDidMount() {
     this.scrollToBottom();
+    this.setFocusOnInput();
   };
 
   componentDidUpdate() {
@@ -83,7 +88,7 @@ class MessageField extends Component {
             text: 'Leave me alone, human...',
           }]
         });
-      }, 100);
+      }, 1000);
     }
     this.scrollToBottom();
   };
@@ -99,6 +104,7 @@ class MessageField extends Component {
         <div className={classes.sendMsgField}>
           <Tooltip title = "Введите текст сообщения">
             <TextField
+              inputRef = {this.msgTextInput}
               className = {classes.sendText}
               variant = "outlined"
               size = "small"
