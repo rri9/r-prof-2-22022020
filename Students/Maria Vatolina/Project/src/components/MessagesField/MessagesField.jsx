@@ -30,7 +30,7 @@ export default class Messages extends Component {
         this.setState ({
             msgArray: [...this.state.msgArray, 
                 {
-                user: 'You',
+                user: null,
                 text: document.querySelector('.msgText').value
                 }
             ]
