@@ -91,6 +91,7 @@ class MessageField extends Component {
       }, 1000);
     }
     this.scrollToBottom();
+    this.setFocusOnInput();
   };
 
   render() {
