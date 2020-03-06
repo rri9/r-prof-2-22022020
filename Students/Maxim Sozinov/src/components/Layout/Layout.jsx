@@ -1,12 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
+import { Row, ListGroup, } from 'react-bootstrap';
 
 import Messages from '../MessagesField/MessagesField.jsx';
 
+
 export default class Layout extends React.Component {
-   constructor(props) {
-      super(props);
+   static propTypes = { 
+      chatId: PropTypes.number, 
+   };
+   static defaultProps = {
+      chatId: 1
    }
 
    render() {
@@ -17,7 +24,15 @@ export default class Layout extends React.Component {
             <div className="bg-light h-100 col-2 d-flex flex-column justify-content-between p-0">
                <div>
                   <p>Hello {user}!</p>
-                  ChatList
+                  ChatList { this.props.chatId }
+                  <ListGroup>
+                     <Link to="/chat/1">
+                        <ListGroup.Item action>Chat 1</ListGroup.Item>
+                     </Link>
+                     <Link to="/chat/2">
+                        <ListGroup.Item action>Chat 2</ListGroup.Item>
+                     </Link>
+                  </ListGroup>
                </div>
                <footer className="text-white bg-dark w-100 text-center">
                   ReactGram &copy;

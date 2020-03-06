@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
 import Router from './router/Router.jsx';
 
 import { Provider } from 'react-redux';
@@ -17,7 +17,8 @@ ReactDom.render (
         <Provider store = { initStore() }>
             <Container className="vh-100 overflow-hidden d-flex flex-column justify-content-between">
                 <Row className="header p-2 rounded-top shadow">
-                    <h1>First React App</h1>
+
+                    <Link to={'/'}><h1>First React App</h1></Link>
                 </Row>
     
                 <Router />
