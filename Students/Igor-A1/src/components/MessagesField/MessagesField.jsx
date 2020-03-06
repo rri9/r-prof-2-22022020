@@ -1,12 +1,22 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 
+import { makeStyles } from '@material-ui/core/styles'
 import { TextField, FloatingActionButton } from '@material-ui/core';
 import Input from '@material-ui/core/Input';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 
 import Message from '../Message/Message.jsx'
+
+const useStyles = makeStyles(theme => ({
+   root: {
+      width: '100%',
+      backgroundColor: theme.palette.background.paper,
+      color: theme.palette.primary.main,
+      padding: 0
+   },
+}));
 
 export default class Messages extends Component {
     constructor(props) {
@@ -37,7 +47,7 @@ export default class Messages extends Component {
     sendMessage = (e) => {
         this.setState ({
             msgArray: [...this.state.msgArray, {
-              user: this.props.usr,
+              user: this.props.user,
               text: this.state.msg
             }],
             msg: '' // clear input field
@@ -66,8 +76,8 @@ export default class Messages extends Component {
     }
     
     render() {
-        let { usr } = this.props
-        const placeholder = `Пишите, ${usr}`
+        let { user } = this.props
+        const placeholder = `Пишите, ${user}`
         let MessagesArr = this.state.msgArray.map( (message, index) => 
           <Message
             sender={ message.user }
@@ -77,20 +87,15 @@ export default class Messages extends Component {
         )
 
         return (
-            <div className="wrapper">
-            
-                <h2>ReactGram&trade;</h2>
-                
-                <p>Hello { usr }!</p>
-                
-                { MessagesArr }
-                
-                <footer className="fixed-bottom">
-                
-                    <div className="d-flex justify-center align-center">
+            <div className="msgs-body">
+                <div className="msgs-list">
+                    { MessagesArr }
+                </div>
                     
+                <div className="msgs-foot">
                         
                         <TextField
+                          className="msg-input"
                           variant = "outlined"
                           placeholder = { placeholder }
                           onChange = { this.handleChange }
@@ -106,11 +111,9 @@ export default class Messages extends Component {
                           <Icon>send</Icon>
                         </Fab>
 
-                    </div>
-                    
-                </footer>
-                
+                </div>
             </div>
+                
         )
     }
 }

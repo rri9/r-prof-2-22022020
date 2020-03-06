@@ -5,7 +5,7 @@ import styles from './style.css';
 
 import Message from '../Message/Message.jsx';
 import { Box, Fab, TextField, GridList } from '@material-ui/core';
-import SendIcon from '@material-ui/icons/Send'; 
+import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = (theme => ({
     root: {
@@ -20,6 +20,11 @@ const useStyles = (theme => ({
     }
   }));
 
+import { sendMessage } from '../../store/actions/messages_action.js';
+
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+
 class Messages extends Component {
 
     messagesEndRef = React.createRef()
@@ -28,52 +33,6 @@ class Messages extends Component {
         super(props);
         this.user = props.usr;
         this.state = {
-            messages: [
-                {
-                    user: 'Alex',
-                    text: 'hello'
-                },
-                {
-                    user: null,
-                    text: null
-                },
-                {
-                    user: 'Anna',
-                    text: 'Hi'
-                },
-                {
-                    user: null,
-                    text: null
-                },
-                {
-                    user: 'Alex',
-                    text: 'hello'
-                },
-                {
-                    user: null,
-                    text: null
-                },
-                {
-                    user: 'Anna',
-                    text: 'Hi'
-                },
-                {
-                    user: null,
-                    text: null
-                },
-                {
-                    user: null,
-                    text: null
-                },
-                {
-                    user: 'Anna',
-                    text: 'Hi'
-                },
-                {
-                    user: null,
-                    text: null
-                }
-            ],
             msg: ''
         }
     }
@@ -81,44 +40,54 @@ class Messages extends Component {
     handleChanges = (event) => {
         event.keyCode !== 13 ?
             this.setState({msg: event.target.value}) :
-            this.newMessage();
+            this.newMessage('Alex', this.state.msg);
     }
 
-    componentDidMount () {
-        this.scrollToBottom()
-    }
+    // componentDidUpdate() {
+    //     const { messages } = this.props;
+    //     console.log(Object.keys(messages).length);
+    //     if (Object.keys(messages).length % 2 === 1) {
+    //         setTimeout(() => {
+    //             this.newMessage(null, 'NOOOOOOOOO')
+    //         }, 500);
+    //     }
+    // }
 
     componentDidUpdate() {
-        const msgs = this.state.messages;
-        if (msgs.length % 2 === 1) {
-            setTimeout(() => {
-                this.setState(
-                    {
-                        messages: [...this.state.messages, {user: null, text: 'NOOOOOOOOO'}]
-                    }
-                );
-            }, 500);
-        }
-        this.scrollToBottom()
+        this.scrollToBottom();
     }
 
-    newMessage = () => {
-        this.setState(
-            {
-                messages: [...this.state.messages, {user: this.user, text: this.state.msg}],
-                msg: ''
-            }
-        );
+    componentDidMount() {
+        this.scrollToBottom();
     }
 
     scrollToBottom = () => {
         this.messagesEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' })
     }
 
+    newMessage = (sender, text) => {
+        const { messages } = this.props;
+        const messageId = Object.keys(messages).length + 1;
+        this.props.sendMessage(messageId, sender, text);
+        this.setState({msg: ''});
+        setTimeout(() => {
+            const { messages } = this.props;
+            const messageId = Object.keys(messages).length + 1;
+            this.props.sendMessage(messageId, null, 'NOOOOOOOOOO');
+        }, 500);
+    }
+
     render() {
         const { classes } = this.props;
-        const renderMessages = this.state.messages.slice().map((obj, index) => {
-            return <Message key={index} sender={obj.user} text={obj.text}/>
+        const { messages } = this.props;
+        const renderMessages = Object.keys(messages).map(messageId => {
+            return (
+                <Message 
+                    key={ messageId } 
+                    sender={ messages[messageId].user } 
+                    text={ messages[messageId].text }
+                />
+            )
         })
         return (
             <div className={ classes.root}>
@@ -129,13 +98,13 @@ class Messages extends Component {
                     className="flex-grow-1"
                     label="Новое сообщение"
                     value={this.state.msg}
-                    onChange={this.handleChanges} 
+                    onChange={this.handleChanges}
                     onKeyUp={this.handleChanges}
                     variant="outlined"
                 />
                 <Fab 
                     color="primary" 
-                    onClick={this.newMessage} >
+                    onClick={() => this.newMessage('Alex', this.state.msg)} >
                     <SendIcon />
                 </Fab>
             </div>
@@ -143,4 +112,9 @@ class Messages extends Component {
     }
 }
 
-export default withStyles(useStyles)(Messages)
+const mapStateToProps = ({ msgReducer }) => ({
+    messages: msgReducer.messages
+});
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Messages))

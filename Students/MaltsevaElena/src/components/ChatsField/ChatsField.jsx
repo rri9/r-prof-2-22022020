@@ -27,7 +27,7 @@ class Chats extends Component {
       return (
          <Box className={classes.root}>
             <NavBar />
-            <Box height="calc(100vh - 128px)">
+            <Box>
                <ChatList />
             </Box>
             <TabBar />
