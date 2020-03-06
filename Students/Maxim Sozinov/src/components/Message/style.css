@@ -1,5 +1,4 @@
 .msgAuthor {
-    background-color: lightblue;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 18px;
@@ -14,4 +13,13 @@
     font-size: 18px;
     margin: 5px;
     align-self: flex-start;
+}
+.bgcAuthor {
+    background-color: lightblue;
+}
+.bgc1{
+    background-color: lawngreen;
+}
+.bgc2 {
+    background-color:#FFFF00;
 }

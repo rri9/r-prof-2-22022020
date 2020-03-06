@@ -1,3 +1,7 @@
 .header {
    background: linear-gradient(to right, lawngreen, lightblue);
 }
+
+a:hover {
+   text-decoration: none;
+}
