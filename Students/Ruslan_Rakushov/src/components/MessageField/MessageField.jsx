@@ -78,9 +78,10 @@ class MessageField extends Component {
     this.setFocusOnInput();
   };
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     //Отвечаем на каждое нечетное сообщение через 0.1 сек
-    if(this.state.msgs[this.state.msgs.length-1].sender === 'Me') {
+    if (prevState.msgs.length < this.state.msgs.length &&
+      this.state.msgs[this.state.msgs.length - 1].sender === 'Me') {
       setTimeout(() => {
         this.setState({
           msgs: [...this.state.msgs, {
