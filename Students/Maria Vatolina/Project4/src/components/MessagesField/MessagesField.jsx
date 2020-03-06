@@ -75,7 +75,7 @@ class Messages extends Component {
 
    handleChange = (event) => {
         if (event.keyCode !== 13 ) {
-           this.setState({ msg: event.target.value })
+           this.setState({ msg: event.target.value })           
          } else {
             this.sendMessage(this.state.msg, this.props.usr)
             this.setState({ msg: ''})
@@ -87,22 +87,13 @@ class Messages extends Component {
    }
 
    componentDidUpdate () {
-      // const { messages } = this.props;
+      const { messages } = this.props;
 
-      // if (Object.keys(messages).length % 2 === 1) {
-      //    setTimeout(() => {
-      //    this.sendMessage('Please, whait');
-      //    }, 500)
-      // }
-
-   //      let msgs = this.state.msgArray
-   //      if (msgs.length % 2 === 1) {
-   //         setTimeout(() => {
-   //            this.setState({ 
-   //               msgArray: [...this.state.msgArray, {user: null, text: "Please, describe the problem"}],
-   //               msg: ''
-   //            }) 
-   //         }, 500)
+      if (Object.keys(messages).length % 2 === 1) {
+         setTimeout(() => {
+         this.sendMessage('Please, whait');
+         }, 500)
+      }
 
       this.scrollToBottom()
    }
@@ -111,49 +102,50 @@ class Messages extends Component {
       
       this.scrollToBottom();
    }
-    render() {
-        let { usr } = this.props
-        let { messages, classes } = this.props
-        let MessagesArr =[]
 
-         Object.keys(messages).forEach(key => {
-            MessagesArr.push( <Message 
-               sender={ messages[key].user } 
-               text={ messages[key].text } 
-               key={ key }
-            />)
-         })
+   render() {
+      let { usr } = this.props
+      let { messages, classes } = this.props
+      let MessagesArr =[]
 
-        return (
-            <div  className={classes.root}>
-            <Navbar />
-            <Box className={classes.msgBlock}>
-               <Box className={classes.msgList} ref={this.mesagesRef}>
-                  { MessagesArr }
-               </Box>
+      Object.keys(messages).forEach(key => {
+         MessagesArr.push( <Message 
+            sender={ messages[key].user } 
+            text={ messages[key].text } 
+            key={ key }
+         />)
+      })
+
+      return (
+         <div  className={classes.root}>
+         <Navbar />
+         <Box className={classes.msgBlock}>
+            <Box className={classes.msgList} ref={this.mesagesRef}>
+               { MessagesArr }
             </Box>
-            <Box className={classes.sendForm} p={2}>
-               <Box width="85%" mr={2}>
-                  <Input placeholder="Enter your message..."
-                     fullWidth={ true }
-                     onChange={ this.handleChange }  
-                     // onKeyUp={ this.handleChange }
-                     value={ this.state.msg }/>
-               </Box>
-               <IconButton aria-label="send" onClick={ () => this.handleSendMessage(this.state.msg, usr) }>
-                  <Send />
-               </IconButton>
-               <IconButton aria-label="smile">
-                  <SentimentVerySatisfiedRounded />
-               </IconButton>
-               <IconButton aria-label="attachment" >
-                  <AttachmentRounded />
-               </IconButton>
+         </Box>
+         <Box className={classes.sendForm} p={2}>
+            <Box width="85%" mr={2}>
+               <Input placeholder="Enter your message..."
+                  fullWidth={ true }
+                  onChange={ this.handleChange }  
+                  onKeyUp={ this.handleChange }
+                  value={ this.state.msg }/>
             </Box>
+            <IconButton aria-label="send" onClick={ () => this.handleSendMessage(this.state.msg, usr) }>
+               <Send />
+            </IconButton>
+            <IconButton aria-label="smile">
+               <SentimentVerySatisfiedRounded />
+            </IconButton>
+            <IconButton aria-label="attachment" >
+               <AttachmentRounded />
+            </IconButton>
+         </Box>
 
-         </div>
-        )
-    }
+      </div>
+      )
+   }
 }
 
 const mapStateToProps = ({ msgReducer }) => ({
