@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import { Row, ListGroup, } from 'react-bootstrap';
+import { Row, ListGroup, Button, } from 'react-bootstrap';
 
 import Messages from '../MessagesField/MessagesField.jsx';
 
@@ -24,7 +24,7 @@ export default class Layout extends React.Component {
             <div className="bg-light h-100 col-2 d-flex flex-column justify-content-between p-0">
                <div>
                   <p>Hello {user}!</p>
-                  ChatList { this.props.chatId }
+                  <Button variant="outline-primary w-100 mb-5">New chat</Button>
                   <ListGroup>
                      <Link to="/chat/1">
                         <ListGroup.Item action>Chat 1</ListGroup.Item>
@@ -38,7 +38,7 @@ export default class Layout extends React.Component {
                   ReactGram &copy;
                </footer>
             </div>
-            <Messages usr={user} />
+            <Messages usr={user} chatId={this.props.chatId}/>
          </Row>
       );
    }
