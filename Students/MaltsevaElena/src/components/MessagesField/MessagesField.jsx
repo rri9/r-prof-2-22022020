@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
-import './style.css'
 import { Input, IconButton, Box } from '@material-ui/core'
 import { Send, SentimentVerySatisfiedRounded, AttachmentRounded } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
@@ -38,7 +37,8 @@ const useStyles = (theme => ({
 class Messages extends Component {
    constructor (props) {
       super(props)
-      this.state = { 
+      this.state = {
+         usr: 'Me', 
          msg: '',
       },
       this.msgList = React.createRef()
@@ -64,15 +64,15 @@ class Messages extends Component {
       if (event.keyCode !== 13) {
          this.setState({ msg: event.target.value })
       } else {
-         this.sendMsg(this.state.msg, this.props.usr)
+         this.sendMsg(this.state.msg, this.state.usr)
          this.setState({ msg: ''})
       }
    }
 
    componentDidUpdate (prevProps) {
-      const { messages, usr } = this.props
+      let { messages } = this.props
       if (Object.keys(prevProps.messages).length < Object.keys(messages).length &&
-         messages[Object.keys(messages).length].user === usr) {
+         messages[Object.keys(messages).length].user === this.state.usr) {
          setTimeout(() => {
             this.sendMsg("We'll call you back") 
          }, 500)
@@ -81,7 +81,7 @@ class Messages extends Component {
    }
 
    render() {
-      let { usr, messages, classes } = this.props
+      let { messages, classes, chatId } = this.props
       // console.log(messages)
 
       let MessagesArr = []
@@ -97,16 +97,16 @@ class Messages extends Component {
 
       return (
          <div>
-            <Navbar />
+            <Navbar chatId={ chatId }/>
 
-            <Box className={classes.msgBlock}>
-               <Box className={classes.msgList} ref={this.msgList}>
+            <Box className={ classes.msgBlock }>
+               <Box className={ classes.msgList } ref={ this.msgList }>
                   { MessagesArr }
                </Box>
             </Box>
 
             {/* to have create new component for send message */}
-            <Box className={classes.sendForm}>
+            <Box className={ classes.sendForm }>
                <Box width="85%" mr={2}>
                   <Input placeholder="Type your message..."
                      fullWidth={ true }
@@ -114,7 +114,7 @@ class Messages extends Component {
                      onKeyUp={ this.handleChange }
                      value={ this.state.msg }/>
                </Box>
-               <IconButton aria-label="send" onClick={ () => this.handleSendMsg(this.state.msg, usr ) }>
+               <IconButton aria-label="send" onClick={ () => this.handleSendMsg(this.state.msg, this.state.usr ) }>
                   <Send />
                </IconButton>
                <IconButton aria-label="smile">
@@ -129,8 +129,6 @@ class Messages extends Component {
       )
    }
 }
-
-// export default withStyles(useStyles)(Messages)
 
 const mapStateToProps = ({ msgReducer }) => ({
    messages: msgReducer.messages

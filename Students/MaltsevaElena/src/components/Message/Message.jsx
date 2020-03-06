@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import { Box, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import './style.css'
 
 const useStyles = makeStyles(theme => ({
    root: {

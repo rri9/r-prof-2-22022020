@@ -19,13 +19,13 @@ class Chats extends Component {
    }
    render() {
 
-      const { classes } = this.props
+      const { classes, chatId } = this.props
 
       return (
          <Box className={classes.root}>
             <NavBar />
             <Box>
-               <ChatList />
+               <ChatList chatId={ chatId }/>
             </Box>
             <TabBar />
          </Box>

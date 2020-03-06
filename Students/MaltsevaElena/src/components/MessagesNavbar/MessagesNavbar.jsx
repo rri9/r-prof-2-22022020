@@ -18,13 +18,14 @@ const useStyles = makeStyles(theme => ({
    }
 }))
 
-let navbar = () => {
+let navbar = (props) => {
    const classes = useStyles()
+   const { chatId } = props
 
    return (
-      <AppBar position="static" className={classes.appBar}>
-         <Toolbar className={classes.toolbar}>
-            <Typography variant="subtitle1"> HelpDesk </Typography>
+      <AppBar position="static" className={ classes.appBar }>
+         <Toolbar className={ classes.toolbar }>
+            <Typography variant="subtitle1"> HelpDesk (chatRoom { chatId }) </Typography>
             <div>
                <IconButton aria-label="search" color="inherit">
                   <SearchIcon />
