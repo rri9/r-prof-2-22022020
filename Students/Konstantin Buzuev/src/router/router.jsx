@@ -9,22 +9,22 @@ export default class Router extends React.Component {
         <Route
           exact
           path="/"
-          render={() => <Layout user={this.props.user} />}
+          render={() => <Layout user={this.props.user} chatId={Number("1")} />}
         />
         <Route
           exact
           path="/chat/1"
-          render={() => <Layout user={this.props.user} chatId="1" />}
+          render={() => <Layout user={this.props.user} chatId={Number("1")} />}
         />
         <Route
           exact
           path="/chat/2"
-          render={() => <Layout user={this.props.user} chatId="2" />}
+          render={() => <Layout user={this.props.user} chatId={Number("2")} />}
         />
         <Route
           exact
           path="/chat/3"
-          render={() => <Layout user={this.props.user} chatId="3" />}
+          render={() => <Layout user={this.props.user} chatId={Number("3")} />}
         />
       </Switch>
     );

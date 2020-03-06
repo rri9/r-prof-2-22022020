@@ -24,10 +24,12 @@ const theme = createMuiTheme({
 
 export default class Layout extends React.Component {
   static propTypes = {
-    chatId: PropTypes.number
+    chatId: PropTypes.number,
+    user: PropTypes.string
   };
   static defaultProps = {
-    chatId: 1
+    chatId: 1,
+    user: "Darth Vader"
   };
   render() {
     return (
@@ -47,7 +49,10 @@ export default class Layout extends React.Component {
                 <ChatRooms />
               </Grid>
               <Grid item xs={9}>
-                <Messages user={this.props.user} />
+                <Messages
+                  chatId={Number(this.props.chatId)}
+                  user={this.props.user}
+                />
               </Grid>
             </Grid>
           </Container>

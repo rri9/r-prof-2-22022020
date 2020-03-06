@@ -32,23 +32,22 @@ const useStyles = theme => ({
 });
 
 class Messages extends Component {
-  messagesEndRef = React.createRef();
-
   constructor(props) {
     super(props);
-    this.user = props.user;
     this.state = {};
     this.state.message = "";
+    this.messagesEndRef = React.createRef();
   }
   sendMessage = (text, sender) => {
     const { messages } = this.props;
+    const chatId = this.props.chatId;
     const messageID = Object.keys(messages).length + 1;
-    this.props.sendMessage(messageID, sender, text);
+    this.props.sendMessage(chatId, messageID, sender, text);
   };
 
   handleSendMessage(message, sender) {
     this.sendMessage(message, sender);
-    if (sender === this.user) {
+    if (sender === this.props.user) {
       setTimeout(() => {
         this.sendMessage(null, null);
       }, 300);
@@ -58,7 +57,7 @@ class Messages extends Component {
 
   handleChange = event => {
     if (event.keyCode !== 13) this.setState({ message: event.target.value });
-    else this.handleSendMessage(this.state.message, this.user);
+    else this.handleSendMessage(this.state.message, this.props.user);
   };
 
   scrollToBottom = () => {
@@ -88,6 +87,7 @@ class Messages extends Component {
         />
       );
     });
+
     return (
       <div className={classes.root}>
         <GridList
@@ -117,7 +117,7 @@ class Messages extends Component {
           <Fab
             color="primary"
             onClick={() =>
-              this.handleSendMessage(this.state.message, this.user)
+              this.handleSendMessage(this.state.message, this.props.user)
             }
           >
             <SendIcon />
@@ -128,9 +128,12 @@ class Messages extends Component {
   }
 }
 
-const mapStateToProps = ({ msgReducer }) => ({
-  messages: msgReducer.messages
-});
+const mapStateToProps = ({ msgReducer }, ownProps) => {
+  const { chatId } = ownProps;
+  return {
+    messages: msgReducer.chats[chatId].messages
+  };
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ sendMessage }, dispatch);
