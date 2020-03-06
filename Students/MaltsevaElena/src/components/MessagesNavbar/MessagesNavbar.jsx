@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDom from 'react-dom'
+
+// Styles, UI
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
@@ -20,12 +22,12 @@ const useStyles = makeStyles(theme => ({
 
 let navbar = (props) => {
    const classes = useStyles()
-   const { chatId } = props
+   const { title } = props
 
    return (
       <AppBar position="static" className={ classes.appBar }>
          <Toolbar className={ classes.toolbar }>
-            <Typography variant="subtitle1"> HelpDesk (chatRoom { chatId }) </Typography>
+            <Typography variant="subtitle1"> { title } </Typography>
             <div>
                <IconButton aria-label="search" color="inherit">
                   <SearchIcon />

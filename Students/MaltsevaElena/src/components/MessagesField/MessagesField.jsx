@@ -1,18 +1,11 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
+import PropTypes from 'prop-types'
+
+// Styles, UI
 import { Input, IconButton, Box } from '@material-ui/core'
 import { Send, SentimentVerySatisfiedRounded, AttachmentRounded } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
-
-import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
-import Message from '../Message/Message.jsx'
-
-//actions
-import { sendMessage } from '../../store/actions/messages_action.js'
-
-//redux
-import { bindActionCreators } from 'redux'
-import connect from 'react-redux/es/connect/connect'
 
 const useStyles = (theme => ({
    msgBlock: {
@@ -34,25 +27,36 @@ const useStyles = (theme => ({
    }
 }))
 
+// Children components
+import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
+import Message from '../Message/Message.jsx'
+
 class Messages extends Component {
-   constructor (props) {
-      super(props)
-      this.state = {
-         usr: 'Me', 
-         msg: '',
-      },
-      this.msgList = React.createRef()
+   static propTypes = {
+      chatId: PropTypes.number.isRequired,
+      chats: PropTypes.object.isRequired,
+      messages: PropTypes.object.isRequired,
+      sendMessage: PropTypes.func.isRequired,
+      classes: PropTypes.object
    }
+   
+   state = {
+      usr: 'Me', 
+      msg: '',
+   }
+
+   msgList = React.createRef()
 
    scrollToNewMsg () {
       this.msgList.current.lastChild.scrollIntoView({block: 'end', behavior: 'smooth'})
    }
 
    sendMsg = ( text, sender ) => {
-      const { messages } = this.props
-      const messageId = Object.keys(messages).length + 1
+      let { chatId, messages, sendMessage } = this.props
+      let chatMessages = messages[chatId]
+      const messageId = Object.keys(chatMessages).length + 1
 
-      this.props.sendMessage(messageId, sender, text)
+      sendMessage(chatId, messageId, sender, text)
    }
 
    handleSendMsg = (text, sender) => {
@@ -70,9 +74,10 @@ class Messages extends Component {
    }
 
    componentDidUpdate (prevProps) {
-      let { messages } = this.props
-      if (Object.keys(prevProps.messages).length < Object.keys(messages).length &&
-         messages[Object.keys(messages).length].user === this.state.usr) {
+      let { chatId, messages } = this.props
+      let chatMessages = messages[chatId]
+      if (Object.keys(prevProps.messages[chatId]).length < Object.keys(chatMessages).length &&
+         chatMessages[Object.keys(chatMessages).length].user === this.state.usr) {
          setTimeout(() => {
             this.sendMsg("We'll call you back") 
          }, 500)
@@ -81,23 +86,25 @@ class Messages extends Component {
    }
 
    render() {
-      let { messages, classes, chatId } = this.props
-      // console.log(messages)
+      let { chatId, chats, messages, classes } = this.props
+      let chatMessages = messages[chatId]
 
       let MessagesArr = []
-      Object.keys(messages).forEach(messageId => {
+      Object.keys(chatMessages).forEach(messageId => {
          MessagesArr.push( 
             <Message 
-               sender={ messages[messageId].user } 
-               text={ messages[messageId].text } 
+               sender={ chatMessages[messageId].user } 
+               text={ chatMessages[messageId].text } 
                key={ messageId }
+               chatId={ chatId }
+               chats={ chats }
             /> 
          )
       })
 
       return (
          <div>
-            <Navbar chatId={ chatId }/>
+            <Navbar title={ chats[chatId].title }/>
 
             <Box className={ classes.msgBlock }>
                <Box className={ classes.msgList } ref={ this.msgList }>
@@ -130,9 +137,4 @@ class Messages extends Component {
    }
 }
 
-const mapStateToProps = ({ msgReducer }) => ({
-   messages: msgReducer.messages
-})
-const mapDespatchToProps = dispatch => bindActionCreators( {sendMessage}, dispatch)
-
-export default connect(mapStateToProps, mapDespatchToProps)(withStyles(useStyles)(Messages))
+export default withStyles(useStyles)(Messages)
