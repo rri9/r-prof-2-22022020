@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Badge } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -21,9 +22,13 @@ const useStyles = (theme => ({
 }));
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-  }
+  static propTypes = {
+    chatId: PropTypes.number,
+  };
+  static defaultProps = {
+    chatId: 1,
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -34,7 +39,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title}>
-              ReactGram &copy;
+              ReactGram &copy; Chat {this.props.chatId}
             </Typography>
             <div className={classes.rightMenu}>
               <IconButton aria-label="notifications" color="inherit">

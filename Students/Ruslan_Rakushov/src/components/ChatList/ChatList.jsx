@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
 import AssistantIcon from '@material-ui/icons/Assistant';
@@ -23,12 +24,9 @@ class ChatList extends Component {
     };
   }
   handleListItemClick = (event, index) => {
-    console.log('this.selectedIndex before: ', this.state.selectedIndex);
     this.setState({
       selectedIndex: index,
     });
-    console.log('handleListItemClick:', index);
-    console.log('this.selectedIndex after: ', this.state.selectedIndex);
   };
   render() {
     const { classes } = this.props;
@@ -36,33 +34,39 @@ class ChatList extends Component {
       <div className={classes.root}>
         <Divider />
         <List>
-          <ListItem
-          button
-          selected={this.state.selectedIndex === 0}
-          onClick={event => this.handleListItemClick(event, 0)}>
+          <Link to='/chat/1/'>
+            <ListItem
+            button
+            selected={this.state.selectedIndex === 0}
+            onClick={event => this.handleListItemClick(event, 0)}>
+              <ListItemIcon className={classes.itemIcon}>
+                <AssistantIcon />
+              </ListItemIcon>
+              <ListItemText primary='Chat 1'/>
+            </ListItem>
+          </Link>
+          <Link to='/chat/2/'>
+            <ListItem
+            button
+            selected={this.state.selectedIndex === 1}
+            onClick={event => this.handleListItemClick(event, 1)}>
             <ListItemIcon className={classes.itemIcon}>
-              <AssistantIcon />
-            </ListItemIcon>
-            <ListItemText primary='Chat 1'/>
-          </ListItem>
-          <ListItem
-          button
-          selected={this.state.selectedIndex === 1}
-          onClick={event => this.handleListItemClick(event, 1)}>
-          <ListItemIcon className={classes.itemIcon}>
-              <AssistantIcon />
-            </ListItemIcon>
-            <ListItemText primary='Chat 2'/>
-          </ListItem>
-          <ListItem
-          button
-          selected={this.state.selectedIndex === 2}
-          onClick={event => this.handleListItemClick(event, 2)}>
-          <ListItemIcon className={classes.itemIcon}>
-              <AssistantIcon />
-            </ListItemIcon>
-            <ListItemText primary='Chat 3'/>
-          </ListItem>
+                <AssistantIcon />
+              </ListItemIcon>
+              <ListItemText primary='Chat 2'/>
+            </ListItem>
+          </Link>
+          <Link to='/chat/3/'>
+            <ListItem
+            button
+            selected={this.state.selectedIndex === 2}
+            onClick={event => this.handleListItemClick(event, 2)}>
+            <ListItemIcon className={classes.itemIcon}>
+                <AssistantIcon />
+              </ListItemIcon>
+              <ListItemText primary='Chat 3'/>
+            </ListItem>
+          </Link>
         </List>
         <Divider />
       </div>

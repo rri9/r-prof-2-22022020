@@ -4,8 +4,6 @@ import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
   
-// import './Message.css';
-
 const useStyles = makeStyles((props) => ({
   root: {
     display: 'flex',

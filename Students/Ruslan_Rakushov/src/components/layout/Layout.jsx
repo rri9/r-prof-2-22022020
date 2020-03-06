@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import { withStyles } from '@material-ui/core/styles';
-
+import PropTypes from 'prop-types';
 import Header from '../Header/Header.jsx';
 import ChatList from '../ChatList/ChatList.jsx';
 import MessageField from '../MessageField/MessageField.jsx';
@@ -13,17 +13,40 @@ const useStyles = (theme => ({
   },
 }));
 
+const msgs = [
+  {
+    sender: 'Me',
+    text: 'Hello!',
+  },
+  {
+    sender: null,
+    text: null,
+  },
+  {
+    sender: 'Me',
+    text: 'How are You?',
+  },
+  {
+    sender: null,
+    text: null,
+  },
+];
+
 class Layout extends Component {
-  constructor(props) {
-    super(props);
-  }
+  static propTypes = {
+    chatId: PropTypes.number,
+  };
+  static defaultProps = {
+    chatId: 1,
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Header />
+        <Header chatId={this.props.chatId}/>
         <ChatList />
-        <MessageField msgs={this.props.msgs} />
+        <MessageField msgs={msgs} />
       </div>
     );
   };
