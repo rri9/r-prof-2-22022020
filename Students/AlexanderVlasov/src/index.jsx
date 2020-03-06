@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDom from "react-dom";
 import { ThemeProvider, createMuiTheme, CssBaseline, Container, Fab, Grid } from "@material-ui/core";
+import { Provider } from 'react-redux';
+import initStore from './store/store.js';
 
 import '../node_modules/bootstrap/dist/css/bootstrap-grid.css';
 import 'typeface-roboto';
@@ -28,25 +30,27 @@ const theme = createMuiTheme({
 
 let user = 'Alex';
 ReactDom.render(
-    <ThemeProvider theme={theme}>
-        <CssBaseline></CssBaseline>
-        <Container maxWidth="lg">
-            <Header usr={ user }/>
-            <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="flex-start"
-                spacing={1}
-            >
-                <Grid item xs={3}>
-                    <ChatList />
+    <Provider store = { initStore() }>
+        <ThemeProvider theme={theme}>
+            <CssBaseline></CssBaseline>
+            <Container maxWidth="lg">
+                <Header usr={ user }/>
+                <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="flex-start"
+                    spacing={1}
+                >
+                    <Grid item xs={3}>
+                        <ChatList />
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Messages usr={ user }/>
+                    </Grid>
                 </Grid>
-                <Grid item xs={9}>
-                    <Messages usr={ user }/>
-                </Grid>
-            </Grid>
-        </Container>
-    </ThemeProvider>, 
+            </Container>
+        </ThemeProvider>
+    </Provider>, 
     document.getElementById("app")
 );

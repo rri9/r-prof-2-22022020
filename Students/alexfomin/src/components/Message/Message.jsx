@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Toast, ToastBody, ToastHeader, Spinner } from 'reactstrap';
+import { Toast, ToastBody, ToastHeader } from 'reactstrap';
 import './style.css';
 
 
@@ -20,19 +20,25 @@ import './style.css';
 const Message = (props) => {
     let { sender, text } = props
     sender ? sender = sender : sender = 'Luke'
+    let senderClass = ''
+    if (sender == 'Luke') {
+       senderClass = 'me'
+    }
+    else {
+       senderClass = 'another'
+    }
+
+
 
     return (
-      <div>
-        <Toast>
-          <ToastHeader icon="primary">
+        <Toast className={senderClass}>
+          <ToastHeader>
            {sender}
           </ToastHeader>
           <ToastBody>
           { props.sender || (!props.sender && text) ? text : 'go away plz...' }
           </ToastBody>
         </Toast>
-
-      </div>
     );
   };
   
