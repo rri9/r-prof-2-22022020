@@ -18,6 +18,7 @@ export default class Layout extends React.Component {
 
    render() {
       let user = 'Darth Vader';
+      const chatId = Number(this.props.match.params.chatId) || 1;
 
       return (
          <Row className="align-items-end h-75 flex-grow-1">
@@ -38,7 +39,7 @@ export default class Layout extends React.Component {
                   ReactGram &copy;
                </footer>
             </div>
-            <Messages usr={user} chatId={this.props.chatId}/>
+            <Messages usr={user} chatId={chatId}/>
          </Row>
       );
    }
