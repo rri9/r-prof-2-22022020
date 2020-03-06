@@ -9,15 +9,18 @@ import Search from './components/Search/Search.jsx'
 import { Provider } from 'react-redux'
 import initStore from './store/store.js'
 
-let user = 'Darth Vader'
+let InitStore = initStore()
+
+let user = 'Darth Vader';
 
 const HeadLogo = (props) => {
-  console.log(props)
   let { logo } = props
   return (
     <Badge color="warning" className="headlogo">{ logo }</Badge>
   );
 }
+
+//console.log(initStore.getState())
 
 const Messenger = (props) => {
     return (
@@ -33,7 +36,7 @@ const Messenger = (props) => {
   }
 
 ReactDom.render (
-  <Provider store = { initStore}>
+  <Provider store = { InitStore }>
     <Messenger/>
   </Provider>
  ,
