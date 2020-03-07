@@ -7,9 +7,10 @@ import initStore from './store/store.js';
 import '../node_modules/bootstrap/dist/css/bootstrap-grid.css';
 import 'typeface-roboto';
 
-import Messages from './components/MessagesField/MessagesField.jsx';
 import Header from './components/Header/Header.jsx';
-import ChatList from './components/ChatList/ChatList.jsx';
+
+import Router from './router/Router.jsx';
+import { BrowserRouter } from 'react-router-dom';
 
 const theme = createMuiTheme({
     typography: {
@@ -30,27 +31,16 @@ const theme = createMuiTheme({
 
 let user = 'Alex';
 ReactDom.render(
-    <Provider store = { initStore() }>
-        <ThemeProvider theme={theme}>
-            <CssBaseline></CssBaseline>
-            <Container maxWidth="lg">
-                <Header usr={ user }/>
-                <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="flex-start"
-                    spacing={1}
-                >
-                    <Grid item xs={3}>
-                        <ChatList />
-                    </Grid>
-                    <Grid item xs={9}>
-                        <Messages usr={ user }/>
-                    </Grid>
-                </Grid>
-            </Container>
-        </ThemeProvider>
-    </Provider>, 
+    <BrowserRouter>
+        <Provider store = { initStore() }>
+            <ThemeProvider theme={theme}>
+                <CssBaseline></CssBaseline>
+                <Container maxWidth="lg">
+                    <Header usr={ user }/>
+                    <Router/>
+                </Container>
+            </ThemeProvider>
+        </Provider>
+    </BrowserRouter>, 
     document.getElementById("app")
 );
