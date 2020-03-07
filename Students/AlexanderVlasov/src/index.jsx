@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { ThemeProvider, createMuiTheme, CssBaseline, Container, Fab, Grid } from "@material-ui/core";
+import { ThemeProvider, createMuiTheme, CssBaseline, Container } from "@material-ui/core";
 import { Provider } from 'react-redux';
 import initStore from './store/store.js';
 
@@ -10,7 +10,7 @@ import 'typeface-roboto';
 import Header from './components/Header/Header.jsx';
 
 import Router from './router/Router.jsx';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 const theme = createMuiTheme({
     typography: {
@@ -27,11 +27,17 @@ const theme = createMuiTheme({
         '"Segoe UI Symbol"',
       ].join(','),
     },
+    pallete: {
+        primary: {
+            dark: '#3f51b5',
+            light: '#fff'
+        }
+    }
   });
 
 let user = 'Alex';
 ReactDom.render(
-    <BrowserRouter>
+    <HashRouter>
         <Provider store = { initStore() }>
             <ThemeProvider theme={theme}>
                 <CssBaseline></CssBaseline>
@@ -41,6 +47,6 @@ ReactDom.render(
                 </Container>
             </ThemeProvider>
         </Provider>
-    </BrowserRouter>, 
+    </HashRouter>, 
     document.getElementById("app")
 );
