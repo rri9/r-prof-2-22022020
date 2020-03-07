@@ -3,10 +3,11 @@ import { Grid } from '@material-ui/core';
 import ChatList from '../ChatList/ChatList.jsx';
 import Messages from '../MessagesField/MessagesField.jsx';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 let user = 'Alex';
 
-export default class Layout extends React.Component {
+class Layout extends React.Component {
     static propTypes = {
         chatId: PropTypes.number,
     }
@@ -14,6 +15,7 @@ export default class Layout extends React.Component {
         chatId: 1
     }
     render() {
+        const { match: { params } } = this.props;
         return (
             <Grid
                 container
@@ -26,9 +28,13 @@ export default class Layout extends React.Component {
                     <ChatList chatId={ this.props.chatId }/>
                 </Grid>
                 <Grid item xs={9}>
-                    <Messages usr={ user }/>
+                    {
+                        params.chatId ?  <Messages usr={ user }/> : <h2 style={{textAlign: 'center'}}>Выберите чат</h2>
+                    }
                 </Grid>
             </Grid>
         )
     }
 }
+
+export default withRouter(Layout);
