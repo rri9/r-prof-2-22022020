@@ -23,14 +23,15 @@ const useStyles = (theme => ({
 
 class Header extends Component {
   static propTypes = {
-    chatId: PropTypes.number,
+    chats: PropTypes.object.isRequired,
+    chatId: PropTypes.number.isRequired,
   };
   static defaultProps = {
     chatId: 1,
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, chats, chatId } = this.props;
     return (
       <div className={classes.root}>
         <AppBar className={classes.appbar}>
@@ -39,7 +40,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title}>
-              ReactGram &copy; Chat {this.props.chatId}
+              ReactGram &copy; {chats[chatId].title}
             </Typography>
             <div className={classes.rightMenu}>
               <IconButton aria-label="notifications" color="inherit">

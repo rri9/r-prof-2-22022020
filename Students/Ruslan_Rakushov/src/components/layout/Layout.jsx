@@ -54,8 +54,7 @@ class Layout extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Header chatId={this.props.chatId} />
-        {/* TODO chat title в header */}
+        <Header chats={chats} chatId={this.props.chatId} />
         <ChatList />
         <MessageField msgs={msgs} chats={chats} chatId={this.props.chatId}/>
       </div>
