@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, match } from 'react-router-dom';
 
 import Layout from '../components/Layout/Layout.jsx';
 
@@ -9,8 +9,7 @@ export default class Router extends React.Component {
         return (
             <Switch>
                 <Route exact path="/" component= { Layout }/>
-                <Route exact path="/chat/1/" render= { () => <Layout chatId = { 1 }/> }/>
-                <Route exact path="/chat/2/" render= { () => <Layout chatId = { 2 }/> }/>
+                <Route path="/chat/:chatId" component= { Layout }/> }/>
             </Switch>
         )
     }
