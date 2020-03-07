@@ -1,0 +1,31 @@
+.msg {
+    background-color: lightblue;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+}
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    max-width: 550px;
+    margin: 0 auto;
+  }
+.header{
+    text-align: center;
+}
+.h1-Header{
+    text-align: center;
+}
+.userMessage{
+    margin-left: 30%;
+    background-color:#48e250;
+}
+.botMessage{
+    margin-right: 30%;
+    background-color:#00b6f8;
+}
+.messagesBlock{
+    overflow-y: auto;
+    height: 570px;
+}
