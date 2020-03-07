@@ -1,17 +1,21 @@
 import React from "react";
+import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { fade, makeStyles, withStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { checkPropTypes } from "prop-types";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "space-between"
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -60,50 +64,60 @@ const useStyles = makeStyles(theme => ({
       }
     }
   }
-}));
+});
 
-export default function Header() {
-  const classes = useStyles();
+class Header extends React.Component {
+  static propTypes = {
+    chatId: PropTypes.number
+  };
+  static defaultProps = {
+    chatId: 1
+  };
+  render() {
+    const { classes } = this.props;
 
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            React ChatRoom
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-          <div>
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
             <IconButton
-              aria-label="upload picture"
+              edge="start"
+              className={classes.menuButton}
               color="inherit"
-              size="medium"
+              aria-label="open drawer"
             >
-              <AccountCircleIcon />
+              <MenuIcon />
             </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+            <Typography className={classes.title} variant="h6" noWrap>
+              React ChatRoom {this.props.chatId}
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </div>
+            <div>
+              <IconButton
+                aria-label="upload picture"
+                color="inherit"
+                size="medium"
+              >
+                <AccountCircleIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 }
+
+export default withStyles(useStyles)(Header);
