@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+// TODO Сделать страницу профиля /profile/, и ссылку на нее в Header’е
+
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';

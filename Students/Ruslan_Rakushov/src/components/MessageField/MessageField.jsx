@@ -12,6 +12,9 @@ const useStyles = (theme => ({
   wrapper: {
     width: '70vh',
     marginTop: '70px',
+    // TODO height 70vh (в body или верхний контейнер 100vh,
+    //  дальше вложенным делаем свои или 100.
+    //  еще можно футером прибить (см.какое-то свойство css)
   },
   root: {
     display: 'flex',

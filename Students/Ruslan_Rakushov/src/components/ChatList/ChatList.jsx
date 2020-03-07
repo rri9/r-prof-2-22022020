@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+// TODO Добавление чатов
+
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';

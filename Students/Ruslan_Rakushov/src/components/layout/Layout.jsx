@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -14,6 +14,8 @@ const useStyles = (theme => ({
 }));
 
 //data - выпилить!
+//FIX Массивы сообщений в каждом чате
+//  или в сообщении id его чата
 const chats = {
   1: { title: 'Чат 1', msgsList: [1, 2, 3, 4] },
   2: { title: 'Чат 2', msgsList: [5] },
