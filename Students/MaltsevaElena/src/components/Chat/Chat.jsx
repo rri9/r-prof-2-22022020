@@ -3,12 +3,11 @@ import ReactDom from 'react-dom'
 
 import { Link } from 'react-router-dom'
 
+// Styles, UI
 import { ListItem, 
          ListItemAvatar, 
          ListItemText, 
-         Avatar, 
-         Badge, 
-         Divider } from "@material-ui/core"
+         Avatar } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -20,7 +19,7 @@ const useStyles = makeStyles(theme => ({
    selected: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.secondary.main,
-      '&>.MuiListItemAvatar-root>.makeStyles-avatar-189': {
+      '&>.MuiListItemAvatar-root>.makeStyles-avatar-190': {
          backgroundColor: theme.palette.secondary.main,
          color: theme.palette.common.white
       }
@@ -38,13 +37,12 @@ let chat = (props) => {
 
    return (
       <Link to={ link }>
-         <ListItem className={ isSelected ? classes.selected : classes.item }>
+         <ListItem className={ isSelected ? classes.selected : classes.item } divider={ true } >
             <ListItemAvatar>
-               <Avatar className={ classes.avatar }> { title[0] } </Avatar>
+               <Avatar className={ classes.avatar }> { title[0].toUpperCase() } </Avatar>
             </ListItemAvatar>
             <ListItemText primary={ title } secondary={ message } />
          </ListItem>
-         <Divider light="true" />
       </Link>
    )
 }
