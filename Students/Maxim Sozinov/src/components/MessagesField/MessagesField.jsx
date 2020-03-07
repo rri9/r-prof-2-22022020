@@ -21,9 +21,10 @@ class Messages extends Component {
 
     addNewMessage = (text, sender) => {
         const { messages } = this.props;
+        const { chatId } = this.props;
         const messageId = Object.keys(messages).length + 1;
 
-        this.props.sendMessage(messageId, sender, text);
+        this.props.sendMessage(messageId, sender, text, chatId);
         this.setState({
             newMessage: ''
         });
@@ -60,11 +61,19 @@ class Messages extends Component {
 
         let { usr } = this.props;
         let { messages } = this.props;
+        const { chatId } = this.props;
 
         let MessagesArr = [];
 
         Object.keys(messages).forEach(key => {
-            MessagesArr.push( <Message key={ key } sender={ messages[key].user } text={ messages[key].text }/> );
+            if ( messages[key].chatId === chatId ) {
+                MessagesArr.push( <Message 
+                                    key={ key }
+                                    sender={ messages[key].user }
+                                    text={ messages[key].text }
+                                    chatId={ chatId }
+                                /> );
+            }
         });
 
 

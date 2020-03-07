@@ -5,7 +5,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import blue from '@material-ui/core/colors/blue';
-import pink from '@material-ui/core/colors/pink';
+import cyan from '@material-ui/core/colors/cyan';
 
 import Layout from './components/Layout/Layout.jsx'
 
@@ -17,7 +17,7 @@ const theme = createMuiTheme({
     primary: indigo,
     hovered: blue["400"],
     selected: indigo,
-    secondary: pink,
+    secondary: cyan,
     background: {
        paper: indigo['50'],
        default: indigo['A100']
