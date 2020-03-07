@@ -100,7 +100,7 @@ class MessageField extends Component {
       msgs[chatMsgLastIndex].sender === 'Me') {
       setTimeout(() => {
         const text = 'Leave me alone, human...';
-        const sender = '';
+        const sender = 'Bot';
         this.sendMsg(text, sender);
       }, 1000);
     }
@@ -123,7 +123,7 @@ class MessageField extends Component {
         <div className={classes.sendMsgField}>
           <Tooltip title = "Введите текст сообщения">
             <TextField
-              // TODO placeholder
+              placeholder = 'Введите сообщение...'
               inputRef = {this.msgTextInput}
               className = {classes.sendText}
               variant = "outlined"
