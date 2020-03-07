@@ -42,27 +42,37 @@ class MessageField extends Component {
     super(props);
     this.state = {
       msgText: '',
+      chats: props.chats,
       msgs: props.msgs,
     };
     this.msgTextInput = React.createRef()
     this.messageFieldEndRef = React.createRef();
   }
   //methods
-  sendMsg = (message) => {
-    // const msg = document.querySelector('#msg'); //Так плохо, потому что не логично обращаться к DOM напрямую!!!
-    this.setState ({
-      msgs : [...this.state.msgs, {
-        sender: 'Me',
-        text: message,
-      }],
+  sendMsg = (message, sender) => {
+    const chatId = this.props.chatId;
+    const { chats, msgs } = this.state;
+    const msgId = Object.keys(msgs).length + 1;
+    this.setState({
+      msgs: { ...msgs, 
+        [msgId]: {
+          sender: sender,
+          text: message,
+        }
+      },
+      chats: { ...chats,
+        [chatId]: { ...chats[chatId],
+          msgsList: [...chats[chatId]['msgsList'], msgId],
+        }
+      },
       msgText: '',
     });
   };
   handleChange = (evt) => {
-    if (evt.keyCode !== 13) {
-      this.setState({ [evt.target.name]: evt.target.value });
+    if (evt.keyCode === 13) {
+      this.sendMsg(evt.target.value, 'Me');
     } else {
-      this.sendMsg(evt.target.value);
+      this.setState({ [evt.target.name]: evt.target.value });
     }
   };
   scrollToBottom = () => {
@@ -79,15 +89,19 @@ class MessageField extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.msgs.length < this.state.msgs.length &&
-      this.state.msgs[this.state.msgs.length - 1].sender === 'Me') {
+    const { chats: prevChats, msgs: prevMsgs } = prevState;
+    const { chats, msgs } = this.state;
+    const chatId = this.props.chatId;
+    const prevMsgsLength = Object.keys(prevChats[chatId].msgsList).length;
+    const msgsLength = Object.keys(chats[chatId].msgsList).length;
+    const chatMsgsListLastIndex = chats[chatId].msgsList.length - 1;
+    const chatMsgLastIndex = chats[chatId].msgsList[chatMsgsListLastIndex];
+    if (prevMsgsLength < msgsLength &&
+      msgs[chatMsgLastIndex].sender === 'Me') {
       setTimeout(() => {
-        this.setState({
-          msgs: [...this.state.msgs, {
-            sender: null,
-            text: 'Leave me alone, human...',
-          }]
-        });
+        const text = 'Leave me alone, human...';
+        const sender = '';
+        this.sendMsg(text, sender);
       }, 1000);
     }
     this.scrollToBottom();
@@ -96,7 +110,11 @@ class MessageField extends Component {
 
   render() {
     const { classes } = this.props;
-    let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg} />);
+    const { msgs, chats } = this.state;
+    const { chatId } = this.props;
+    const MessagesArr = chats[chatId].msgsList.map((msgId, index) => (
+      <Message key={index.toString()} msg={msgs[msgId]} />
+    ));
     return (
       <div className={classes.wrapper}>
         <div className={classes.root} ref={this.messageFieldEndRef}>
@@ -105,6 +123,7 @@ class MessageField extends Component {
         <div className={classes.sendMsgField}>
           <Tooltip title = "Введите текст сообщения">
             <TextField
+              // TODO placeholder
               inputRef = {this.msgTextInput}
               className = {classes.sendText}
               variant = "outlined"
@@ -120,7 +139,7 @@ class MessageField extends Component {
               className={classes.sendBtn}
               // size="small"
               name="sendMsgUI"
-              onClick={() => this.sendMsg(this.state.msgText)}>
+              onClick={() => this.sendMsg(this.state.msgText, 'Me')}>
                 <SendOutlinedIcon />
               </IconButton>
           </Tooltip>

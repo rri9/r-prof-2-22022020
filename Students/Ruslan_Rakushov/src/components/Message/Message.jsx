@@ -33,8 +33,8 @@ const Message = (props) => {
   const classes = useStyles(props);
   const sender = props.msg.sender ? props.msg.sender : 'Bot';
   const text = (props.msg.sender || props.msg.text) ? props.msg.text : 'Bot answering smth...';
-  const msgStyle = props.msg.sender ? classes.userAnswer : classes.botAnswer;
-
+  const msgStyle = props.msg.sender === 'Me' ? classes.userAnswer : classes.botAnswer;
+  // TODO неверный стиль при отправке в sendMsg sender='Bot'
   return (
     <Paper className = {classes.root}>
       <span className={msgStyle}> { sender }: </span>
