@@ -45,7 +45,7 @@ export default function FolderList() {
 
       <List className={classes.root}>
         <Link to="/chat/1">
-          <ListItem>
+          <ListItem button>
             <ListItemAvatar>
               <Avatar>
                 <ChatIcon />
@@ -55,7 +55,7 @@ export default function FolderList() {
           </ListItem>
         </Link>
         <Link to="/chat/2">
-          <ListItem>
+          <ListItem button>
             <ListItemAvatar>
               <Avatar>
                 <ForumIcon />
@@ -65,7 +65,7 @@ export default function FolderList() {
           </ListItem>
         </Link>
         <Link to="/chat/3">
-          <ListItem>
+          <ListItem button>
             <ListItemAvatar>
               <Avatar>
                 <FeedbackIcon />
