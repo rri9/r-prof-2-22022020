@@ -10,6 +10,7 @@ import {
   Grid,
   Fab
 } from "@material-ui/core";
+import "./style.css";
 
 import Messages from "../MessagesField/MessagesField.jsx";
 import Header from "../Header/Header.jsx";
@@ -19,6 +20,14 @@ import initStore from "../../store/store.js";
 const theme = createMuiTheme({
   typography: {
     fontFamily: ["Roboto", "Arial"].join(",")
+  },
+  overrides: {
+    MuiContainer: {
+      root: {
+        height: "100vh",
+        overflow: "hidden"
+      }
+    }
   }
 });
 
@@ -44,11 +53,12 @@ export default class Layout extends React.Component {
               justify="space-around"
               align-items="flex-start"
               spacing={1}
+              className="wrapperGrid"
             >
-              <Grid item xs={3}>
+              <Grid item xs={3} className="panel">
                 <ChatRooms />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={9} className="panel">
                 <Messages
                   chatId={Number(this.props.chatId)}
                   user={this.props.user}

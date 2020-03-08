@@ -15,16 +15,16 @@ import SendIcon from "@material-ui/icons/Send";
 const useStyles = theme => ({
   root: {
     display: "flex",
-    flexWrap: "wrap",
-    overflow: "hidden",
+    flexWrap: "nowrap",
+    overflowY: "hidden",
+    overflowX: "hidden",
     backgroundColor: theme.palette.background.paper,
     flexDirection: "column",
-    alignItems: "flex-start",
-    justify: "space-between"
+    justifyContent: "space-between",
+    height: "100%"
   },
   gridList: {
-    width: "100%",
-    maxHeight: "calc(100vh - 120px)"
+    width: "100%"
   },
   bottomPanel: {
     padding: "10px"
