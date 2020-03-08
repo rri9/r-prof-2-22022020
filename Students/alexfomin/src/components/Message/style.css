@@ -1,7 +1,23 @@
 .msg {
-    background-color: lightblue;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 18px;
     margin: 5px;
+}
+
+
+.me {
+    align-self: flex-end;
+}
+
+.me .toast-header {
+    color: rgb(255, 193, 7)
+}
+
+.another {
+    align-self: flex-start;
+}
+
+.another .toast-header {
+    color: rgb(34,193,195)
 }

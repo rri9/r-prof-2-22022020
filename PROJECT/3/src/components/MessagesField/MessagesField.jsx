@@ -14,25 +14,25 @@ class Messages extends Component {
     constructor(props) {
         super(props)
         //где-то тут... 
-        this.state = {
-            msg: '',
-            // msgArray: [{
-            //     user: 'Darth Vader',
-            //     text: 'Hallo'
-            // },
-            // {
-            //     user: null,
-            //     text: null
-            // },
-            // {
-            //     user: 'Darth Vader',
-            //     text: 'I am your father'
-            // },
-            // {
-            //     user: null,
-            //     text: 'NOOOOOOOOO'
-            // }]
-        }
+         this.state = {
+             msg: '',
+        //     // msgArray: [{
+        //     //     user: 'Darth Vader',
+        //     //     text: 'Hallo'
+        //     // },
+        //     // {
+        //     //     user: null,
+        //     //     text: null
+        //     // },
+        //     // {
+        //     //     user: 'Darth Vader',
+        //     //     text: 'I am your father'
+        //     // },
+        //     // {
+        //     //     user: null,
+        //     //     text: 'NOOOOOOOOO'
+        //     // }]
+        // }
     }
     //methods
     sendMessage = (text, sender) => {

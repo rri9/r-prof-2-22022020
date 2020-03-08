@@ -1,85 +1,119 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
+import PropTypes from 'prop-types'
+
+// Styles, UI
 import { Input, IconButton, Box } from '@material-ui/core'
 import { Send, SentimentVerySatisfiedRounded, AttachmentRounded } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
-import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
-import Message from '../Message/Message.jsx'
 
 const useStyles = (theme => ({
-   root: {
-      heigth: '100vh',
-      width: "100%"
-   },
-   msgList: {
-      height: 'calc(100vh - 163px)',
+   msgBlock: {
+      height: 'calc(100vh - 160px)',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
       padding: theme.spacing(2)
    },
+   msgList: {
+      overflow: 'auto'
+   },
    sendForm: {
+      maxHeight: '64px',
       position: 'static',
       display: 'flex',
       justifyContent: 'space-between',
+      padding: theme.spacing(1, 2, 0, 2)
    }
 }))
 
+// Children components
+import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
+import Message from '../Message/Message.jsx'
+
 class Messages extends Component {
-   constructor (props) {
-      super(props)
-      this.state = { 
-         msg: '',
-         msgArray: [
-            { user: null, text: "Any problems?" },
-            { user: "Me", text: "I clicked something and everything disappeared" },
-            { user: null, text: null },
-            { user: "Me", text: "And what?" },
-         ] 
-      }
+   static propTypes = {
+      chatId: PropTypes.number.isRequired,
+      chats: PropTypes.object.isRequired,
+      messages: PropTypes.object.isRequired,
+      sendMessage: PropTypes.func.isRequired,
+      classes: PropTypes.object
+   }
+   
+   state = {
+      usr: 'Me', 
+      msg: '',
    }
 
-   sendMsg = () => {
-      this.setState({ 
-         msgArray: [...this.state.msgArray, {user: this.props.usr, text: this.state.msg}],
-         msg: ''
-      }) 
+   msgList = React.createRef()
+
+   scrollToNewMsg () {
+      this.msgList.current.lastChild.scrollIntoView({block: 'end', behavior: 'smooth'})
+   }
+
+   sendMsg = ( text, sender ) => {
+      let { chatId, messages, sendMessage } = this.props
+      let chatMessages = messages[chatId]
+      const messageId = Object.keys(chatMessages).length + 1
+
+      sendMessage(chatId, messageId, sender, text)
+   }
+
+   handleSendMsg = (text, sender) => {
+      this.setState({ msg: ''})
+      if (text.length > 0) this.sendMsg(text, sender)
    }
 
    handleChange = (event) => {
-      event.keyCode !== 13 ?
-         this.setState({ msg: event.target.value }) :
-         this.sendMsg()
-   }
-
-   componentDidUpdate () {
-      let msgs = this.state.msgArray
-      if (msgs.length % 2 === 1) {
-         setTimeout(() => {
-            this.setState({ 
-               msgArray: [...this.state.msgArray, {user: null, text: "We'll call you back"}],
-               msg: ''
-            }) 
-         }, 500)
+      if (event.keyCode !== 13) {
+         this.setState({ msg: event.target.value })
+      } else {
+         this.sendMsg(this.state.msg, this.state.usr)
+         this.setState({ msg: ''})
       }
    }
 
-   render() {
-      let { usr, classes } = this.props
-      let { msgArray } = this.state
+   componentDidUpdate (prevProps) {
+      let { chatId, messages } = this.props
+      let chatMessages = messages[chatId]
+      if (Object.keys(prevProps.messages[chatId]).length < Object.keys(chatMessages).length &&
+         chatMessages[Object.keys(chatMessages).length].user === this.state.usr) {
+         setTimeout(() => {
+            this.sendMsg("We'll call you back") 
+         }, 500)
+      }
+      this.scrollToNewMsg()
+   }
 
-      let MessagesArr = msgArray.map((message, index) => <Message sender={ message.user } text={ message.text } key={ index }/>)
+   render() {
+      let { chatId, chats, messages, classes } = this.props
+      let chatMessages = messages[chatId]
+
+      let MessagesArr = []
+      Object.keys(chatMessages).forEach(messageId => {
+         MessagesArr.push( 
+            <Message 
+               sender={ chatMessages[messageId].user } 
+               text={ chatMessages[messageId].text } 
+               key={ messageId }
+               chatId={ chatId }
+               chats={ chats }
+            /> 
+         )
+      })
 
       return (
-         <div className={classes.root}>
-            <Navbar />
+         <div>
+            <Navbar title={ chats[chatId].title }/>
 
-            <Box className={classes.msgList}>
-               { MessagesArr }
+            <Box className={ classes.msgBlock }>
+               <Box className={ classes.msgList } ref={ this.msgList }>
+                  { MessagesArr }
+               </Box>
             </Box>
 
             {/* to have create new component for send message */}
-            <Box className={classes.sendForm} p={2}>
+            <Box className={ classes.sendForm }>
                <Box width="85%" mr={2}>
                   <Input placeholder="Type your message..."
                      fullWidth={ true }
@@ -87,7 +121,7 @@ class Messages extends Component {
                      onKeyUp={ this.handleChange }
                      value={ this.state.msg }/>
                </Box>
-               <IconButton aria-label="send" onClick={ this.sendMsg }>
+               <IconButton aria-label="send" onClick={ () => this.handleSendMsg(this.state.msg, this.state.usr ) }>
                   <Send />
                </IconButton>
                <IconButton aria-label="smile">

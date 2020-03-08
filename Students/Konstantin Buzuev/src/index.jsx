@@ -2,9 +2,14 @@ import React from "react";
 import ReactDom from "react-dom";
 import "bootstrap";
 
-import Messages from "./components/MessagesField/MessagesField.jsx";
+import Router from "./router/router.jsx";
+import { BrowserRouter } from "react-router-dom";
+let user = "Constantine";
 
-let user = "Darth Vader";
-//<Messages usr={user} />
+ReactDom.render(
+  <BrowserRouter>
+    <Router user={user} />
+  </BrowserRouter>,
 
-ReactDom.render(<Messages usr={user} />, document.getElementById("app"));
+  document.getElementById("app")
+);

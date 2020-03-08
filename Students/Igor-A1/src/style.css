@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: #aaa;
+}
+
+.chats {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "chats-head"
+    "chats-list"
+    "chats-foot";
+  grid-area: chats;
+  overflow-y: auto;
+}
+
+.msgs {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "msgs-head"
+    "msgs-body";
+  grid-area: msgs;
+  overflow: auto;
+}
+
+.msgs-body {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "msgs-list"
+    "msgs-foot";
+  grid-area: msgs-body;
+  overflow: auto;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.grid {
+  min-width: 256px;
+  max-width: 800px;
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: 1fr;
+  grid-template-columns: 200px 1fr;
+  grid-template-areas: "chats msgs";
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "chats"
+    "msgs";
+  }
+  
+  .chats {
+    grid-template-rows: auto auto auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+.chat-item,
+.msg-item {
+  margin-bottom: 8px;
+}
+
+.chats-list,
+.msgs-list {
+  overflow-y: auto;
+}
+
+.chats-head {
+  grid-area: chats-head;
+}
+
+.chats-list {
+  grid-area: chats-list;
+  background-color: #e8eaf6; /* theme.background.paper */
+}
+
+.chat-item {
+  padding: 8px;
+}
+
+.chats-foot {
+  grid-area: chats-foot;
+}
+
+.msgs-head {
+  grid-area: msgs-head;
+  display: flex;
+  justify-content: space-between;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+.msgs-list {
+  grid-area: msgs-list;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.msg-item {
+  max-width: 80%;
+  width: max-content;
+  padding: 8px;
+  border-radius: 8px;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 14;
+}
+
+.msg-self {
+  align-self: flex-end;
+  width: 100%;
+  border-radius: 8px 8px 0 8px;
+  background-color: cyan;
+  color: blue;
+}
+
+.msgs-foot {
+  grid-area: msgs-foot;
+  display: flex;
+  padding: 8px;
+}
+
+.msg-input {
+  flex-grow: 1;
+}
