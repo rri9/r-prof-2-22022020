@@ -12,7 +12,9 @@ import {
 } from "@material-ui/core";
 import "./style.css";
 
-import Messages from "../MessagesField/MessagesField.jsx";
+import Messages from "../Chat/MessageField/MessageField.jsx";
+import MessageManager from "../Chat/MessageManager/MessageManager.jsx";
+import Chat from "../Chat/Chat.jsx";
 import Header from "../Header/Header.jsx";
 import Rooms from "../Rooms/Rooms.jsx";
 import initStore from "../../store/store.js";
@@ -37,7 +39,7 @@ export default class Layout extends React.Component {
     user: PropTypes.string
   };
   static defaultProps = {
-    chatId: 1,
+    chatID: 1,
     user: "Darth Vader"
   };
   render() {
@@ -58,7 +60,12 @@ export default class Layout extends React.Component {
               <Grid item xs={3} className="panel">
                 <Rooms />
               </Grid>
-              <Grid item xs={9} className="panel"></Grid>
+              <Grid item xs={9} className="panel">
+                <Chat
+                  chatID={Number(this.props.chatID)}
+                  user={this.props.user}
+                />
+              </Grid>
             </Grid>
           </Container>
         </ThemeProvider>
@@ -66,22 +73,3 @@ export default class Layout extends React.Component {
     );
   }
 }
-//<ChatRooms />
-/* <Grid
-  container
-  direction="row"
-  justify="space-around"
-  align-items="flex-start"
-  spacing={1}
-  className="wrapperGrid"
->
-  <Grid item xs={3} className="panel">
-    <ChatRooms />
-  </Grid>
-  <Grid item xs={9} className="panel">
-    <Messages
-      chatId={Number(this.props.chatId)}
-      user={this.props.user}
-    />
-  </Grid>
-</Grid> */

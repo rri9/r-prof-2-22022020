@@ -1,48 +1,34 @@
 import React, { Component } from "react";
 import ReactDom from "react-dom";
 // ACTIONS
-import { sendMessage } from "../../store/actions/chat_actions.js";
+import { sendMessage } from "../../../store/actions/chat_actions.js";
 // REDUX
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 // COMPONENTS
-import Message from "../Message/Message.jsx";
+import { Fab, TextField, Grid } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
 // STYLES
 import { withStyles } from "@material-ui/core/styles";
-import styles from "./style.css";
-import { Box, Fab, TextField, GridList, Grid } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
 const useStyles = theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "nowrap",
-    overflowY: "hidden",
-    overflowX: "hidden",
-    backgroundColor: theme.palette.background.paper,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    height: "100%"
-  },
-  gridList: {
-    width: "100%"
+  inputText: {
+    width: "calc(100% - 64px)"
   },
   bottomPanel: {
     padding: "10px"
   }
 });
-
-class Messages extends Component {
+class MessageManager extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.state.message = "";
-    this.messagesEndRef = React.createRef();
   }
   sendMessage = (text, sender) => {
     const { messages } = this.props;
-    const chatId = this.props.chatId;
+    const chatID = this.props.chatID;
     const messageID = Object.keys(messages).length + 1;
-    this.props.sendMessage(chatId, messageID, sender, text);
+    this.props.sendMessage(chatID, messageID, sender, text);
   };
 
   handleSendMessage(message, sender) {
@@ -66,38 +52,10 @@ class Messages extends Component {
     });
   };
 
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
-
   render() {
     const { classes } = this.props;
-    let { messages } = this.props;
-    let Messages = [];
-    Object.keys(messages).forEach(key => {
-      Messages.push(
-        <Message
-          key={key}
-          sender={messages[key].user}
-          text={messages[key].text}
-        />
-      );
-    });
-
     return (
       <div className={classes.root}>
-        <GridList
-          className={classes.gridList}
-          cols={1}
-          spacing={0}
-          ref={this.messagesEndRef}
-        >
-          {Messages}
-        </GridList>
         <Grid
           className={classes.bottomPanel}
           container
@@ -108,15 +66,19 @@ class Messages extends Component {
         >
           <TextField
             className="flex-grow-1"
+            className={classes.inputText}
             label="Новое сообщение"
             id="Name"
             value={this.state.message}
             onChange={this.handleChange}
             onKeyUp={this.handleChange}
             variant="outlined"
+            size="small"
           />
           <Fab
             color="primary"
+            className="sendButton"
+            size="small"
             onClick={() =>
               this.handleSendMessage(this.state.message, this.props.user)
             }
@@ -129,10 +91,11 @@ class Messages extends Component {
   }
 }
 
-const mapStateToProps = ({ msgReducer }, ownProps) => {
-  const { chatId } = ownProps;
+const mapStateToProps = ({ chatReducer }, ownProps) => {
+  const { chatID } = ownProps;
+
   return {
-    messages: msgReducer.chats[chatId].messages
+    messages: chatReducer.chats[chatID].messages
   };
 };
 
@@ -142,4 +105,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles)(Messages));
+)(withStyles(useStyles)(MessageManager));
+/*
+.chats[chatID].messages
+*/

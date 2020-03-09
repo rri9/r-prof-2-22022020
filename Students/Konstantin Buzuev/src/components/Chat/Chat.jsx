@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 // MY COMPONENTS
-import RoomList from "./RoomList/RoomList.jsx";
-import RoomManager from "./RoomManager/RoomManager.jsx";
+import MessageManager from "./MessageManager/MessageManager.jsx";
+import MessageField from "./MessageField/MessageField.jsx";
 // COMPONENTS
 import Divider from "@material-ui/core/Divider";
+
 // STYLES
 import { withStyles } from "@material-ui/core/styles";
 
@@ -27,22 +28,30 @@ const useStyles = theme => ({
   }
 });
 
-class Rooms extends Component {
+class Chat extends Component {
+  static propTypes = {
+    chatID: PropTypes.number,
+    user: PropTypes.string
+  };
+  static defaultProps = {
+    chatID: 1,
+    user: "SomeUser"
+  };
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-        <RoomManager />
+      <div className={classes.root}>
+        <MessageField
+          chatID={Number(this.props.chatID)}
+          user={this.props.user}
+        />
         <Divider />
-        <RoomList />
+        <MessageManager
+          chatID={Number(this.props.chatID)}
+          user={this.props.user}
+        />
       </div>
     );
   }
 }
-
-export default withStyles(useStyles)(Rooms);
-
-/*
-        
-        
-
-*/
+export default withStyles(useStyles)(Chat);

@@ -19,6 +19,9 @@ import {
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import ChatIcon from "@material-ui/icons/Chat";
+import FeedbackOutlinedIcon from "@material-ui/icons/FeedbackOutlined";
+import AssistantOutlinedIcon from "@material-ui/icons/AssistantOutlined";
+import SmsOutlinedIcon from "@material-ui/icons/SmsOutlined";
 
 const useStyles = theme => ({
   root: {
@@ -30,9 +33,13 @@ const useStyles = theme => ({
 // MY COMPONENTS
 import { chatTypes } from "../dictionary.jsx";
 function chatTypeToComponent(type) {
+  let result = "";
   chatTypes.forEach(el => {
-    if (el.type === type) return el.component;
+    if (el.type === type) {
+      result = el.component;
+    }
   });
+  return result;
 }
 
 class RoomList extends React.Component {
@@ -57,7 +64,6 @@ class RoomList extends React.Component {
   render() {
     const { classes } = this.props;
     const { chats } = this.props;
-    console.log(this.props);
     let Chats = [];
     Object.keys(chats).forEach(key => {
       Chats.push(
@@ -82,9 +88,9 @@ class RoomList extends React.Component {
   }
 }
 
-const mapStateToProps = ({ roomReducer }) => {
+const mapStateToProps = ({ chatReducer }) => {
   return {
-    chats: roomReducer.chats
+    chats: chatReducer.chats
   };
 };
 

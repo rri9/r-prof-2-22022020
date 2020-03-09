@@ -23,11 +23,7 @@ import {
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 //ICONS
-import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
-import SendIcon from "@material-ui/icons/Send";
-import ChatIcon from "@material-ui/icons/Chat";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 // MY COMPONENTS
 import { chatTypes } from "../dictionary.jsx";
 // STYLES

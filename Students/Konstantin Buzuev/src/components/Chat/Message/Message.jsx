@@ -23,16 +23,19 @@ const useStyles = theme => ({
     borderRadius: "10px",
     fontSize: "16px",
     margin: "5px",
-    color: "white"
+    color: "white",
+    lineHeight: "1"
   },
   paperL: {
     width: "50%",
-    backgroundColor: "#e33371",
+    // e33371
+    backgroundColor: "#2dd700",
     padding: "5px 10px",
     borderRadius: "10px",
     fontSize: "16px",
     margin: "5px",
-    color: "white"
+    color: "white",
+    lineHeight: "1"
   }
 });
 
