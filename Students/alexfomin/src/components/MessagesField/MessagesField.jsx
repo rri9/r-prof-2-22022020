@@ -6,7 +6,7 @@ import './style.css';
 import Message from '../Message/Message.jsx'
 import Chatlist from '../Chatlist/ChatList.jsx'
 
-import { sendMessage } from '../../store/actions/messages_actions.js'
+import { sendMessage, sendAnswer } from '../../store/actions/messages_actions.js'
 
 //redux
 import { bindActionCreators } from 'redux'
@@ -17,7 +17,7 @@ class Messages extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            msg: '',
+            //msg: '',
         //     msgArray: [{
         //         user: 'Darth Vader',
         //         text: 'Hallo'
@@ -85,20 +85,21 @@ class Messages extends Component {
 
     //hooks
     // componentDidUpdate () {
-    //     // console.log ('updated')
-    //     let msgs = this.state.msgArray
+    //  console.log (this.state)
+    //     //let msgs = this.state.msgArray
 
-    //     if (msgs.length % 2 === 1) {
-    //         setTimeout(() => {
-    //             this.setState ({
-    //                 msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
-    //                 msg: ''
-    //             })
-    //         }, 500)
-    //     }
+    //     // if (msgs.length % 2 === 1) {
+    //     //     setTimeout(() => {
+    //     //         this.setState ({
+    //     //             msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
+    //     //             msg: ''
+    //     //         })
+    //     //     }, 500)
+    //     // }
+    //     const messageId = Object.keys(this.state).length + 1;
+    //     this.props.sendAnswer(messageId, 'Luke', 'Oh, nooo!')
     // }
 
-    //
     
 
     render() {
@@ -123,7 +124,7 @@ class Messages extends Component {
           <Col sm="0" md="2" lg="3"></Col>
           <Col sm="12"  md="10" lg="6">       
             <InputGroup>
-                <Input onChange = {this.handleChange}/>
+                <Input onChange = {this.handleChange} value={this.state.msg}/>
                 <InputGroupAddon addonType="append" >
                 <Button color="warning" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Отправить</Button>
                 </InputGroupAddon>
@@ -145,6 +146,6 @@ const mapStateToProps = ({ msgReducer }) => ({
     messages: msgReducer.messages
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch )
+const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage, sendAnswer }, dispatch )
 
 export default connect(mapStateToProps, mapDispatchToProps)(Messages)
