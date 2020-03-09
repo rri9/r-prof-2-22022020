@@ -2,11 +2,18 @@ import update from 'react-addons-update'
 // ACTIONS
 import {
     SEND_MSG
-} from '../actions/messages_actions.js'
+} from '../actions/chat_actions.js'
+import {
+    ADD_CHAT
+} from '../actions/room_actions.js'
+
 
 let initialStore = {
     chats: {
         1: {
+            name: "Room 1",
+            description: "First room",
+            type: "normal",
             messages: {
                 1: {
                     user: null,
@@ -23,6 +30,9 @@ let initialStore = {
             }
         },
         2: {
+            name: "Room 2",
+            description: "Second room",
+            type: "important",
             messages: {
                 1: {
                     user: null,
@@ -40,6 +50,9 @@ let initialStore = {
 
         },
         3: {
+            name: "Room 3",
+            description: "Third room",
+            type: "VIP",
             messages: {
                 1: {
                     user: null,
@@ -55,19 +68,19 @@ let initialStore = {
                 },
             }
 
-        }
-
+        },
     }
 }
-export default function msgReducer(store = initialStore, action) {
+
+export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
         case SEND_MSG: {
             initialStore = update(store, {
                 chats: {
-                    [action.chatId]: {
+                    [action.chatID]: {
                         messages: {
                             $merge: {
-                                [action.messageId]: {
+                                [action.messageID]: {
                                     user: action.sender,
                                     text: action.text
                                 }
@@ -78,7 +91,23 @@ export default function msgReducer(store = initialStore, action) {
             });
             return initialStore;
         }
+        case ADD_CHAT: {
+            initialStore = update(store, {
+                chats: {
+                    $merge: {
+                        [action.chatID]: {
+                            name: action.name,
+                            description: action.description,
+                            type: action.chatType,
+                            messages: {}
+                        }
+                    }
+                }
+            });
+            return initialStore;
+        }
+
         default:
-            return store
+            return store;
     }
 }

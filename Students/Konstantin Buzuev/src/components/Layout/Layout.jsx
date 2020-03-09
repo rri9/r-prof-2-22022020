@@ -14,7 +14,7 @@ import "./style.css";
 
 import Messages from "../MessagesField/MessagesField.jsx";
 import Header from "../Header/Header.jsx";
-import ChatRooms from "../ChatRooms/ChatRooms.jsx";
+import Rooms from "../Rooms/Rooms.jsx";
 import initStore from "../../store/store.js";
 
 const theme = createMuiTheme({
@@ -33,7 +33,7 @@ const theme = createMuiTheme({
 
 export default class Layout extends React.Component {
   static propTypes = {
-    chatId: PropTypes.number,
+    chatID: PropTypes.number,
     user: PropTypes.string
   };
   static defaultProps = {
@@ -56,14 +56,9 @@ export default class Layout extends React.Component {
               className="wrapperGrid"
             >
               <Grid item xs={3} className="panel">
-                <ChatRooms />
+                <Rooms />
               </Grid>
-              <Grid item xs={9} className="panel">
-                <Messages
-                  chatId={Number(this.props.chatId)}
-                  user={this.props.user}
-                />
-              </Grid>
+              <Grid item xs={9} className="panel"></Grid>
             </Grid>
           </Container>
         </ThemeProvider>
@@ -71,3 +66,22 @@ export default class Layout extends React.Component {
     );
   }
 }
+//<ChatRooms />
+/* <Grid
+  container
+  direction="row"
+  justify="space-around"
+  align-items="flex-start"
+  spacing={1}
+  className="wrapperGrid"
+>
+  <Grid item xs={3} className="panel">
+    <ChatRooms />
+  </Grid>
+  <Grid item xs={9} className="panel">
+    <Messages
+      chatId={Number(this.props.chatId)}
+      user={this.props.user}
+    />
+  </Grid>
+</Grid> */

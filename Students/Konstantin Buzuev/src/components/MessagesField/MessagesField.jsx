@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDom from "react-dom";
 // ACTIONS
-import { sendMessage } from "../../store/actions/messages_actions.js";
+import { sendMessage } from "../../store/actions/chat_actions.js";
 // REDUX
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -109,6 +109,7 @@ class Messages extends Component {
           <TextField
             className="flex-grow-1"
             label="Новое сообщение"
+            id="Name"
             value={this.state.message}
             onChange={this.handleChange}
             onKeyUp={this.handleChange}
