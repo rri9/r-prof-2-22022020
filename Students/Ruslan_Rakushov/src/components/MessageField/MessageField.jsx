@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 
+//redux
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+import { sendMessage } from '../../store/actions/messageActions.js';
+
 import Message from '../Message/Message.jsx';
 
 //UI Components
@@ -46,8 +51,8 @@ class MessageField extends Component {
     this.state = {
       msgText: '',
       chats: props.chats,
-      msgs: props.msgs,
     };
+    this.sendMessage = this.props.sendMessage;
     this.msgTextInput = React.createRef()
     this.messageFieldEndRef = React.createRef();
   }
@@ -93,8 +98,9 @@ class MessageField extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { chats: prevChats, msgs: prevMsgs } = prevState;
-    const { chats, msgs } = this.state;
-    const chatId = this.props.chatId;
+    // const { chats, msgs } = this.state;
+    const { chats } = this.state;
+    const { msgs, chatId } = this.props;
     const prevMsgsLength = Object.keys(prevChats[chatId].msgsList).length;
     const msgsLength = Object.keys(chats[chatId].msgsList).length;
     const chatMsgsListLastIndex = chats[chatId].msgsList.length - 1;
@@ -113,8 +119,8 @@ class MessageField extends Component {
 
   render() {
     const { classes } = this.props;
-    const { msgs, chats } = this.state;
-    const { chatId } = this.props;
+    const { chats } = this.state;
+    const { msgs, chatId } = this.props;
     const MessagesArr = chats[chatId].msgsList.map((msgId, index) => (
       <Message key={index.toString()} msg={msgs[msgId]} />
     ));
@@ -152,4 +158,12 @@ class MessageField extends Component {
   }
 }
 
-export default withStyles(useStyles)(MessageField);
+const mapStateToProps = ({ messageReducer }) => ({
+  msgs: messageReducer.msgs,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  sendMessage,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));

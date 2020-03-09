@@ -6,6 +6,10 @@ import Header from '../Header/Header.jsx';
 import ChatList from '../ChatList/ChatList.jsx';
 import MessageField from '../MessageField/MessageField.jsx';
 
+// //redux
+// import { bindActionCreators } from 'redux';
+// import connect from 'react-redux/es/connect/connect';
+
 const useStyles = (theme => ({
   root: {
     width: '550px',
@@ -21,28 +25,28 @@ const chats = {
   2: { title: 'Чат 2', msgsList: [5] },
   3: { title: 'Чат 3', msgsList: []},
 };
-const msgs = {
-  1: {
-    sender: 'Me',
-    text: 'Hello!',
-  },
-  2: {
-    sender: null,
-    text: null,
-  },
-  3: {
-    sender: 'Me',
-    text: 'How are You?',
-  },
-  4: {
-    sender: null,
-    text: null,
-  },
-  5: {
-    sender: null,
-    text: 'Hello, human!',
-  }
-};
+// const msgs = {
+//   1: {
+//     sender: 'Me',
+//     text: 'Hello!',
+//   },
+//   2: {
+//     sender: null,
+//     text: null,
+//   },
+//   3: {
+//     sender: 'Me',
+//     text: 'How are You?',
+//   },
+//   4: {
+//     sender: null,
+//     text: null,
+//   },
+//   5: {
+//     sender: null,
+//     text: 'Hello, human!',
+//   }
+// };
 
 class Layout extends Component {
   static propTypes = {
@@ -58,7 +62,7 @@ class Layout extends Component {
       <div className={classes.root}>
         <Header chats={chats} chatId={this.props.chatId} />
         <ChatList />
-        <MessageField msgs={msgs} chats={chats} chatId={this.props.chatId}/>
+        <MessageField chats={chats} chatId={this.props.chatId}/>
       </div>
     );
   };
