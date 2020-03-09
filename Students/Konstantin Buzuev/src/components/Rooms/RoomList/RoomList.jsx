@@ -67,7 +67,7 @@ class RoomList extends React.Component {
     let Chats = [];
     Object.keys(chats).forEach(key => {
       Chats.push(
-        <Link to={"/chats/" + key} key={key}>
+        <Link to={"/chat/" + key} key={key}>
           <ListItem button>
             <ListItemAvatar>
               <Avatar>{chatTypeToComponent(chats[key].type)}</Avatar>

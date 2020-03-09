@@ -29,7 +29,7 @@ const useStyles = theme => ({
   paperL: {
     width: "50%",
     // e33371
-    backgroundColor: "#2dd700",
+    backgroundColor: "#6B96A8",
     padding: "5px 10px",
     borderRadius: "10px",
     fontSize: "16px",

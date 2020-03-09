@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "typeface-roboto";
-import { Provider } from "react-redux";
+
 import {
   ThemeProvider,
   createMuiTheme,
@@ -17,7 +17,6 @@ import MessageManager from "../Chat/MessageManager/MessageManager.jsx";
 import Chat from "../Chat/Chat.jsx";
 import Header from "../Header/Header.jsx";
 import Rooms from "../Rooms/Rooms.jsx";
-import initStore from "../../store/store.js";
 
 const theme = createMuiTheme({
   typography: {
@@ -44,32 +43,27 @@ export default class Layout extends React.Component {
   };
   render() {
     return (
-      <Provider store={initStore()}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline></CssBaseline>
-          <Container maxWidth="lg">
-            <Header chatId={this.props.chatId} />
-            <Grid
-              container
-              direction="row"
-              justify="space-around"
-              align-items="flex-start"
-              spacing={1}
-              className="wrapperGrid"
-            >
-              <Grid item xs={3} className="panel">
-                <Rooms />
-              </Grid>
-              <Grid item xs={9} className="panel">
-                <Chat
-                  chatID={Number(this.props.chatID)}
-                  user={this.props.user}
-                />
-              </Grid>
+      <ThemeProvider theme={theme}>
+        <CssBaseline></CssBaseline>
+        <Container maxWidth="lg">
+          <Header chatId={this.props.chatId} />
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            align-items="flex-start"
+            spacing={1}
+            className="wrapperGrid"
+          >
+            <Grid item xs={3} className="panel">
+              <Rooms />
             </Grid>
-          </Container>
-        </ThemeProvider>
-      </Provider>
+            <Grid item xs={9} className="panel">
+              <Chat chatID={Number(this.props.chatID)} user={this.props.user} />
+            </Grid>
+          </Grid>
+        </Container>
+      </ThemeProvider>
     );
   }
 }
