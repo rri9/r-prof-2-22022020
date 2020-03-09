@@ -5,3 +5,7 @@ body {
    font-family: 'Roboto', sans-serif;
    background-color: #141433;
 }
+a {
+   text-decoration: none;
+   color: inherit
+}

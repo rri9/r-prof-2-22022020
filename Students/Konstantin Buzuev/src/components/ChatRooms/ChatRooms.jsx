@@ -20,6 +20,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+import { Link } from "react-router-dom";
+
 function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
@@ -42,30 +44,36 @@ export default function FolderList() {
       <Divider />
 
       <List className={classes.root}>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <ChatIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Room 1" secondary="First room" />
-        </ListItem>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <ForumIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Room 2" secondary="Second room" />
-        </ListItem>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <FeedbackIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Room 3" secondary="Third room" />
-        </ListItem>
+        <Link to="/chat/1">
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <ChatIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="Room 1" secondary="First room" />
+          </ListItem>
+        </Link>
+        <Link to="/chat/2">
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <ForumIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="Room 2" secondary="Second room" />
+          </ListItem>
+        </Link>
+        <Link to="/chat/3">
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <FeedbackIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="Room 3" secondary="Third room" />
+          </ListItem>
+        </Link>
       </List>
     </div>
   );

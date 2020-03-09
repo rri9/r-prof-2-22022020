@@ -39,10 +39,10 @@ const useStyles = theme => ({
 class Message extends Component {
   constructor(props) {
     super(props);
-    this.sender = this.props.sender ? this.props.sender : "Bot";
-    this.text = this.props.text ? this.props.text : "Sorry, I'm busy ...";
   }
   render() {
+    this.sender = this.props.sender ? this.props.sender : "Bot";
+    this.text = this.props.text ? this.props.text : "Sorry, I'm busy ...";
     const { classes } = this.props;
     const root = this.sender === "Bot" ? classes.rootL : classes.rootR;
     const bgcolor = this.sender === "Bot" ? classes.paperL : classes.paperR;
