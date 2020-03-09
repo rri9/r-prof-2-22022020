@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { Button, Form, Row, ListGroup } from 'react-bootstrap';
+import { Button, Form, ListGroup, InputGroup, } from 'react-bootstrap';
 import './style.css';
 
 import { addChat } from '../../store/actions/chats_action.js';
@@ -12,12 +12,26 @@ import { connect } from 'react-redux';
 
 class ChatList extends React.Component {
 
-   addNewChat = () => {
-      const { chats } = this.props;
-      const chatId = Object.keys( chats ).length + 1;
-      const title = `Chat ${chatId}`;
+   state = {
+      newChatTitle: ''
+   }
 
-      this.props.addChat( chatId, title );
+   handleChange = (event) => {
+      event.keyCode !== 13 ?
+          this.setState({
+            newChatTitle: event.target.value
+          }) :
+          this.addNewChat( this.state.newChatTitle );
+  }
+
+   addNewChat = ( title ) => {
+      const { chats } = this.props;
+      const chatId = Object.keys(chats).length + 1;
+
+      this.props.addChat(chatId, title);
+      this.setState({
+         newChatTitle: ''
+     });
    }
 
    render() {
@@ -28,14 +42,14 @@ class ChatList extends React.Component {
 
       let chatsArray = [];
 
-      Object.keys( chats ).forEach( key => {
+      Object.keys(chats).forEach(key => {
          chatsArray.push(
-            <Link to={ `/chat/${key}` } key={ key }>
+            <Link to={`/chat/${key}`} key={key}>
                <ListGroup.Item
-                   action
-                   className={ chatId == key ? 'active' : '' }
+                  action
+                  className={chatId == key ? 'active' : ''}
                >
-                  { chats[key].title }
+                  {chats[key].title}
                </ListGroup.Item>
             </Link>);
       });
@@ -44,20 +58,33 @@ class ChatList extends React.Component {
          <div className="bg-light h-100 col-2 d-flex flex-column justify-content-between p-0">
             <div>
                <p>Hello {usr}!</p>
-               <Button 
-                  variant="outline-primary w-100 mb-5"
-                  onClick={ this.addNewChat }
-               >
-                  New chat
-               </Button>
+               <InputGroup className="mb-5">
+                  <Form.Control
+                     placeholder="New chat"
+                     className="border-primary"
+                     onChange={ this.handleChange }
+                     onKeyUp= { this.handleChange }
+                     value = { this.state.newChatTitle }
+                  />
+                  <InputGroup.Append>
+                     <Button 
+                        variant="outline-primary"
+                        className="font-weight-bold"
+                        onClick={ () => this.addNewChat( this.state.newChatTitle ) }
+                     >
+                        +
+                     </Button>
+                  </InputGroup.Append>
+               </InputGroup>
+
                <ListGroup>
-                  { chatsArray }
+                  {chatsArray}
                </ListGroup>
             </div>
-         <footer className="text-white bg-dark w-100 text-center">
-            ReactGram &copy;
+            <footer className="text-white bg-dark w-100 text-center">
+               ReactGram &copy;
          </footer>
-      </div>
+         </div>
       );
    }
 }
@@ -66,6 +93,6 @@ const mapStateToProps = ({ chatsReducer }) => ({
    chats: chatsReducer.chats
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators( { addChat }, dispatch );
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
