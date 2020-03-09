@@ -3,9 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Form, Row, ListGroup } from 'react-bootstrap';
-// import './style.css';
-
-// import Message from '../Message/Message.jsx';
+import './style.css';
 
 import { addChat } from '../../store/actions/chats_action.js';
 
@@ -14,19 +12,46 @@ import { connect } from 'react-redux';
 
 class ChatList extends React.Component {
 
+   addNewChat = () => {
+      const { chats } = this.props;
+      const chatId = Object.keys( chats ).length + 1;
+      const title = `Chat ${chatId}`;
+
+      this.props.addChat( chatId, title );
+   }
+
    render() {
+
+      const { usr } = this.props;
+      const { chats } = this.props;
+      const { chatId } = this.props;
+
+      let chatsArray = [];
+
+      Object.keys( chats ).forEach( key => {
+         chatsArray.push(
+            <Link to={ `/chat/${key}` } key={ key }>
+               <ListGroup.Item
+                   action
+                   className={ chatId == key ? 'active' : '' }
+               >
+                  { chats[key].title }
+               </ListGroup.Item>
+            </Link>);
+      });
+
       return (
          <div className="bg-light h-100 col-2 d-flex flex-column justify-content-between p-0">
             <div>
-               {/* <p>Hello {user}!</p> */}
-               <Button variant="outline-primary w-100 mb-5">New chat</Button>
+               <p>Hello {usr}!</p>
+               <Button 
+                  variant="outline-primary w-100 mb-5"
+                  onClick={ this.addNewChat }
+               >
+                  New chat
+               </Button>
                <ListGroup>
-                  <Link to="/chat/1">
-                     <ListGroup.Item action>Chat 1</ListGroup.Item>
-                  </Link>
-                  <Link to="/chat/2">
-                     <ListGroup.Item action>Chat 2</ListGroup.Item>
-                  </Link>
+                  { chatsArray }
                </ListGroup>
             </div>
          <footer className="text-white bg-dark w-100 text-center">
