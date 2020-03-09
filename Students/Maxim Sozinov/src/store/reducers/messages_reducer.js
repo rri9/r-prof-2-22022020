@@ -8,19 +8,33 @@ const initialStore = {
    messages: {
       1: {
          user: 'Darth Vader',
-         text: 'Hallo'
+         text: 'Hallo',
+         chatId: 1
       },
       2: {
          user: null,
-         text: null
+         text: null,
+         chatId: 1
       },
       3: {
          user: 'Darth Vader',
-         text: 'I am your father'
+         text: 'I am your father',
+         chatId: 1
       },
       4: {
          user: null,
-         text: 'NOOOOOOOOO'
+         text: 'NOOOOOOOOO',
+         chatId: 1
+      },
+      5: {
+         user: 'Darth Vader',
+         text: 'Hello, world!',
+         chatId: 2
+      },
+      6: {
+         user: null,
+         text: 'Who is here?!!',
+         chatId: 2
       },
    },
 };
@@ -33,7 +47,8 @@ export default function msgReducer(store = initialStore, action) {
                $merge: {
                   [action.messageId]: {
                      user: action.sender,
-                     text: action.text
+                     text: action.text,
+                     chatId: action.chatId
                   }
                }
             }
