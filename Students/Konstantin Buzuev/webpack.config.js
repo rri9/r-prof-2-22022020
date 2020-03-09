@@ -1,13 +1,13 @@
-const path = require ('path')
+const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: {
-        main: path.resolve (__dirname, 'src', 'index.jsx') //'./src/index.jsx
+        main: path.resolve(__dirname, 'src', 'index.jsx') //'./src/index.jsx
     },
     output: {
-        path: path.join (__dirname, 'dist'),
+        path: path.join(__dirname, 'dist'),
         publicPath: '',
         filename: 'js/bundle.js'
     },
@@ -20,8 +20,7 @@ module.exports = {
         open: true
     },
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
@@ -29,35 +28,40 @@ module.exports = {
                     presets: ["@babel/preset-env", "@babel/preset-react"],
                     plugins: [
                         [
-                            "@babel/plugin-proposal-class-properties", {"loose": true}
+                            "@babel/plugin-proposal-class-properties", {
+                                "loose": true
+                            }
                         ]
                     ]
                 }
             },
             {
+                test: /\.(woff|woff2|ttf|eot)$/,
+                use: 'file-loader?name=fonts/[name].[ext]!static'
+            },
+            {
                 test: /\.css$/,
-                use: [
-                    {
+                use: [{
                         loader: MiniCssExtractPlugin.loader,
                         options: {
                             publicPath: '../', //?
                             hmr: process.env.NODE_ENV === 'development',
                         },
                     },
-                  'css-loader',
+                    'css-loader',
                 ],
             }
         ]
     },
     plugins: [
         new MiniCssExtractPlugin({
-          filename: 'css/[name].css',
-          chunkFilename: '[id].css',
-          ignoreOrder: false,
+            filename: 'css/[name].css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false,
         }),
-        new HtmlWebpackPlugin({ 
+        new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'src/index.html'
-          })
-      ]
+        })
+    ]
 }

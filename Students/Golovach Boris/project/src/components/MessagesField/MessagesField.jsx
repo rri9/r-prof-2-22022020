@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 
 import Message from '../Message/Message.jsx'
+
 //
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -9,66 +10,64 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 //
 
-export default class Messages extends Component {
+//actions
+import { sendMessage } from '../../store/actions/messages_actions.js'
+
+//redux
+import { bindActionCreators } from 'redux'
+import connect from 'react-redux/es/connect/connect'
+
+class Messages extends Component {
     constructor(props) {
         super(props)
-        //где-то тут... 
         this.state = {
             msg: '',
-            msgArray: [{
-                user: 'Darth Vader',
-                text: 'Hallo'
-            },
-            {
-                user: null,
-                text: null
-            },
-            {
-                user: 'Darth Vader',
-                text: 'I am your father'
-            },
-            {
-                user: null,
-                text: 'NOOOOOOOOO'
-            }]
         }
     }
     //methods
-    sendMessage = (e) => {
-        this.setState ({
-            msgArray: [...this.state.msgArray, { user: this.props.usr, text: this.state.msg }], //ЯМы Дартвейдер
-            msg: ''
-        })
-        // e.target.value = ''
+    sendMessage = (text, sender) => {
+        const { messages } = this.props
+        const messageId = Object.keys(messages).length + 1;
+
+        this.props.sendMessage(messageId, sender, text)
+    }
+
+    handleSendMessage = (message, sender) => {
+        this.setState({ msg: '' })
+        if (message) {
+            this.sendMessage(message, sender)
+        }
     }
 
     handleChange = (evt) => {
-        evt.keyCode !== 13 ?
-            this.setState ({msg: evt.target.value}) :
-            this.sendMessage(evt)
+        if (evt.keyCode !== 13) {
+            this.setState ({msg: evt.target.value})
+        }else if(evt.keyCode == 13){
+            this.handleSendMessage(this.state.msg, this.props.usr)
+        }
     }
 
-    //hooks
     componentDidUpdate () {
-        // console.log ('updated')
-        let msgs = this.state.msgArray
-
-        if (msgs.length % 2 === 1) {
+        if(Object.keys(this.props.messages).length % 2 === 1){
             setTimeout(() => {
-                this.setState ({
-                    msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
-                    msg: ''
-                })
-            }, 500)
+                this.sendMessage('NOOOOOOOOOOOOOO...', 'Luke')
+            }, 500);
         }
     }
 
     render() {
-        //let user = this.props.usr
         let { usr } = this.props
-        let { msgArray } = this.state
+        let { messages } = this.props
+
+        let MessagesArr = []
         
-        let MessagesArr = msgArray.map(message => <Message sender={ message.user } text={ message.text }/>)
+        Object.keys(messages).forEach(key => {
+            MessagesArr.push(<Message 
+                sender={ messages[key].user } 
+                text={ messages[key].text }
+                key={ key }
+            />)
+        })
 
         return (
             <div className="container-fluid align-items-center">
@@ -77,7 +76,7 @@ export default class Messages extends Component {
                         <h2>ReactGram</h2>
                         <p>Hello { usr }!</p>
                     </div>
-                    <div>
+                    <div className="messagesBlock">
                         { MessagesArr }
                     </div>
                     <TextField
@@ -88,9 +87,17 @@ export default class Messages extends Component {
                         onKeyUp = { this.handleChange }
                         value = { this.state.msg }
                     />
-                    <Button fullWidth variant="contained" color="primary" onClick = { this.sendMessage }>Send</Button>
+                    <Button fullWidth variant="contained" color="primary" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Send</Button>
                 </div>
             </div>
         )
     }
 }
+
+const mapStateToProps = ({ msgReducer }) => ({
+    messages: msgReducer.messages
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch )
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messages)

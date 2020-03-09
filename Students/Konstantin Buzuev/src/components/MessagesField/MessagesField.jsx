@@ -1,54 +1,144 @@
 import React, { Component } from "react";
 import ReactDom from "react-dom";
-
+// ACTIONS
+import { sendMessage } from "../../store/actions/messages_actions.js";
+// REDUX
+import { bindActionCreators } from "redux";
+import connect from "react-redux/es/connect/connect";
+// COMPONENTS
 import Message from "../Message/Message.jsx";
+// STYLES
+import { withStyles } from "@material-ui/core/styles";
+import styles from "./style.css";
+import { Box, Fab, TextField, GridList, Grid } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
+const useStyles = theme => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    overflow: "hidden",
+    backgroundColor: theme.palette.background.paper,
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justify: "space-between"
+  },
+  gridList: {
+    width: "100%",
+    maxHeight: "calc(100vh - 120px)"
+  },
+  bottomPanel: {
+    padding: "10px"
+  }
+});
 
-export default class Messages extends Component {
+class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.state.messages = [
-      { user: "Darth Vader", text: "Hello, Luke!" },
-      { user: null, text: null },
-      { user: "Darth Vader", text: "I am your father" },
-      { user: null, text: "NOOOOOOOOO" }
-    ];
+    this.state.message = "";
+    this.messagesEndRef = React.createRef();
+  }
+  sendMessage = (text, sender) => {
+    const { messages } = this.props;
+    const chatId = this.props.chatId;
+    const messageID = Object.keys(messages).length + 1;
+    this.props.sendMessage(chatId, messageID, sender, text);
+  };
+
+  handleSendMessage(message, sender) {
+    this.sendMessage(message, sender);
+    if (sender === this.props.user) {
+      setTimeout(() => {
+        this.sendMessage(null, null);
+      }, 300);
+    }
+    this.setState({ message: "" });
+  }
+
+  handleChange = event => {
+    if (event.keyCode !== 13) this.setState({ message: event.target.value });
+    else this.handleSendMessage(this.state.message, this.props.user);
+  };
+
+  scrollToBottom = () => {
+    this.messagesEndRef.current.lastElementChild.scrollIntoView({
+      behavior: "smooth"
+    });
+  };
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   render() {
-    let { usr } = this.props;
-    let MessagesArr = this.state.messages.map(message => (
-      <Message sender={message.user} text={message.text} />
-    ));
+    const { classes } = this.props;
+    let { messages } = this.props;
+    let Messages = [];
+    Object.keys(messages).forEach(key => {
+      Messages.push(
+        <Message
+          key={key}
+          sender={messages[key].user}
+          text={messages[key].text}
+        />
+      );
+    });
 
     return (
-      <div className="wrapper">
-        <h2>ReactGram &copy;</h2>
-        <p>Hello {usr}!</p>
-        {MessagesArr}
-
-        <div className="d-flex flex-column inputMessage">
-          <button
-            className="messages"
-            onClick={() => {
-              this.setState({
-                messages: [
-                  ...this.state.messages,
-                  { user: null, text: "Нормально!" }
-                ]
-              });
-            }}
+      <div className={classes.root}>
+        <GridList
+          className={classes.gridList}
+          cols={1}
+          spacing={0}
+          ref={this.messagesEndRef}
+        >
+          {Messages}
+        </GridList>
+        <Grid
+          className={classes.bottomPanel}
+          container
+          direction="row"
+          justify="space-between"
+          align-items="flex-start"
+          spacing={1}
+        >
+          <TextField
+            className="flex-grow-1"
+            label="Новое сообщение"
+            value={this.state.message}
+            onChange={this.handleChange}
+            onKeyUp={this.handleChange}
+            variant="outlined"
+          />
+          <Fab
+            color="primary"
+            onClick={() =>
+              this.handleSendMessage(this.state.message, this.props.user)
+            }
           >
-            Добавить сообщение!
-          </button>
-        </div>
+            <SendIcon />
+          </Fab>
+        </Grid>
       </div>
     );
   }
 }
-// onClick = {() => {
-//     this.setState({
-//         messages: [...this.state.messages, { user: null, text: null }]
-//     });
-//     console.log(this.state);
-// }}
+
+const mapStateToProps = ({ msgReducer }, ownProps) => {
+  const { chatId } = ownProps;
+  return {
+    messages: msgReducer.chats[chatId].messages
+  };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ sendMessage }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(useStyles)(Messages));

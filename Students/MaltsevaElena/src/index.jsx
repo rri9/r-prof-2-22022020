@@ -1,15 +1,18 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import 'bootstrap'
-import { Grid, Container } from '@material-ui/core'
+
+// Routing
+import Router from './router/router.jsx'
+import { BrowserRouter } from 'react-router-dom'
+
+// Store
+import { Provider } from 'react-redux'
+import initStore from './store/store.js'
+
+// Styles
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import 'typeface-roboto'
 import './index.css'
-
-import Messages from './components/MessagesField/MessagesField.jsx'
-import Chats from './components/ChatsField/ChatsField.jsx'
-
-let user = 'Me'
 
 const darkTheme = createMuiTheme({
    palette: {
@@ -34,17 +37,12 @@ const darkTheme = createMuiTheme({
 })
 
 ReactDom.render (
-   <ThemeProvider theme={darkTheme}>
-      <Container fixed>
-         <Grid container spacing={0}>
-            <Grid item xs={3} style={{height: 100 + 'vh'}}>
-               <Chats />
-            </Grid>
-            <Grid item xs={9} style={{height: 100 + 'vh'}}>
-               <Messages usr={user} />
-            </Grid>
-         </Grid>
-      </Container>
-   </ThemeProvider>,
+   <BrowserRouter>
+      <Provider store={ initStore() }>
+         <ThemeProvider theme={ darkTheme }>
+            <Router/>
+         </ThemeProvider>
+      </Provider>
+   </BrowserRouter>,
    document.getElementById('app')
 )
