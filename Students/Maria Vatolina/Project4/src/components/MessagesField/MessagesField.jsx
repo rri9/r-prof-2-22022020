@@ -16,7 +16,7 @@ import { bindActionCreators } from 'redux'
 import connect from 'react-redux/es/connect/connect'
 
 const useStyles = (theme => ({
-    root: {
+   root: {
        heigth: '100vh',
        width: "100%"
     },
@@ -43,12 +43,6 @@ class Messages extends Component {
       super(props)
       this.state = {
          msg: '',
-         // msgArray: [
-         //     { user: 'You', text: 'Halo'},
-         //     { user: null, text: null},
-         //     { user: 'You', text: 'Can you help me?' },
-         //     { user: null, text: 'Yes' }
-         // ]
       }   
    }
 
@@ -57,13 +51,7 @@ class Messages extends Component {
       const messageId = Object.keys(messages).length + 1;
       this.props.sendMessage(messageId, sender, text)
       
-      this.scrollToBottom()
-      //   this.setState ({
-      //       msgArray: [
-      //           ...this.state.msgArray, 
-      //           {user: this.props.usr, text: this.state.msg}
-      //       ],
-      //       msg: ''})    
+      this.scrollToBottom()   
    }
 
    handleSendMessage = (message, sender) => {
@@ -82,16 +70,12 @@ class Messages extends Component {
          }
    }
 
-   scrollToBottom = () => {
-      this.mesagesRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' })
-   }
-
    componentDidUpdate () {
       const { messages } = this.props;
 
       if (Object.keys(messages).length % 2 === 1) {
          setTimeout(() => {
-         this.sendMessage('Please, whait');
+         this.sendMessage('Please, wait...');
          }, 500)
       }
 
@@ -103,8 +87,12 @@ class Messages extends Component {
       this.scrollToBottom();
    }
 
+   scrollToBottom = () => {
+      this.mesagesRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' })
+   }
+
    render() {
-      let { usr } = this.props
+      let usr = 'Darth Vader'
       let { messages, classes } = this.props
       let MessagesArr =[]
 
@@ -118,7 +106,7 @@ class Messages extends Component {
 
       return (
          <div  className={classes.root}>
-         <Navbar />
+         <Navbar title={ this.props.chatId }/>
          <Box className={classes.msgBlock}>
             <Box className={classes.msgList} ref={this.mesagesRef}>
                { MessagesArr }

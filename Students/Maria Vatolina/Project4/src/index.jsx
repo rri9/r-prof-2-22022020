@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import 'bootstrap';
-import { Grid, Container } from '@material-ui/core';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
-// import 'typeface-roboto'
+// import { Grid, Container } from '@material-ui/core';
 
 import './index.css'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import 'typeface-roboto'
 
-import Messages from './components/MessagesField/MessagesField.jsx'
-import Chats from './components/ChatList/ChatList.jsx'
+import Layout from './components/Layout/Layout.jsx'
 
+// import Messages from './components/MessagesField/MessagesField.jsx'
+// import Chats from './components/ChatList/ChatList.jsx'
+
+//store
 import { Provider } from 'react-redux'
 import initStore from './store/store.js'
+// import { Router } from '@material-ui/icons';
+
+import Router from './router/router.jsx'
+import { BrowserRouter } from 'react-router-dom'
 
 let user = 'Darth Vader'
 
@@ -33,19 +40,13 @@ const theme = createMuiTheme({
 })
 
 ReactDom.render (
-   <Provider store = { initStore() }>
-      <ThemeProvider theme={theme}>
-         <div className="container">
-            <Grid container spacing={0}>
-               <Grid item xs={3} >
-                  <Chats />
-               </Grid>
-               <Grid item xs={9} >
-                  <Messages usr={ user } />
-               </Grid>
-            </Grid>
-         </div>
-      </ThemeProvider>
-   </Provider>,
-    document.getElementById('app')
+   <BrowserRouter>
+      <Provider store = { initStore() }>
+         <ThemeProvider theme={theme}>
+            <Router />
+            <Layout usr={ user } />
+         </ThemeProvider>
+      </Provider>
+   </BrowserRouter>
+   , document.getElementById('app')
 )

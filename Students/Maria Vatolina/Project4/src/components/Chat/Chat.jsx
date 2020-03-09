@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDom from 'react-dom'
+import {Link} from 'react-router-dom'
+
 import { List, 
          ListItem, 
          ListItemAvatar, 
@@ -20,9 +22,6 @@ const useStyles = makeStyles(theme => ({
       '&:hover, &:active': {
          backgroundColor: theme.palette.primary.main,
       },
-      // '.Mui-selected': {
-      //    backgroundColor: theme.palette.primary.main,
-      // }
    },
    selected: {
       backgroundColor: theme.palette.primary.main,
@@ -34,33 +33,40 @@ const useStyles = makeStyles(theme => ({
 }))
 
 let chat = () => {
-
    const classes = useStyles()
 
    return (
       <List className={classes.root}>
-         <ListItem button className={classes.item}>
-            <ListItemAvatar>
-               <Badge color="secondary" overlap="circle" variant="dot">
+         <Link to="/chat/1">
+            <ListItem button className={classes.item}>
+               <ListItemAvatar>
+                  <Badge color="secondary" overlap="circle" variant="dot">
+                     <Avatar className={classes.avatar}>Sup</Avatar>
+                  </Badge>
+               </ListItemAvatar>
+               <ListItemText primary="Support" secondary="Describe the problem" />
+            </ListItem>
+         </Link>
+         <Divider variant="inset" component="li" />
+
+         <Link to="/chat/2">
+            <ListItem button selected className={classes.item}>
+               <ListItemAvatar>
                   <Avatar className={classes.avatar}>DV</Avatar>
-               </Badge>
-            </ListItemAvatar>
-            <ListItemText primary="Support" secondary="Describe the problem" />
-         </ListItem>
+               </ListItemAvatar>
+               <ListItemText primary="Darth Vader" secondary="Luke, I'm your father!" />
+            </ListItem>
+         </Link>
          <Divider variant="inset" component="li" />
-         <ListItem button selected className={classes.item}>
-            <ListItemAvatar>
-               <Avatar className={classes.avatar}>H</Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Darth Vader" secondary="Luke, I'm your father!" />
-         </ListItem>
-         <Divider variant="inset" component="li" />
-         <ListItem button className={classes.item}>
-            <ListItemAvatar>
-            <Avatar className={classes.avatar}>SW</Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Lenta" secondary="News"/>
-         </ListItem>
+         
+         <Link to="/chat/3">
+            <ListItem button className={classes.item}>
+               <ListItemAvatar>
+               <Avatar className={classes.avatar}>L</Avatar>
+               </ListItemAvatar>
+               <ListItemText primary="Lenta" secondary="News"/>
+            </ListItem>
+         </Link>
          <Divider variant="inset" component="li" />
       </List>
    )
