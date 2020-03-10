@@ -4,7 +4,7 @@ import { Row, Col, InputGroup, InputGroupAddon, Button, Input } from 'reactstrap
 import './style.css';
 
 import Message from '../Message/Message.jsx'
-import Chatlist from '../Chatlist/ChatList.jsx'
+import ChatList from '../ChatList/ChatList.jsx'
 
 import { sendMessage, sendAnswer } from '../../store/actions/messages_actions.js'
 
@@ -17,7 +17,7 @@ class Messages extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            //msg: '',
+            msg: '',
         //     msgArray: [{
         //         user: 'Darth Vader',
         //         text: 'Hallo'
@@ -77,7 +77,6 @@ class Messages extends Component {
     }
 
     handleSendMessage = (message, sender) => {
-        this.setState({ msg: '' })
         if (sender == 'Darth Vader') {
             this.sendMessage(message, sender)
         }
@@ -86,16 +85,16 @@ class Messages extends Component {
     //hooks
     // componentDidUpdate () {
     //  console.log (this.state)
-    //     //let msgs = this.state.msgArray
+    //     let msgs = this.state.msgArray
 
-    //     // if (msgs.length % 2 === 1) {
-    //     //     setTimeout(() => {
-    //     //         this.setState ({
-    //     //             msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
-    //     //             msg: ''
-    //     //         })
-    //     //     }, 500)
-    //     // }
+    //     if (msgs.length % 2 === 1) {
+    //         setTimeout(() => {
+    //             this.setState ({
+    //                 msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
+    //                 msg: ''
+    //             })
+    //         }, 500)
+    //     }
     //     const messageId = Object.keys(this.state).length + 1;
     //     this.props.sendAnswer(messageId, 'Luke', 'Oh, nooo!')
     // }
@@ -118,7 +117,7 @@ class Messages extends Component {
             <>
             <Row className="rowContent">
             <Col sm={{ size: 7, offset: 2 }} md={{ size: 6, offset: 2 }} lg={{ size: 6, offset: 3 }} ><div class="scrollContainer"><div class="MessagesContainer">{ MessagesArr }</div></div></Col>
-            <Col sm="3"  md="4" lg="3"><Chatlist/></Col>
+            <Col sm="3"  md="4" lg="3"><ChatList/></Col>
         </Row>
         <Row className="rowSendButton">
           <Col sm="0" md="2" lg="3"></Col>
