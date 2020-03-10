@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+//FIX Отображение пустого чата (3й например)
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
 //redux
@@ -50,27 +51,21 @@ class MessageField extends Component {
     super(props);
     this.state = {
       msgText: '',
-      chats: props.chats,
+      chats: props.chats, //FIX
     };
-    this.sendMessage = this.props.sendMessage;
+    this.sendMessage = this.props.sendMessage; //Функция из messageActions
     this.msgTextInput = React.createRef()
     this.messageFieldEndRef = React.createRef();
   }
   //methods
-  sendMsg = (message, sender) => {
-    const chatId = this.props.chatId;
-    const { chats, msgs } = this.state;
+  handleSendMsg = (message, sender) => {
+    const {msgs, chatId} = this.props;
     const msgId = Object.keys(msgs).length + 1;
+    sendMessage(msgId, sender, message, chatId);
     this.setState({
-      msgs: { ...msgs, 
-        [msgId]: {
-          sender: sender,
-          text: message,
-        }
-      },
       chats: { ...chats,
         [chatId]: { ...chats[chatId],
-          msgsList: [...chats[chatId]['msgsList'], msgId],
+          msgsCount: chats[chatId].msgsCount++,
         }
       },
       msgText: '',
@@ -78,7 +73,7 @@ class MessageField extends Component {
   };
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
-      this.sendMsg(evt.target.value, 'Me');
+      this.handleSendMsg(evt.target.value, 'Me');
     } else {
       this.setState({ [evt.target.name]: evt.target.value });
     }
@@ -89,6 +84,29 @@ class MessageField extends Component {
   setFocusOnInput = () => {
     this.msgTextInput.current.focus();
   }
+  
+  getLastMsgInChat(chatId, msgsObj) {
+    for (let i = Object.keys(msgsObj).length; i > 0; i--) {
+      if (msgsObj[i].chatId === chatId) {
+        return msgsObj[i];
+      }
+    }
+  }
+  getAllMsgsInChat(chatId, msgsObj) {
+    const msgsArr = [];
+    // for (let i = 1; i <= Object.keys(msgsObj).length; i++) {
+    //   if (msgsObj[i].chatId === chatId) {
+    //     msgsArr.push(msgsObj[i]);
+    //   }
+    // }
+    //lets try smth else =)
+    for (let i in msgsObj) {
+      if (msgsObj.hasOwnProperty(i) && msgsObj[i].chatId === chatId) {
+        msgsArr.push(msgsObj[i]);
+      }
+    }
+    return msgsArr;
+  }
 
   //hooks
   componentDidMount() {
@@ -97,32 +115,25 @@ class MessageField extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { chats: prevChats, msgs: prevMsgs } = prevState;
-    // const { chats, msgs } = this.state;
-    const { chats } = this.state;
-    const { msgs, chatId } = this.props;
-    const prevMsgsLength = Object.keys(prevChats[chatId].msgsList).length;
-    const msgsLength = Object.keys(chats[chatId].msgsList).length;
-    const chatMsgsListLastIndex = chats[chatId].msgsList.length - 1;
-    const chatMsgLastIndex = chats[chatId].msgsList[chatMsgsListLastIndex];
-    if (prevMsgsLength < msgsLength &&
-      msgs[chatMsgLastIndex].sender === 'Me') {
-      setTimeout(() => {
-        const text = 'Leave me alone, human...';
-        const sender = 'Bot';
-        this.sendMsg(text, sender);
-      }, 1000);
-    }
+    const { chatId } = this.props;
+    if (prevState.chats[chatId].msgsCount > this.state.chats[chatId].msgsCount && 
+      this.getLastMsgInChat(this.props.chatId, this.props.msgs).sender === 'Me') {
+        setTimeout(() => {
+          const text = 'Leave me alone, human...';
+          const sender = 'Bot';
+          this.handleSendMsg(text, sender);
+        }, 1000);
+      }
     this.scrollToBottom();
     this.setFocusOnInput();
   };
 
   render() {
     const { classes } = this.props;
-    const { chats } = this.state;
     const { msgs, chatId } = this.props;
-    const MessagesArr = chats[chatId].msgsList.map((msgId, index) => (
-      <Message key={index.toString()} msg={msgs[msgId]} />
+    const currentChatMsgs = this.getAllMsgsInChat(chatId, msgs);
+    const MessagesArr = currentChatMsgs.map((msg, index) => (
+      <Message key={index.toString()} msg={msg} />
     ));
     return (
       <div className={classes.wrapper}>
@@ -130,25 +141,23 @@ class MessageField extends Component {
           { MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
-          <Tooltip title = "Введите текст сообщения">
-            <TextField
-              placeholder = 'Введите сообщение...'
-              inputRef = {this.msgTextInput}
-              className = {classes.sendText}
-              variant = "outlined"
-              size = "small"
-              onChange = {this.handleChange}
-              onKeyUp = {this.handleChange}
-              value = {this.state.msgText}
-              name = 'msgText'
-              />
-          </Tooltip>
+          <TextField
+            placeholder = 'Введите сообщение...'
+            inputRef = {this.msgTextInput}
+            className = {classes.sendText}
+            variant = "outlined"
+            size = "small"
+            onChange = {this.handleChange}
+            onKeyUp = {this.handleChange}
+            value = {this.state.msgText}
+            name = 'msgText'
+            />
           <Tooltip title="Отправить">
             <IconButton 
               className={classes.sendBtn}
               // size="small"
               name="sendMsgUI"
-              onClick={() => this.sendMsg(this.state.msgText, 'Me')}>
+              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}>
                 <SendOutlinedIcon />
               </IconButton>
           </Tooltip>

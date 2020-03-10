@@ -22,7 +22,7 @@ class ChatList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: 0,
+      selectedIndex: this.props.selectedIndex,
     };
   }
   handleListItemClick = (event, index) => {

@@ -18,35 +18,11 @@ const useStyles = (theme => ({
 }));
 
 //data - выпилить!
-//FIX Массивы сообщений в каждом чате
-//  или в сообщении id его чата
 const chats = {
-  1: { title: 'Чат 1', msgsList: [1, 2, 3, 4] },
-  2: { title: 'Чат 2', msgsList: [5] },
-  3: { title: 'Чат 3', msgsList: []},
+  1: { title: 'Чат 1', msgsCount: 4 },
+  2: { title: 'Чат 2', msgsCount: 1 },
+  3: { title: 'Чат 3', msgsCount: 0 },
 };
-// const msgs = {
-//   1: {
-//     sender: 'Me',
-//     text: 'Hello!',
-//   },
-//   2: {
-//     sender: null,
-//     text: null,
-//   },
-//   3: {
-//     sender: 'Me',
-//     text: 'How are You?',
-//   },
-//   4: {
-//     sender: null,
-//     text: null,
-//   },
-//   5: {
-//     sender: null,
-//     text: 'Hello, human!',
-//   }
-// };
 
 class Layout extends Component {
   static propTypes = {
@@ -61,7 +37,7 @@ class Layout extends Component {
     return (
       <div className={classes.root}>
         <Header chats={chats} chatId={this.props.chatId} />
-        <ChatList />
+        <ChatList selectedIndex={this.props.chatId - 1}/>
         <MessageField chats={chats} chatId={this.props.chatId}/>
       </div>
     );

@@ -6,22 +6,27 @@ const initialStore = {
     1: {
       sender: 'Me',
       text: 'Hello!',
+      chatId: 1,
     },
     2: {
       sender: null,
       text: null,
+      chatId: 1,
     },
     3: {
       sender: 'Me',
       text: 'How are You?',
+      chatId: 1,
     },
     4: {
       sender: null,
       text: null,
+      chatId: 1,
     },
     5: {
       sender: null,
       text: 'Hello, human!',
+      chatId: 2,
     }
   }
 };
