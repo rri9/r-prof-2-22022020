@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-let tabbar = () => {
+let navigation = () => {
 
   const classes = useStyles()
 
@@ -60,5 +60,5 @@ let tabbar = () => {
 //   )
 // }
 
-export default tabbar
+export default navigation
 

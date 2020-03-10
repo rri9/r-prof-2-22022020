@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
    selected: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.secondary.main,
-      '&>.MuiListItemAvatar-root>.makeStyles-avatar-190': {
+      '&>.MuiListItemAvatar-root>.makeStyles-avatar-216': {
          backgroundColor: theme.palette.secondary.main,
          color: theme.palette.common.white
       }

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
    }
 }))
 
-let navbar = (props) => {
+let header = (props) => {
    const classes = useStyles()
    const { title } = props
 
@@ -41,4 +41,4 @@ let navbar = (props) => {
    )
 }
 
-export default navbar
+export default header

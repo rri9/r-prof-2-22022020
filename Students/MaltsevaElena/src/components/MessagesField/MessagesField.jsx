@@ -28,7 +28,7 @@ const useStyles = (theme => ({
 }))
 
 // Children components
-import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
+import Header from '../MessagesHeader/MessagesHeader.jsx'
 import Message from '../Message/Message.jsx'
 
 class Messages extends Component {
@@ -107,7 +107,7 @@ class Messages extends Component {
 
       return (
          <div>
-            <Navbar title={ chatRooms[chatId].title }/>
+            <Header title={ chatRooms[chatId].title }/>
 
             <Box className={ classes.msgBlock }>
                <Box className={ classes.msgList } ref={ this.msgList }>

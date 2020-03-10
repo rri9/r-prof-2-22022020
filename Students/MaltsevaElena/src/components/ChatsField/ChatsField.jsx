@@ -3,29 +3,50 @@ import ReactDom from 'react-dom'
 import PropTypes from 'prop-types'
 
 // Styles, UI
-import { Box, List, ListItem, Input, IconButton } from '@material-ui/core'
+import { AppBar, 
+         Box,
+         Button,
+         Dialog, DialogActions, DialogContent, DialogTitle, 
+         List, 
+         Input, InputBase,
+         IconButton, 
+         Toolbar } from '@material-ui/core'
+import { AddCircle, Search } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
-import { AddCircle } from '@material-ui/icons'
 
 const useStyles = (theme => ({
    root: {
       borderRight: '4px solid rgba(0, 0, 0, .1)',
    },
    chatList: {
-      height: 'calc(100vh - 217px)',
+      height: 'calc(100vh - 145px)',
       padding: theme.spacing(1, 0),
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.common.white
    },
-   newChat: {
-      padding: theme.spacing(1.5),
-   }
+   grow: {
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: 'none',
+   },
+   search: {
+      borderBottom: '1px solid rgba(255, 255, 255, .2)'
+   },
+   inputSearch: {
+      color: 'inherit',
+      padding: theme.spacing(1),
+   },
+   addBtn: {
+      marginRight: theme.spacing(1),
+      color: theme.palette.secondary.main,
+   },
+   cancelBtn: {
+      color: theme.palette.secondary.light
+   },
 }))
 
 // Children components
-import NavBar from '../ChatsNavbar/ChatsNavbar.jsx'
 import Chat from '../Chat/Chat.jsx'
-import TabBar from '../ChatsTabbar/ChatsTabbar.jsx'
+import Navigation from '../ChatsNavigation/ChatsNavigation.jsx'
 
 class ChatList extends Component {
    static propTypes = {
@@ -38,9 +59,10 @@ class ChatList extends Component {
    }
 
    state = {
-      input: ''
+      input: '',
+      openDialog: false
    }
-
+   
    handleChange = (event) => {
       this.setState({ input: event.target.value })
    }
@@ -59,7 +81,12 @@ class ChatList extends Component {
          addChat(newChatId, this.state.input)
          addChatToMsgStore(newChatId)
          this.setState({ input: '' })
+         this.handleClickOpenClose()
       }
+   }
+
+   handleClickOpenClose = () => {
+      this.setState({ openDialog: !this.state.openDialog })
    }
 
    render() {
@@ -82,24 +109,49 @@ class ChatList extends Component {
 
       return (
          <Box className={classes.root}>
-            <NavBar />
+
+            {/* Navbar: create and search functions */}
+            <AppBar position="static" className={classes.grow}>
+               <Toolbar className={classes.search}>
+                  <IconButton aria-label="create" edge="start" className={ classes.addBtn }
+                     onClick={ this.handleClickOpenClose }>
+                     <AddCircle />
+                  </IconButton>
+                  <Search />
+                  <InputBase aria-label="search" className={ classes.inputSearch }
+                     placeholder="Search in all..."
+                  />
+               </Toolbar>
+            </AppBar>
+
+            {/* Popup for creating new chat */}
+            <Dialog fullWidth open={ this.state.openDialog } onClose={ this.handleClickOpenClose }>
+               <DialogTitle>Create new chat</DialogTitle>
+               <DialogContent>
+                  <Input autoFocus fullWidth margin="dense"
+                     name="input"
+                     placeholder="Add new chat"
+                     onChange={ this.handleChange }
+                     onKeyUp={ this.handleKeyUp }
+                     value={ this.state.input }
+                  />
+               </DialogContent>
+               <DialogActions>
+                  <Button onClick={ this.handleClickOpenClose } className={ classes.cancelBtn }>
+                     Cancel
+                  </Button>
+                  <Button onClick={ this.handleAdd } color="secondary">
+                     Create
+                  </Button>
+               </DialogActions>
+            </Dialog>
+
             <List className={classes.chatList}>
                { ChatRoomsArr }
             </List>
 
-            <Box className={classes.newChat}>
-               <IconButton aria-label="create" onClick={ () => this.handleAdd() }>
-                  <AddCircle />
-               </IconButton>
-               <Input name="input"
-                  placeholder="Add new chat"
-                  onChange={ this.handleChange }
-                  onKeyUp={ this.handleKeyUp }
-                  value={ this.state.input }
-               />
-            </Box>
+            <Navigation />
 
-            <TabBar />
          </Box>
       )
    }
