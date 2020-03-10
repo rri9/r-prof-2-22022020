@@ -4,19 +4,19 @@ import {withStyles} from '@material-ui/core/styles';
 import styles from './style.css';
 
 import Message from '../Message/Message.jsx';
-import { Box, Fab, TextField, GridList } from '@material-ui/core';
+import { Box, Fab, TextField, GridList, List } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = (theme => ({
     root: {
       display: 'flex',
       flexWrap: 'wrap',
-      overflow: 'hidden',
       backgroundColor: theme.palette.background.paper,
     },
     gridList: {
       width: '100%',
-      maxHeight: 'calc(100vh - 120px)',
+      overflow: 'auto',
+      height: 'calc(100vh - 120px)',
     }
   }));
 
@@ -24,6 +24,7 @@ import { sendMessage } from '../../store/actions/messages_action.js';
 
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
+import { withRouter } from 'react-router-dom';
 
 class Messages extends Component {
 
@@ -35,6 +36,7 @@ class Messages extends Component {
         this.state = {
             msg: ''
         }
+        console.log('test');
     }
 
     handleChanges = (event) => {
@@ -43,18 +45,17 @@ class Messages extends Component {
             this.newMessage('Alex', this.state.msg);
     }
 
-    // componentDidUpdate() {
-    //     const { messages } = this.props;
-    //     console.log(Object.keys(messages).length);
-    //     if (Object.keys(messages).length % 2 === 1) {
-    //         setTimeout(() => {
-    //             this.newMessage(null, 'NOOOOOOOOO')
-    //         }, 500);
-    //     }
-    // }
-
-    componentDidUpdate() {
-        this.scrollToBottom();
+    componentDidUpdate(prevProps) {
+        const { messages, match: { params } } = this.props;
+        const currMessages = messages[params.chatId];
+        const prevLength = Object.keys(prevProps.messages[params.chatId]).length;
+        const currLength = Object.keys(currMessages).length;
+        if (prevLength < currLength && currMessages[Object.keys(currMessages).length].user === this.user) {
+            setTimeout(() => {
+                const messageId = Object.keys(messages[params.chatId]).length + 1;
+                this.props.sendMessage(messageId, params.chatId, null, 'NOOOOOOOOOO');
+            }, 500);
+        }
     }
 
     componentDidMount() {
@@ -66,34 +67,31 @@ class Messages extends Component {
     }
 
     newMessage = (sender, text) => {
-        const { messages } = this.props;
-        const messageId = Object.keys(messages).length + 1;
-        this.props.sendMessage(messageId, sender, text);
+        const { messages, match: { params } } = this.props;
+        const messageId = Object.keys(messages[params.chatId]).length + 1;
+        this.props.sendMessage(messageId, params.chatId, sender, text);
         this.setState({msg: ''});
-        setTimeout(() => {
-            const { messages } = this.props;
-            const messageId = Object.keys(messages).length + 1;
-            this.props.sendMessage(messageId, null, 'NOOOOOOOOOO');
-        }, 500);
+        this.scrollToBottom();
     }
 
     render() {
-        const { classes } = this.props;
-        const { messages } = this.props;
-        const renderMessages = Object.keys(messages).map(messageId => {
+        const { classes, messages, match: { params } } = this.props;
+        const mapMessages = messages[params.chatId];
+        console.log(Object.keys(mapMessages));
+        const renderMessages = Object.keys(mapMessages).map(messageId => {
             return (
                 <Message 
-                    key={ messageId } 
-                    sender={ messages[messageId].user } 
-                    text={ messages[messageId].text }
+                    key={ `${params.chatId}@@${messageId}` } 
+                    sender={ mapMessages[messageId].user } 
+                    text={ mapMessages[messageId].text }
                 />
             )
         })
         return (
             <div className={ classes.root}>
-                <GridList className={ classes.gridList } cols={ 1 } spacing={ 0 } ref={this.messagesEndRef}>
-                    {renderMessages}
-                </GridList>
+                <List className={ classes.gridList } cols={ 1 } spacing={ 0 } ref={this.messagesEndRef}>
+                    { renderMessages }
+                </List>
                 <TextField 
                     className="flex-grow-1"
                     label="Новое сообщение"
@@ -117,4 +115,4 @@ const mapStateToProps = ({ msgReducer }) => ({
 });
 const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Messages))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(withRouter(Messages)))
