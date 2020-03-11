@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import { Button, Form, ListGroup, InputGroup, } from 'react-bootstrap';
 import './style.css';
@@ -27,8 +27,9 @@ class ChatList extends React.Component {
    addNewChat = ( title ) => {
       const { chats } = this.props;
       const chatId = Object.keys(chats).length + 1;
-
-      this.props.addChat(chatId, title);
+      if ( title !== '') {
+         this.props.addChat(chatId, title);
+      }
       this.setState({
          newChatTitle: ''
      });
@@ -57,7 +58,7 @@ class ChatList extends React.Component {
       return (
          <div className="bg-light h-100 col-2 d-flex flex-column justify-content-between p-0">
             <div>
-               <p>Hello {usr}!</p>
+               <p className="my-3 text-center font-weight-bold">Hello {usr}!</p>
                <InputGroup className="mb-5">
                   <Form.Control
                      placeholder="New chat"
