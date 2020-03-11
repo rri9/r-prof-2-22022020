@@ -11,18 +11,18 @@ import { ListItem,
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
-   item: {
-      '&:hover, &:active': {
+   root: {
+      '& .MuiListItem-root:hover': {
          backgroundColor: theme.palette.primary.light,
       },
-   },
-   selected: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.secondary.main,
-      '&>.MuiListItemAvatar-root>.makeStyles-avatar-216': {
-         backgroundColor: theme.palette.secondary.main,
-         color: theme.palette.common.white
-      }
+      '& .Mui-selected': {
+         backgroundColor: theme.palette.primary.main,
+         color: theme.palette.secondary.main,
+         '& .MuiListItemAvatar-root > .MuiAvatar-root': {
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.common.white
+         }
+      },
    },
    avatar: {
       backgroundColor: theme.palette.common.white,
@@ -36,8 +36,8 @@ let chat = (props) => {
    const { link, title, message, isSelected } = props
 
    return (
-      <Link to={ link }>
-         <ListItem className={ isSelected ? classes.selected : classes.item } divider={ true } >
+      <Link to={ link } className={ classes.root }>
+         <ListItem selected={ isSelected ? true : false } divider={ true } >
             <ListItemAvatar>
                <Avatar className={ classes.avatar }> { title[0].toUpperCase() } </Avatar>
             </ListItemAvatar>
