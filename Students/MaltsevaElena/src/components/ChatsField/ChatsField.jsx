@@ -37,7 +37,7 @@ const useStyles = (theme => ({
    },
    addBtn: {
       marginRight: theme.spacing(1),
-      color: theme.palette.secondary.main,
+      color: theme.palette.common.white,
    },
    cancelBtn: {
       color: theme.palette.secondary.light
