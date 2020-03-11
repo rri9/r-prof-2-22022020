@@ -1,0 +1,44 @@
+.input_line{
+    color: white;
+    /* border-bottom: 2px solid color #074f03;
+    margin-left: 30px; */
+}
+
+.mail{
+   /* position: absolute;
+   right: 0;
+   padding-right: 24px; */
+   color: #074f03;
+}
+
+.searchIcon{
+    /* margin-left:14px; */
+    color: #074f03;
+}
+
+.toolBar {
+    /* position: relative; */
+}
+.notiFication{
+    /* position : absolute;
+    right: 64px; */
+    color: #074f03;
+}
+
+.Bar{
+    background-color: #1b9403 !important;
+}
+
+.menu{
+    color: #074f03;
+}
+
+.chatHeader
+{
+    display: block;
+    font-family: 'Spartan', sans-serif;
+}
+
+.settings{
+    color: #074f03;
+}
