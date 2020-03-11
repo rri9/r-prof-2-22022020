@@ -60,11 +60,12 @@ class ChatList extends Component {
 
    state = {
       input: '',
-      openDialog: false
+      openDialog: false,
+      search: ''
    }
    
    handleChange = (event) => {
-      this.setState({ input: event.target.value })
+      this.setState({ [event.target.name]: event.target.value })
    }
 
    handleKeyUp = (event) => {
@@ -107,19 +108,30 @@ class ChatList extends Component {
          )
       })
 
+      let ChatRoomsFiltered = []
+      if (this.state.search !== '') {
+         let searchRequest = new RegExp(this.state.search, 'gi')
+         ChatRoomsFiltered = ChatRoomsArr.filter(room => {
+            return searchRequest.test(room.props.title)
+         })
+      } else ChatRoomsFiltered = ChatRoomsArr
+
       return (
-         <Box className={classes.root}>
+         <Box className={ classes.root }>
 
             {/* Navbar: create and search functions */}
-            <AppBar position="static" className={classes.grow}>
-               <Toolbar className={classes.search}>
+            <AppBar position="static" className={ classes.grow }>
+               <Toolbar className={ classes.search }>
                   <IconButton aria-label="create" edge="start" className={ classes.addBtn }
                      onClick={ this.handleClickOpenClose }>
                      <AddCircle />
                   </IconButton>
                   <Search />
                   <InputBase aria-label="search" className={ classes.inputSearch }
+                     name="search"
                      placeholder="Search in all..."
+                     onChange={ this.handleChange }
+                     value={ this.state.search }
                   />
                </Toolbar>
             </AppBar>
@@ -146,8 +158,8 @@ class ChatList extends Component {
                </DialogActions>
             </Dialog>
 
-            <List className={classes.chatList}>
-               { ChatRoomsArr }
+            <List className={ classes.chatList }>
+               { ChatRoomsFiltered }
             </List>
 
             <Navigation />
