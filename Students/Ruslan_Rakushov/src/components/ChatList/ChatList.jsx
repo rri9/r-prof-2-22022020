@@ -4,14 +4,17 @@ import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
+import {
+  List, ListItem, ListItemText, ListItemIcon, TextField,
+  Divider, Tooltip, IconButton, 
+} from '@material-ui/core';
 import AssistantIcon from '@material-ui/icons/Assistant';
-import Divider from '@material-ui/core/Divider';
+import AddIcon from '@material-ui/icons/Add';
 
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-// import { addChat } from '../../store/actions/chatActions.js';
+import { addChat } from '../../store/actions/chatActions.js';
 
 const useStyles = (theme => ({
   root: {
@@ -28,6 +31,7 @@ class ChatList extends Component {
     super(props);
     this.state = {
       selectedIndex: this.props.selectedIndex,
+      newChatName: '',
     };
     this.chats = this.props.chats;
   }
@@ -36,6 +40,20 @@ class ChatList extends Component {
       selectedIndex: index,
     });
   };
+  handleChange = (evt) => {
+    if (evt.keyCode === 13) {
+      this.handleNewChat(evt.target.value);
+    } else {
+      this.setState({ [evt.target.name]: evt.target.value });
+    }
+  };
+  handleNewChat = (title) => {
+    this.props.addChat(title);
+    this.setState({
+      newChatName: '',
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const { chats } = this.props;
@@ -51,7 +69,7 @@ class ChatList extends Component {
               <ListItemIcon className={classes.itemIcon}>
                 <AssistantIcon />
               </ListItemIcon>
-              <ListItemText primary={`Chat ${i}`}/>
+              <ListItemText primary={`${chats[i].title}`}/>
             </ListItem>
           </Link>
         );
@@ -63,6 +81,26 @@ class ChatList extends Component {
         <Divider />
         <List>
           { listsArr }
+          <Divider />
+          <ListItem>
+            <TextField
+              placeholder='Добавить чат'
+              name='newChatName'
+              value={this.state.newChatName}
+              variant = "outlined"
+              size = "small"
+              onChange = {this.handleChange}
+              onKeyUp = {this.handleChange}
+            />
+            <Tooltip title="Добавить чат">
+            <IconButton 
+              className={classes.addBtn}
+              name="addChatUI"
+              onClick={() => this.handleNewChat(this.state.newChatName)}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+          </ListItem>
         </List>
         <Divider />
       </div>
@@ -75,7 +113,7 @@ const mapStateToProps = ({ chatReducer }) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  // addChat,
+  addChat,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(ChatList));
