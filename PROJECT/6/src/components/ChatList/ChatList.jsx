@@ -11,11 +11,23 @@ import { TextField } from 'material-ui'
 import { addChat } from '../../store/actions/chats_actions.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 
+import { push } from 'connected-react-router'
 
 class ChatList extends React.Component {
+    static propTypes = {
+        chats: PropTypes.object.isRequired,
+        push: PropTypes.func.isRequired,
+        addChat: PropTypes.func.isRequired,
+    }
+
     state = {
         input: ''
+    }
+
+    handleNavigate = (link) => {
+        this.props.push(link)
     }
 
     handleChange = (evt) => {
@@ -42,9 +54,11 @@ class ChatList extends React.Component {
         
         Object.keys(chats).forEach(key => {
             chatsArray.push(
-            <Link to={ `/chat/${key}` }>
-                <ListItem primaryText={chats[key].title} leftIcon = { <ContentSend /> } />
-            </Link>
+                <ListItem 
+                    primaryText={chats[key].title} 
+                    leftIcon = { <ContentSend /> } 
+                    onClick = { () => this.handleNavigate(`/chat/${key}`) }
+                />
             )
         })
 
@@ -76,6 +90,6 @@ const mapStateToProps = ({ chatsReducer }) => ({
     chats: chatsReducer.chats
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators( { addChat }, dispatch )
+const mapDispatchToProps = dispatch => bindActionCreators( { addChat, push }, dispatch )
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList)

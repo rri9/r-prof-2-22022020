@@ -9,13 +9,16 @@ import { Provider } from 'react-redux'
 import initStore from './store/store.js'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
+import { ConnectedRouter } from 'connected-react-router'
+import { history } from './store/store.js'
+
 ReactDom.render (
-    <BrowserRouter>
-        <Provider store = { initStore() }>
+    <Provider store = { initStore() }>
+        <ConnectedRouter history={ history }>
             <MuiThemeProvider>
                 <Router />
             </MuiThemeProvider>
-        </Provider>
-    </BrowserRouter>
+        </ConnectedRouter>
+    </Provider>
     , document.getElementById('app')
 );

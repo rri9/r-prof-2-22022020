@@ -16,6 +16,7 @@ class Messages extends Component {
         //где-то тут... 
         this.state = {
             msg: '',
+            show: false
         }
     }
     //methods
@@ -27,8 +28,9 @@ class Messages extends Component {
     }
 
     handleSendMessage = (message, sender) => {
+        console.log('sent')
         this.setState({ msg: '' })
-        if (sender == 'Darth Vader') {
+        if (sender == 'Darth') {
             this.sendMessage(message, sender)
         }
     }
@@ -40,11 +42,14 @@ class Messages extends Component {
             //this.sendMessage(evt)
     }
     
+    handle = () => {
+        this.setState({ show: !this.state.show })
+    }
+
     render() {
         //let user = this.props.usr
         let usr = 'Darth'
         let { messages } = this.props
-
 
         let MessagesArr = []
         
@@ -67,7 +72,11 @@ class Messages extends Component {
                 onChange = { this.handleChange } 
                 // onKeyUp = { this.handleChange }
                 value = { this.state.msg }/>
-                <button onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Send</button>
+                <button onClick = { () => this.handleSendMessage (this.state.msg, 'Darth') }>Send</button>
+
+                <button onClick = { this.handle }>OKKKK</button>
+
+                {this.state.show && <div>SHOWED</div>}
             </div>
         )
     }
