@@ -1,15 +1,16 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { ThemeProvider, createMuiTheme, CssBaseline, Container, Fab, Grid } from "@material-ui/core";
+import { ThemeProvider, createMuiTheme, CssBaseline, Container } from "@material-ui/core";
 import { Provider } from 'react-redux';
 import initStore from './store/store.js';
 
 import '../node_modules/bootstrap/dist/css/bootstrap-grid.css';
 import 'typeface-roboto';
 
-import Messages from './components/MessagesField/MessagesField.jsx';
 import Header from './components/Header/Header.jsx';
-import ChatList from './components/ChatList/ChatList.jsx';
+
+import Router from './router/Router.jsx';
+import { HashRouter } from 'react-router-dom';
 
 const theme = createMuiTheme({
     typography: {
@@ -26,31 +27,26 @@ const theme = createMuiTheme({
         '"Segoe UI Symbol"',
       ].join(','),
     },
+    pallete: {
+        primary: {
+            dark: '#3f51b5',
+            light: '#fff'
+        }
+    }
   });
 
 let user = 'Alex';
 ReactDom.render(
-    <Provider store = { initStore() }>
-        <ThemeProvider theme={theme}>
-            <CssBaseline></CssBaseline>
-            <Container maxWidth="lg">
-                <Header usr={ user }/>
-                <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="flex-start"
-                    spacing={1}
-                >
-                    <Grid item xs={3}>
-                        <ChatList />
-                    </Grid>
-                    <Grid item xs={9}>
-                        <Messages usr={ user }/>
-                    </Grid>
-                </Grid>
-            </Container>
-        </ThemeProvider>
-    </Provider>, 
+    <HashRouter>
+        <Provider store = { initStore() }>
+            <ThemeProvider theme={theme}>
+                <CssBaseline></CssBaseline>
+                <Container maxWidth="lg">
+                    <Header usr={ user }/>
+                    <Router/>
+                </Container>
+            </ThemeProvider>
+        </Provider>
+    </HashRouter>, 
     document.getElementById("app")
 );

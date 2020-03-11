@@ -1,0 +1,21 @@
+.btn{
+    
+    margin-left: 10px !important;
+    background-color:#074f03 !important;
+}
+
+.field-data
+{
+    padding:15px;
+}
+
+.wrapper
+{
+    margin-top: 90px;
+}
+
+.inp
+{
+    width: calc(100% - 150px);
+}
+
