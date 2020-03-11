@@ -1,41 +1,50 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
+import PropTypes from "prop-types";
 
-import { makeStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
+import { AppBar, Toolbar, Typography, Fab, IconButton, Icon } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
-   root: {
-      backgroundColor: theme.palette.primary.main,
-      padding: theme.spacing(2),
-      justifyContent: 'space-between',
-   },
-   hovered: {
-      '&:hover, &:active': {
-         color: theme.palette.secondary.main
-      },
-   },
+import { withStyles } from '@material-ui/core/styles';
+const useStyles = (theme => ({
+  root: {
+    backgroundColor: theme.palette.primary.main,
+    padding: theme.spacing(2),
+    justifyContent: 'space-between',
+  },
+  hovered: {
+    '&:hover, &:active': {
+      color: theme.palette.secondary.main
+    },
+  },
 }));
 
-export default function MessagesHead() {
-  const classes = useStyles();
+class MessagesHead extends Component {
+  static propTypes = {
+    chatId: PropTypes.number,
+  };
+  
+  static defaultProps = {
+    chatId: 1,
+  };
+  
+  render() {
+    let { classes } = this.props;
+    
+    return (
+      <header className="msgs-head">
+        <AppBar position="static">
+          <Toolbar className={ classes.root } >
+            <Icon>chat</Icon>
+            <Typography className={ classes.title } >
+              Чат { this.props.chatId }
+            </Typography>
+            <Fab className={ classes.hovered } color="primary" aria-label="search">
+              <Icon>search</Icon>
+            </Fab>
+          </Toolbar>
+        </AppBar>
+      </header>
+    );
+  };
+};
 
-  return (
-    <header className="msgs-head">
-      <AppBar position="static">
-        <Toolbar className={classes.root}>
-          <Typography className={classes.title}>
-            Messages header
-          </Typography>
-          <Fab className={classes.hovered} color="primary" aria-label="search">
-            <Icon>search</Icon>
-          </Fab>
-        </Toolbar>
-      </AppBar>
-    </header>
-  );
-}
+export default withStyles(useStyles)(MessagesHead);
