@@ -3,7 +3,8 @@ import ReactDom from 'react-dom'
 
 // Routing
 import Router from './router/router.jsx'
-import { BrowserRouter } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
+import { history } from './store/store.js'
 
 // Store
 import { Provider } from 'react-redux'
@@ -37,12 +38,12 @@ const darkTheme = createMuiTheme({
 })
 
 ReactDom.render (
-   <BrowserRouter>
-      <Provider store={ initStore() }>
+   <Provider store={ initStore() }>
+      <ConnectedRouter history={ history }>
          <ThemeProvider theme={ darkTheme }>
             <Router/>
          </ThemeProvider>
-      </Provider>
-   </BrowserRouter>,
+      </ConnectedRouter>
+   </Provider>,
    document.getElementById('app')
 )

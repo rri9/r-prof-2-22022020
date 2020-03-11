@@ -54,6 +54,7 @@ class ChatList extends Component {
       chatRooms: PropTypes.object.isRequired,
       addChat: PropTypes.func.isRequired,
       addChatToMsgStore: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
       messages: PropTypes.object.isRequired,
       classes: PropTypes.object
    }
@@ -62,6 +63,10 @@ class ChatList extends Component {
       input: '',
       openDialog: false,
       search: ''
+   }
+
+   handleNavigate = (link) => {
+      this.props.push(link)
    }
    
    handleChange = (event) => {
@@ -99,6 +104,7 @@ class ChatList extends Component {
          messages[chatRoomId] ? lastMsgIndex = Object.keys(messages[chatRoomId]).length : ''
          ChatRoomsArr.push( 
             <Chat 
+               handleNavigate={ this.handleNavigate }
                link={ `/chat/${chatRoomId}` }
                title={ chatRooms[chatRoomId].title }
                message={ lastMsgIndex ? messages[chatRoomId][lastMsgIndex].text : '* No messages yet *'}
@@ -119,7 +125,7 @@ class ChatList extends Component {
       return (
          <Box className={ classes.root }>
 
-            {/* Navbar: create and search functions */}
+            {/* Header: create and search functions */}
             <AppBar position="static" className={ classes.grow }>
                <Toolbar className={ classes.search }>
                   <IconButton aria-label="create" edge="start" className={ classes.addBtn }
@@ -129,20 +135,20 @@ class ChatList extends Component {
                   <Search />
                   <InputBase aria-label="search" className={ classes.inputSearch }
                      name="search"
-                     placeholder="Search in all..."
+                     placeholder="Search..."
                      onChange={ this.handleChange }
                      value={ this.state.search }
                   />
                </Toolbar>
             </AppBar>
 
-            {/* Popup for creating new chat */}
+            {/* Popup: creating new chat */}
             <Dialog fullWidth open={ this.state.openDialog } onClose={ this.handleClickOpenClose }>
                <DialogTitle>Create new chat</DialogTitle>
                <DialogContent>
                   <Input autoFocus fullWidth margin="dense"
                      name="input"
-                     placeholder="Add new chat"
+                     placeholder="Type chat's title here..."
                      onChange={ this.handleChange }
                      onKeyUp={ this.handleKeyUp }
                      value={ this.state.input }
@@ -158,10 +164,12 @@ class ChatList extends Component {
                </DialogActions>
             </Dialog>
 
+            {/* Main: chats list */}
             <List className={ classes.chatList }>
                { ChatRoomsFiltered }
             </List>
 
+            {/* Footer: tabbar (bottom menu) */}
             <Navigation />
 
          </Box>

@@ -1,12 +1,9 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 
-import { Link } from 'react-router-dom'
-
 // Styles, UI
-import { ListItem, 
-         ListItemAvatar, 
-         ListItemText, 
+import { Box, 
+         ListItem, ListItemAvatar, ListItemText, 
          Avatar } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -14,6 +11,7 @@ const useStyles = makeStyles(theme => ({
    root: {
       '& .MuiListItem-root:hover': {
          backgroundColor: theme.palette.primary.light,
+         cursor: 'pointer'
       },
       '& .Mui-selected': {
          backgroundColor: theme.palette.primary.main,
@@ -33,17 +31,19 @@ const useStyles = makeStyles(theme => ({
 let chat = (props) => {
 
    const classes = useStyles()
-   const { link, title, message, isSelected } = props
+   const { handleNavigate, link, title, message, isSelected } = props
 
    return (
-      <Link to={ link } className={ classes.root }>
-         <ListItem selected={ isSelected ? true : false } divider={ true } >
+      <Box className={ classes.root }>
+         <ListItem divider={ true } 
+            selected={ isSelected ? true : false } 
+            onClick={ () => handleNavigate(link) } >
             <ListItemAvatar>
                <Avatar className={ classes.avatar }> { title[0].toUpperCase() } </Avatar>
             </ListItemAvatar>
             <ListItemText primary={ title } secondary={ message } />
          </ListItem>
-      </Link>
+      </Box>
    )
 }
 

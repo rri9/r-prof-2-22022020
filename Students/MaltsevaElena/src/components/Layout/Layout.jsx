@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 import connect from 'react-redux/es/connect/connect'
 import { sendMessage, addChatToMsgStore } from '../../store/actions/messages_action.js'
 import { addChat } from '../../store/actions/chats_action.js'
+import { push } from 'connected-react-router'
 
 // Components
 import Messages from '../MessagesField/MessagesField.jsx'
@@ -19,6 +20,7 @@ class Layout extends Component {
       chatRooms: PropTypes.object.isRequired,
       addChat:PropTypes.func.isRequired,
       addChatToMsgStore: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
       messages: PropTypes.object.isRequired,
       sendMessage: PropTypes.func.isRequired,
    }
@@ -27,15 +29,26 @@ class Layout extends Component {
    }
 
    render () {
-      let { chatId, chatRooms, messages, sendMessage, addChat, addChatToMsgStore } = this.props
+      let { chatId, chatRooms, messages, sendMessage, addChat, addChatToMsgStore, push } = this.props
+      
       return (
          <div className="container">
             <Grid container spacing={0}>
                <Grid item xs={3}>
-                  <ChatList chatId={ chatId } chatRooms={ chatRooms } messages={ messages } addChat={ addChat } addChatToMsgStore={ addChatToMsgStore }/>
+                  <ChatList 
+                     chatId={ chatId } 
+                     chatRooms={ chatRooms } 
+                     messages={ messages } 
+                     addChat={ addChat } 
+                     addChatToMsgStore={ addChatToMsgStore } 
+                     push={ push } />
                </Grid>
                <Grid item xs={9}>
-                  <Messages chatId={ chatId } chatRooms={ chatRooms } messages={ messages } sendMessage={ sendMessage } />
+                  <Messages 
+                     chatId={ chatId } 
+                     chatRooms={ chatRooms } 
+                     messages={ messages } 
+                     sendMessage={ sendMessage } />
                </Grid>
             </Grid>
          </div>
@@ -47,6 +60,6 @@ const mapStateToProps = ({ msgReducer, chatReducer }) => ({
    messages: msgReducer.messages,
    chatRooms: chatReducer.chatRooms
 })
-const mapDespatchToProps = dispatch => bindActionCreators( { sendMessage, addChatToMsgStore, addChat }, dispatch)
+const mapDespatchToProps = dispatch => bindActionCreators( { sendMessage, addChatToMsgStore, addChat, push }, dispatch)
 
 export default connect(mapStateToProps, mapDespatchToProps)(Layout)

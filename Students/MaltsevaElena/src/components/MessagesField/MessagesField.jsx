@@ -75,16 +75,7 @@ class Messages extends Component {
       }
    }
 
-   componentDidUpdate (prevProps) {
-      let { chatId, messages } = this.props
-      let chatMessages = messages[chatId]
-
-      if (Object.keys(prevProps.messages[chatId]).length < Object.keys(chatMessages).length &&
-         chatMessages[Object.keys(chatMessages).length].user === this.state.usr) {
-         setTimeout(() => {
-            this.sendMsg("We'll call you back") 
-         }, 500)
-      }
+   componentDidUpdate () {
       this.scrollToNewMsg()
    }
 
@@ -107,15 +98,17 @@ class Messages extends Component {
 
       return (
          <div>
+            {/* Header: chat's title, search and other functions */}
             <Header title={ chatRooms[chatId].title }/>
 
+            {/* Main: messages history */}
             <Box className={ classes.msgBlock }>
                <Box className={ classes.msgList } ref={ this.msgList }>
                   { MessagesArr ? MessagesArr : '' }
                </Box>
             </Box>
 
-            {/* to have create new component for send message */}
+            {/* Footer: new message input and additional options */}
             <Box className={ classes.sendForm }>
                <Box width="85%" mr={2}>
                   <Input placeholder="Type your message..."
