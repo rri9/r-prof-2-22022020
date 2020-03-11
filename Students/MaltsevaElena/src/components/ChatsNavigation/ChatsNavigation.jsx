@@ -1,9 +1,14 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import { AppBar, Toolbar, IconButton } from '@material-ui/core'
-// import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
-import { ForumRounded, AccountCircleRounded, Settings } from '@material-ui/icons/'
+
+// Styles, UI
+import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { AppBar, 
+        Toolbar, 
+        IconButton, 
+        Menu, MenuItem, 
+        ListItemIcon, ListItemText } from '@material-ui/core'
+import { ForumRounded, AccountCircleRounded, Settings, Face, Notifications, Lock, Tune } from '@material-ui/icons'
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -19,46 +24,96 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #2C2C6A',
+  },
+})(props => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))
+
+const StyledMenuItem = withStyles(theme => ({
+  root: {
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light
+    },
+  },
+}))(MenuItem)
+
 let navigation = () => {
 
   const classes = useStyles()
 
+  const [ anchorEl, setAnchorEl ] = React.useState(null)
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
-    <AppBar position="static" color="primary" className={classes.appBar}>
-      <Toolbar className={classes.toolbar}>
+    <AppBar position="static" color="primary" className={ classes.appBar }>
+      <Toolbar className={ classes.toolbar }>
         <IconButton color="secondary">
           <ForumRounded />
         </IconButton>
         <IconButton color="inherit">
           <AccountCircleRounded />
         </IconButton>
-        <IconButton color="inherit">
+        
+        {/* Settings menu */}
+        <IconButton color="inherit" onClick={ handleClick }>
           <Settings />
         </IconButton>
+        <StyledMenu
+          anchorEl={ anchorEl }
+          open={ Boolean(anchorEl) }
+          onClose={ handleClose } >
+          <StyledMenuItem>
+            <ListItemIcon>
+              <Face fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="My account" />
+          </StyledMenuItem>
+          <StyledMenuItem>
+            <ListItemIcon>
+              <Notifications fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Notifications" />
+          </StyledMenuItem>
+          <StyledMenuItem>
+            <ListItemIcon>
+              <Lock fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Privacy & security" />
+          </StyledMenuItem>
+          <StyledMenuItem>
+            <ListItemIcon>
+              <Tune fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="General settings" />
+          </StyledMenuItem>
+        </StyledMenu>
+
       </Toolbar>
     </AppBar>
   )
 }
-
-// let tabbar = () => {
-//   const classes = useStyles()
-//   const [value, setValue] = React.useState(0)
-
-//   return (
-//     <BottomNavigation
-//       value={value}
-//       onChange={(event, newValue) => {
-//         setValue(newValue);
-//       }}
-//       showLabels
-//       className={classes.appBar}
-//     >
-//       <BottomNavigationAction label="Talks" icon={<ForumRounded />} />
-//       <BottomNavigationAction label="Contacts" icon={<AccountCircleRounded />} />
-//       <BottomNavigationAction label="Settings" icon={<Settings />} />
-//     </BottomNavigation>
-//   )
-// }
 
 export default navigation
 
