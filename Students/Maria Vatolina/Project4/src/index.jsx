@@ -44,7 +44,6 @@ ReactDom.render (
       <Provider store = { initStore() }>
          <ThemeProvider theme={theme}>
             <Router />
-            <Layout usr={ user } />
          </ThemeProvider>
       </Provider>
    </BrowserRouter>
