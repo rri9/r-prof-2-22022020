@@ -23,26 +23,29 @@ const useStyles = theme => ({
     borderRadius: "10px",
     fontSize: "16px",
     margin: "5px",
-    color: "white"
+    color: "white",
+    lineHeight: "1"
   },
   paperL: {
     width: "50%",
-    backgroundColor: "#e33371",
+    // e33371
+    backgroundColor: "#6B96A8",
     padding: "5px 10px",
     borderRadius: "10px",
     fontSize: "16px",
     margin: "5px",
-    color: "white"
+    color: "white",
+    lineHeight: "1"
   }
 });
 
 class Message extends Component {
   constructor(props) {
     super(props);
-    this.sender = this.props.sender ? this.props.sender : "Bot";
-    this.text = this.props.text ? this.props.text : "Sorry, I'm busy ...";
   }
   render() {
+    this.sender = this.props.sender ? this.props.sender : "Bot";
+    this.text = this.props.text ? this.props.text : "Sorry, I'm busy ...";
     const { classes } = this.props;
     const root = this.sender === "Bot" ? classes.rootL : classes.rootR;
     const bgcolor = this.sender === "Bot" ? classes.paperL : classes.paperR;

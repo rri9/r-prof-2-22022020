@@ -17,7 +17,9 @@ module.exports = {
         contentBase: './dist',
         port: 3000,
         hot: true,
-        open: true
+        open: true,
+        historyApiFallback: true, // отвечает файлом index.html на все запросы по незнакомым URL. 
+
     },
     module: {
         rules: [

@@ -1,0 +1,8 @@
+    .wrapperGrid {
+        height: calc(100vh - 64px);
+    }
+
+    .panel {
+        height: 100%;
+        overflow-y: auto;
+    }
