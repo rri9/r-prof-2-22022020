@@ -6,6 +6,7 @@ import ReactDom from 'react-dom';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { sendMessage } from '../../store/actions/messageActions.js';
+import { addMsgCount } from '../../store/actions/chatActions.js';
 
 import Message from '../Message/Message.jsx';
 
@@ -13,6 +14,7 @@ import Message from '../Message/Message.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {IconButton, TextField, Tooltip } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
+import chatReducer from '../../store/reducers/chatReducer.js';
 
 const useStyles = (theme => ({
   wrapper: {
@@ -51,9 +53,7 @@ class MessageField extends Component {
     super(props);
     this.state = {
       msgText: '',
-      chats: props.chats, //FIX
     };
-    this.sendMessage = this.props.sendMessage; //Функция из messageActions
     this.msgTextInput = React.createRef()
     this.messageFieldEndRef = React.createRef();
   }
@@ -61,13 +61,9 @@ class MessageField extends Component {
   handleSendMsg = (message, sender) => {
     const {msgs, chatId} = this.props;
     const msgId = Object.keys(msgs).length + 1;
-    sendMessage(msgId, sender, message, chatId);
+    this.props.sendMessage(msgId, sender, message, chatId);
+    this.props.addMsgCount(chatId);
     this.setState({
-      chats: { ...chats,
-        [chatId]: { ...chats[chatId],
-          msgsCount: chats[chatId].msgsCount++,
-        }
-      },
       msgText: '',
     });
   };
@@ -116,7 +112,8 @@ class MessageField extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { chatId } = this.props;
-    if (prevState.chats[chatId].msgsCount > this.state.chats[chatId].msgsCount && 
+    
+    if (this.props.chats[chatId].msgsCount > prevProps.chats[chatId].msgsCount && 
       this.getLastMsgInChat(this.props.chatId, this.props.msgs).sender === 'Me') {
         setTimeout(() => {
           const text = 'Leave me alone, human...';
@@ -167,12 +164,14 @@ class MessageField extends Component {
   }
 }
 
-const mapStateToProps = ({ messageReducer }) => ({
+const mapStateToProps = ({ messageReducer, chatReducer }) => ({
   msgs: messageReducer.msgs,
+  chats: chatReducer.chats,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
+  addMsgCount,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));

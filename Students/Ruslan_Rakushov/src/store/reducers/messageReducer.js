@@ -36,7 +36,7 @@ export default function messageReducer(store = initialStore, action) {
     case SEND_MESSAGE:
       return update(store, {
         msgs: { $merge: {
-            [action.msgId]: { sender: action.sender, text: action.text }
+            [action.msgId]: { sender: action.sender, text: action.text, chatId: action.chatId }
         }}
       });
   

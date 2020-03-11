@@ -8,6 +8,11 @@ import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
 import AssistantIcon from '@material-ui/icons/Assistant';
 import Divider from '@material-ui/core/Divider';
 
+//redux
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+// import { addChat } from '../../store/actions/chatActions.js';
+
 const useStyles = (theme => ({
   root: {
     width: '30vh',
@@ -24,6 +29,7 @@ class ChatList extends Component {
     this.state = {
       selectedIndex: this.props.selectedIndex,
     };
+    this.chats = this.props.chats;
   }
   handleListItemClick = (event, index) => {
     this.setState({
@@ -32,43 +38,31 @@ class ChatList extends Component {
   };
   render() {
     const { classes } = this.props;
+    const { chats } = this.props;
+    const listsArr = [];
+    for (let i in chats) {
+      if (chats.hasOwnProperty(i)) {
+        listsArr.push(
+          <Link to={`/chat/${i}/`} key={i}>
+            <ListItem
+            button
+            selected={this.state.selectedIndex === (i-1) }
+            onClick={event => this.handleListItemClick(event, i-1)}>
+              <ListItemIcon className={classes.itemIcon}>
+                <AssistantIcon />
+              </ListItemIcon>
+              <ListItemText primary={`Chat ${i}`}/>
+            </ListItem>
+          </Link>
+        );
+      }
+    }
+
     return (
       <div className={classes.root}>
         <Divider />
         <List>
-          <Link to='/chat/1/'>
-            <ListItem
-            button
-            selected={this.state.selectedIndex === 0}
-            onClick={event => this.handleListItemClick(event, 0)}>
-              <ListItemIcon className={classes.itemIcon}>
-                <AssistantIcon />
-              </ListItemIcon>
-              <ListItemText primary='Chat 1'/>
-            </ListItem>
-          </Link>
-          <Link to='/chat/2/'>
-            <ListItem
-            button
-            selected={this.state.selectedIndex === 1}
-            onClick={event => this.handleListItemClick(event, 1)}>
-            <ListItemIcon className={classes.itemIcon}>
-                <AssistantIcon />
-              </ListItemIcon>
-              <ListItemText primary='Chat 2'/>
-            </ListItem>
-          </Link>
-          <Link to='/chat/3/'>
-            <ListItem
-            button
-            selected={this.state.selectedIndex === 2}
-            onClick={event => this.handleListItemClick(event, 2)}>
-            <ListItemIcon className={classes.itemIcon}>
-                <AssistantIcon />
-              </ListItemIcon>
-              <ListItemText primary='Chat 3'/>
-            </ListItem>
-          </Link>
+          { listsArr }
         </List>
         <Divider />
       </div>
@@ -76,4 +70,12 @@ class ChatList extends Component {
   };
 }
 
-export default withStyles(useStyles)(ChatList);
+const mapStateToProps = ({ chatReducer }) => ({
+  chats: chatReducer.chats,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  // addChat,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(ChatList));

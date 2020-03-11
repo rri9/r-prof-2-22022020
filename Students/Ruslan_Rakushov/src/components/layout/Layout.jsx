@@ -6,9 +6,9 @@ import Header from '../Header/Header.jsx';
 import ChatList from '../ChatList/ChatList.jsx';
 import MessageField from '../MessageField/MessageField.jsx';
 
-// //redux
-// import { bindActionCreators } from 'redux';
-// import connect from 'react-redux/es/connect/connect';
+//redux
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
 
 const useStyles = (theme => ({
   root: {
@@ -16,13 +16,6 @@ const useStyles = (theme => ({
     display: 'flex',
   },
 }));
-
-//data - выпилить!
-const chats = {
-  1: { title: 'Чат 1', msgsCount: 4 },
-  2: { title: 'Чат 2', msgsCount: 1 },
-  3: { title: 'Чат 3', msgsCount: 0 },
-};
 
 class Layout extends Component {
   static propTypes = {
@@ -36,12 +29,16 @@ class Layout extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Header chats={chats} chatId={this.props.chatId} />
+        <Header chatId={this.props.chatId} />
         <ChatList selectedIndex={this.props.chatId - 1}/>
-        <MessageField chats={chats} chatId={this.props.chatId}/>
+        <MessageField chatId={this.props.chatId}/>
       </div>
     );
   };
 }
 
-export default withStyles(useStyles)(Layout);
+const mapStateToProps = ({ }) => ({ });
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Layout));
