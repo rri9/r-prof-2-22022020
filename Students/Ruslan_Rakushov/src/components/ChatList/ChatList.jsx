@@ -1,6 +1,8 @@
+//TODO Switch to new chat after adding it
+
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
-import { Link } from 'react-router-dom';
+import { push } from "connected-react-router";
 import { withStyles } from '@material-ui/core/styles';
 import {
   List, ListItem, ListItemText, ListItemIcon, TextField,
@@ -31,12 +33,12 @@ class ChatList extends Component {
       selectedIndex: this.props.selectedIndex,
       newChatName: '',
     };
-    this.chats = this.props.chats;
   }
-  handleListItemClick = (event, index) => {
+  handleListItemClick = (index) => {
     this.setState({
-      selectedIndex: index,
+      selectedIndex: index-1,
     });
+    this.props.push(`/chat/${index}/`);
   };
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
@@ -59,17 +61,16 @@ class ChatList extends Component {
     for (let i in chats) {
       if (chats.hasOwnProperty(i)) {
         listsArr.push(
-          <Link to={`/chat/${i}/`} key={i}>
             <ListItem
             button
             selected={this.state.selectedIndex === (i-1) }
-            onClick={event => this.handleListItemClick(event, i-1)}>
+            onClick={() => this.handleListItemClick(i)}
+            key={i}>
               <ListItemIcon className={classes.itemIcon}>
                 <AssistantIcon />
               </ListItemIcon>
               <ListItemText primary={`${chats[i].title}`}/>
             </ListItem>
-          </Link>
         );
       }
     }
@@ -110,8 +111,11 @@ const mapStateToProps = ({ chatReducer }) => ({
   chats: chatReducer.chats,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  addChat,
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    addChat,
+    push,
+  },
+  dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(ChatList));
