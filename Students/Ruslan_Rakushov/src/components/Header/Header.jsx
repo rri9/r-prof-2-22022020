@@ -1,10 +1,17 @@
-import React, {Component} from 'react';
+// TODO Сделать страницу профиля /profile/, и ссылку на нее в Header’е
+
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Badge } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+
+//redux
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
 
 const useStyles = (theme => ({
   root: {},
@@ -21,11 +28,16 @@ const useStyles = (theme => ({
 }));
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-  }
+  static propTypes = {
+    chats: PropTypes.object.isRequired,
+    chatId: PropTypes.number.isRequired,
+  };
+  static defaultProps = {
+    chatId: 1,
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, chats, chatId } = this.props;
     return (
       <div className={classes.root}>
         <AppBar className={classes.appbar}>
@@ -34,7 +46,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title}>
-              ReactGram &copy;
+              ReactGram &copy; {chats[chatId].title}
             </Typography>
             <div className={classes.rightMenu}>
               <IconButton aria-label="notifications" color="inherit">
@@ -53,4 +65,10 @@ class Header extends Component {
   };
 }
 
-export default withStyles(useStyles)(Header);
+const mapStateToProps = ({ chatReducer }) => ({
+  chats: chatReducer.chats,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Header));

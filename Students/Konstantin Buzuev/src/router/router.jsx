@@ -1,32 +1,38 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Layout from "../components/Layout/Layout.jsx";
+// REDUX
+import connect from "react-redux/es/connect/connect";
 
-export default class Router extends React.Component {
+class Router extends React.Component {
   render() {
+    const { chats } = this.props;
+    let Routes = [];
+    Object.keys(chats).forEach(key => {
+      Routes.push(
+        <Route
+          exact
+          path={"/chat/" + key}
+          render={() => <Layout user={this.props.user} chatID={key} />}
+        />
+      );
+    });
     return (
       <Switch>
         <Route
           exact
           path="/"
-          render={() => <Layout user={this.props.user} chatId={Number("1")} />}
+          render={() => <Layout user={this.props.user} chatID={Number("1")} />}
         />
-        <Route
-          exact
-          path="/chat/1"
-          render={() => <Layout user={this.props.user} chatId={Number("1")} />}
-        />
-        <Route
-          exact
-          path="/chat/2"
-          render={() => <Layout user={this.props.user} chatId={Number("2")} />}
-        />
-        <Route
-          exact
-          path="/chat/3"
-          render={() => <Layout user={this.props.user} chatId={Number("3")} />}
-        />
+        {Routes}
       </Switch>
     );
   }
 }
+const mapStateToProps = ({ chatReducer }) => {
+  return {
+    chats: chatReducer.chats
+  };
+};
+
+export default connect(mapStateToProps)(Router);
