@@ -48,11 +48,11 @@ class Messages extends Component {
         const { messages } = this.props;
         const lastMsg = messages[Object.keys(messages).length];
 
-        if (lastMsg.user === this.props.usr) {
-            setTimeout(() => {
-                    this.addNewMessage( 'NOOOOOOOOOO...', null);
-            }, 500);
-        }
+        // if (lastMsg.user === this.props.usr) {
+        //     setTimeout(() => {
+        //             this.addNewMessage( 'NOOOOOOOOOO...', null);
+        //     }, 500);
+        // }
         let block = this.refs["msgBlock"];
         block.scrollTop = block.scrollHeight;
     }
