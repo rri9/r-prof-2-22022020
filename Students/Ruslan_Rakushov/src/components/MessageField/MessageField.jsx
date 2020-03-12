@@ -1,4 +1,3 @@
-//FIX Отображение пустого чата (3й например)
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
@@ -75,10 +74,14 @@ class MessageField extends Component {
     }
   };
   scrollToBottom = () => {
-    this.messageFieldEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+    if (this.messageFieldEndRef.current.lastElementChild) {
+      this.messageFieldEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   setFocusOnInput = () => {
-    this.msgTextInput.current.focus();
+    if (this.msgTextInput.current) {
+      this.msgTextInput.current.focus();
+    }
   }
   
   getLastMsgInChat(chatId, msgsObj) {
@@ -129,9 +132,16 @@ class MessageField extends Component {
     const { classes } = this.props;
     const { msgs, chatId } = this.props;
     const currentChatMsgs = this.getAllMsgsInChat(chatId, msgs);
-    const MessagesArr = currentChatMsgs.map((msg, index) => (
-      <Message key={index.toString()} msg={msg} />
-    ));
+    let MessagesArr = [];
+    if (currentChatMsgs) {
+      MessagesArr = currentChatMsgs.map((msg, index) => (
+        <Message key={index.toString()} msg={msg} />
+      ));
+    } else {
+      MessagesArr.push(
+        <span>Сообщений пока нет...</span>
+      );
+    }
     return (
       <div className={classes.wrapper}>
         <div className={classes.root} ref={this.messageFieldEndRef}>
