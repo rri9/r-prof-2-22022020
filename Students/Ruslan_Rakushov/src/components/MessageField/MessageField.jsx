@@ -114,16 +114,6 @@ class MessageField extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { chatId } = this.props;
-    
-    if (this.props.chats[chatId].msgsCount > prevProps.chats[chatId].msgsCount && 
-      this.getLastMsgInChat(this.props.chatId, this.props.msgs).sender === 'Me') {
-        setTimeout(() => {
-          const text = 'Leave me alone, human...';
-          const sender = 'Bot';
-          this.handleSendMsg(text, sender);
-        }, 1000);
-      }
     this.scrollToBottom();
     this.setFocusOnInput();
   };
