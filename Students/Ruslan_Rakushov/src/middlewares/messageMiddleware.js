@@ -1,4 +1,5 @@
 import { SEND_MESSAGE, sendMessage } from '../store/actions/messageActions';
+import { blinkChat } from '../store/actions/chatActions';
 
 export default store => next => (action) => {
   switch (action.type) {
@@ -11,6 +12,9 @@ export default store => next => (action) => {
           store.dispatch(sendMessage(msgId, sender, text, action.chatId));
         }, 1000);
       }
+      if (action.sender === 'Bot') {
+        store.dispatch(blinkChat(action.chatId));
+      };
       break;
   }
   return next(action);

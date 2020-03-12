@@ -14,7 +14,9 @@ import AddIcon from '@material-ui/icons/Add';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { addChat } from '../../store/actions/chatActions.js';
+import { addChat, blinkChat } from '../../store/actions/chatActions.js';
+
+import './ChatList.css';
 
 const useStyles = (theme => ({
   root: {
@@ -54,14 +56,24 @@ class ChatList extends Component {
     });
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.chatWithNewMsg) {
+      setTimeout(() => {
+        this.props.blinkChat(null);
+      }, 1500);
+    }
+  };
+
   render() {
     const { classes } = this.props;
     const { chats } = this.props;
     const listsArr = [];
     for (let i in chats) {
+      const blinkClass = this.props.chatWithNewMsg == i ? 'blink' : '';
       if (chats.hasOwnProperty(i)) {
         listsArr.push(
             <ListItem
+            className={blinkClass}
             button
             selected={this.state.selectedIndex === (i-1) }
             onClick={() => this.handleListItemClick(i)}
@@ -109,11 +121,13 @@ class ChatList extends Component {
 
 const mapStateToProps = ({ chatReducer }) => ({
   chats: chatReducer.chats,
+  chatWithNewMsg: chatReducer.chatWithNewMsg,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
     addChat,
+    blinkChat,
     push,
   },
   dispatch);
