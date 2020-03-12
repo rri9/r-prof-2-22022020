@@ -18,14 +18,13 @@ body {
 .chats {
   display: grid;
   align-content: space-between;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   grid-template-columns: 1fr;
   grid-template-areas: 
     "chats-head"
-    "chats-list"
-    "chats-foot";
+    "chats-body";
   grid-area: chats;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .msgs {
@@ -37,6 +36,18 @@ body {
     "msgs-head"
     "msgs-body";
   grid-area: msgs;
+  overflow: auto;
+}
+
+.chats-body {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "chats-list"
+    "chats-foot";
+  grid-area: chats-body;
   overflow: auto;
 }
 
@@ -73,11 +84,6 @@ body {
     "chats"
     "msgs";
   }
-  
-  .chats {
-    grid-template-rows: auto auto auto;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  }
 }
 
 .chat-item,
@@ -105,6 +111,8 @@ body {
 
 .chats-foot {
   grid-area: chats-foot;
+  display: flex;
+  padding: 8px;
 }
 
 .msgs-head {
@@ -128,6 +136,7 @@ body {
   font-family: Roboto, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 14;
+  word-wrap: break-word;
 }
 
 .msg-self {
@@ -144,6 +153,7 @@ body {
   padding: 8px;
 }
 
+.chat-input,
 .msg-input {
   flex-grow: 1;
 }

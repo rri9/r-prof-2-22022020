@@ -15,7 +15,8 @@ const useStyles = theme => ({
   root: {
     flexGrow: 1,
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    maxHeight: "64px"
   },
   menuButton: {
     marginRight: theme.spacing(2)

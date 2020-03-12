@@ -4,10 +4,15 @@ import ReactDom from 'react-dom';
 import Message from '../Message/Message.jsx'
 
 //
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+//import TextField from '@material-ui/core/TextField';
+import { TextField, FloatingActionButton } from 'material-ui';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import AppBar from 'material-ui/AppBar';
+import SendIcon from 'material-ui/svg-icons/content/send';
+import {cyan500} from 'material-ui/styles/colors';
 //
 
 //actions
@@ -20,6 +25,7 @@ import connect from 'react-redux/es/connect/connect'
 class Messages extends Component {
     constructor(props) {
         super(props)
+        //где-то тут... 
         this.state = {
             msg: '',
         }
@@ -34,7 +40,7 @@ class Messages extends Component {
 
     handleSendMessage = (message, sender) => {
         this.setState({ msg: '' })
-        if (message) {
+        if (sender == 'Darth Vader') {
             this.sendMessage(message, sender)
         }
     }
@@ -42,22 +48,15 @@ class Messages extends Component {
     handleChange = (evt) => {
         if (evt.keyCode !== 13) {
             this.setState ({msg: evt.target.value})
-        }else if(evt.keyCode == 13){
-            this.handleSendMessage(this.state.msg, this.props.usr)
         }
+            //this.sendMessage(evt)
     }
-
-    componentDidUpdate () {
-        if(Object.keys(this.props.messages).length % 2 === 1){
-            setTimeout(() => {
-                this.sendMessage('NOOOOOOOOOOOOOO...', 'Luke')
-            }, 500);
-        }
-    }
-
+    
     render() {
-        let { usr } = this.props
+        //let user = this.props.usr
+        let usr = 'Darth'
         let { messages } = this.props
+
 
         let MessagesArr = []
         
@@ -68,12 +67,11 @@ class Messages extends Component {
                 key={ key }
             />)
         })
-
         return (
             <div className="container-fluid align-items-center">
-                    <div className="col-md-3">
+                <div className="col-md-3">
                     <div className="header">
-                        <h2>ReactGram</h2>
+                        <h2>ReactGram &copy;</h2>
                         <p>Hello { usr }!</p>
                     </div>
                     <div className="messagesBlock">
@@ -87,7 +85,10 @@ class Messages extends Component {
                         onKeyUp = { this.handleChange }
                         value = { this.state.msg }
                     />
-                    <Button fullWidth variant="contained" color="primary" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Send</Button>
+                    <Button fullWidth variant="contained" color="primary" onClick = { 
+                            () => this.handleSendMessage (this.state.msg, 'Darth Vader') 
+                        }>Send
+                    </Button>
                 </div>
             </div>
         )

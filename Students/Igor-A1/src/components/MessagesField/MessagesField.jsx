@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
-import { withStyles } from '@material-ui/core/styles';
-import { TextField, FloatingActionButton } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import Divider from '@material-ui/core/Divider';
-import Input from '@material-ui/core/Input';
-import Fab from '@material-ui/core/Fab';
-import Icon from '@material-ui/core/Icon';
+import
+{ Box,
+  Divider,
+  TextField,
+  Input,
+  FloatingActionButton,
+  Fab,
+  Icon } from '@material-ui/core';
 
 import Message from '../Message/Message.jsx'
 
+import { withStyles } from '@material-ui/core/styles';
 const useStyles = (theme => ({
    root: {
       backgroundColor: theme.palette.background.paper,
@@ -32,15 +34,30 @@ const useStyles = (theme => ({
    }
 }));
 
-import botData from './botData.json'
-const randomBotData = () => Math.floor(Math.random() * botData.emoji.length)
-const randomBotEmoj = () => String.fromCodePoint(botData.emoji[randomBotData()])
-const randomBotMsg = () => botData.msg[randomBotData()]
-const botPrefix = 'bot :: '
+import botData from './botData.json';
+const randomBotData = () => Math.floor(Math.random() * botData.emoji.length);
+const randomBotEmoj = () => String.fromCodePoint(botData.emoji[randomBotData()]);
+const randomBotMsg = () => botData.msg[randomBotData()];
+const botPrefix = 'bot :: ';
+
+const scrolledId = 'scrolled_msg';
+
+import { bindActionCreators } from "redux";
+import connect from "react-redux/es/connect/connect";
+import PropTypes from "prop-types";
 
 class Messages extends Component {
+    static propTypes = {
+      chatId: PropTypes.number.isRequired,
+      chats: PropTypes.object.isRequired,
+      messages: PropTypes.object.isRequired,
+      sendMessage: PropTypes.func.isRequired,
+    };
+    
     constructor(props) {
-        super(props)
+        super(props);
+        
+        this.scrolledEl = null;
         
         this.state = {
           msgArray: [
@@ -61,10 +78,9 @@ class Messages extends Component {
                 text: 'NOOOOOOOOO'
             }
           ],
-        }
-    }
+        };
+    };
 
-    
     sendMessage = (e) => {
         this.setState ({
             msgArray: [...this.state.msgArray, {
@@ -72,45 +88,49 @@ class Messages extends Component {
               text: this.state.msg || ''
             }],
             msg: '' // clear input field
-        })
-    }
+        });
+    };
 
     handleChange = (e) => {
         e.keyCode === 13 ? this.sendMessage(e)
           : this.setState ({msg: e.target.value})
-    }
+    };
     
-    scrollToBottom = () => {console.log('scrollToBottom')
-      const { messageList } = this.refs;
-      messageList.scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest" })
-    }
+    scrollToBottom = () => {
+      if(this.scrolledEl) 
+        this.scrolledEl.scrollIntoView();
+    };
 
     componentDidMount() {
+      this.scrolledEl = document.getElementById(scrolledId);
       this.scrollToBottom();
-    }
+    };
     
-    componentDidUpdate () {
-        if (this.state.msgArray.length % 2 === 1) {
-            setTimeout(() => {
-                this.setState ({
-                    msgArray: [...this.state.msgArray, 
-                      {
-                        user: `${botPrefix}${randomBotEmoj()}`,
-                        text: randomBotMsg() 
-                      }
-                    ],
-                    msg: ''
-                })
-            }, 500)
-        }
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.msgArray.length < this.state.msgArray.length
+          &&
+          this.state.msgArray.length % 2 === 1)
+          {
+              setTimeout(() => {
+                  this.setState ({
+                      msgArray: [...this.state.msgArray, 
+                        {
+                          user: `${botPrefix}${randomBotEmoj()}`,
+                          text: randomBotMsg() 
+                        }
+                      ],
+                      msg: ''
+                  });
+              }, 500)
+          };
         
-        this.scrollToBottom()
+        this.scrollToBottom();
     }
     
     render() {
-        let { user, classes } = this.props
+        let { user, classes } = this.props;
         
-        const placeholder = `Введите текст нового сообщения`
+        const placeholder = `Новое сообщение ...`;
         
         let MessagesArr = this.state.msgArray.map( (message, index, self) => 
           <Message
@@ -120,22 +140,19 @@ class Messages extends Component {
             self={ message.user === user }
             key={ index }
           />
-        )
+        );
         
         return (
             <div className="msgs-body">
                 
-                <Box ref="messageList" className={`msgs-list ${classes.root}`}>
+                <Box ref="messageList" className={ `msgs-list ${classes.root}` }>
                     { MessagesArr }
+                    <div id={ scrolledId } />
                 </Box>
-                
-                <div style={{ float:"left", clear: "both" }}
-                     ref={(el) => { this.messagesEnd = el; }}>
-                </div>
                 
                 <Divider variant="middle" />
                     
-                <Box className={`msgs-foot ${classes.foot}`}>
+                <Box className={ `msgs-foot ${classes.foot}` }>
                         
                   <TextField
                     className="msg-input"
@@ -145,7 +162,7 @@ class Messages extends Component {
                     placeholder = { placeholder }
                     onChange = { this.handleChange }
                     onKeyUp = { this.handleChange }
-                    value = { this.state.msg || ''}
+                    value = { this.state.msg || '' }
                     InputProps={{ className: classes.input }}
                   />
                   
@@ -160,10 +177,17 @@ class Messages extends Component {
 
                 </Box>
             </div>
-                
-        )
+        );
+    };
+};
 
-    }
-}
+const mapStateToProps = ({ chatsReducer }) => ({
+  chats: chatsReducer.chats
+});
 
-export default withStyles(useStyles)(Messages);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({}, dispatch);
+
+export default
+  connect(mapStateToProps, mapDispatchToProps)
+    (withStyles(useStyles)(Messages));
