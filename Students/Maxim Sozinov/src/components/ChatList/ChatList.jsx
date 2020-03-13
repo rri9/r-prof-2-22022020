@@ -57,7 +57,6 @@ class ChatList extends React.Component {
 
       Object.keys(chats).forEach(key => {
          chatsArray.push(
-            // <Link to={`/chat/${key}`} key={key}>
                <ListGroup.Item
                   key={key}
                   action
@@ -66,7 +65,6 @@ class ChatList extends React.Component {
                >
                   {chats[key].title}
                </ListGroup.Item>
-            // </Link>
             );
       });
 

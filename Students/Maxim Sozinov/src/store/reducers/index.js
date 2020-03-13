@@ -8,4 +8,6 @@ import userReducer from './user_reducer.js';
 export default (history) => combineReducers({
    router: connectRouter(history),
     msgReducer,
-    chatsReducer});
+    chatsReducer,
+    userReducer,
+   });

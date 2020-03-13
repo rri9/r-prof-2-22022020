@@ -14,7 +14,7 @@ function initStore () {
       initialReducers( history ), 
       initialStore,
       compose(
-         applyMiddleware( routerMiddleware(history) ),
+         applyMiddleware( routerMiddleware(history), ...middlewares ),
          window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : () => {},
       )
    );
