@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
-
 import PropTypes from "prop-types"; 
 import { push } from 'connected-react-router'; 
 
@@ -41,6 +39,7 @@ class ChatList extends React.Component {
       this.setState({
          newChatTitle: ''
      });
+     this.handleNavigate(`/chat/${chatId}`);
    }
 
    handleNavigate = (link) => { 
@@ -103,8 +102,9 @@ class ChatList extends React.Component {
    }
 }
 
-const mapStateToProps = ({ chatsReducer }) => ({
-   chats: chatsReducer.chats
+const mapStateToProps = ({ chatsReducer, userReducer }) => ({
+   chats: chatsReducer.chats,
+   usr: userReducer.user,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
