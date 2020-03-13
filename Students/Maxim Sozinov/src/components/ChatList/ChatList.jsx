@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import PropTypes from "prop-types"; 
+import { push } from 'connected-react-router'; 
 
 import { Button, Form, ListGroup, InputGroup, } from 'react-bootstrap';
 import './style.css';
@@ -11,6 +14,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 class ChatList extends React.Component {
+   static propTypes = { 
+          chats: PropTypes.object.isRequired, 
+          addChat: PropTypes.func.isRequired, 
+          push: PropTypes.func.isRequired, 
+      };
 
    state = {
       newChatTitle: ''
@@ -35,6 +43,10 @@ class ChatList extends React.Component {
      });
    }
 
+   handleNavigate = (link) => { 
+      this.props.push(link); 
+  };
+
    render() {
 
       const { usr } = this.props;
@@ -45,14 +57,17 @@ class ChatList extends React.Component {
 
       Object.keys(chats).forEach(key => {
          chatsArray.push(
-            <Link to={`/chat/${key}`} key={key}>
+            // <Link to={`/chat/${key}`} key={key}>
                <ListGroup.Item
+                  key={key}
                   action
                   className={chatId == key ? 'active' : ''}
+                  onClick={ () => this.handleNavigate(`/chat/${key}`) } 
                >
                   {chats[key].title}
                </ListGroup.Item>
-            </Link>);
+            // </Link>
+            );
       });
 
       return (
@@ -94,6 +109,6 @@ const mapStateToProps = ({ chatsReducer }) => ({
    chats: chatsReducer.chats
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
