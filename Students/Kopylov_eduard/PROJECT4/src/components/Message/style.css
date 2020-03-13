@@ -1,0 +1,38 @@
+.msg{
+    background-color: #1b9403;
+    padding: 5px 15px;
+    border-radius: 7px;
+    font-size: 18px;
+    margin: 7px !important;
+    width: 30%;
+}
+
+.btn{
+    padding: 7px;
+    font-size: 25px;
+    border:none;
+    background-color: brown;
+    border-radius: 7px;
+}
+
+.inpt
+{
+    padding: 7px;
+   margin-right: 10px;
+   
+    
+}
+
+.sender
+{
+    color:#091b08;
+}
+.messageText
+{
+    color: #022c00;
+}
+
+.grid
+{
+    margin: 8px;
+}

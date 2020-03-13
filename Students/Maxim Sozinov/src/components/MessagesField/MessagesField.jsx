@@ -94,7 +94,12 @@ class Messages extends Component {
                         value = { this.state.newMessage }
                     />
 
-                    <Button className="m-2" onClick={ () => this.addNewMessage (this.state.newMessage, usr) }>Send&nbsp;Message</Button>
+                    <Button 
+                        className="m-2" 
+                        onClick={ () => this.addNewMessage (this.state.newMessage, usr) }
+                    >
+                        Send&nbsp;Message
+                    </Button>
                 </Row>
 
             </Container>
