@@ -9,6 +9,9 @@ import { history } from './store/store.js'
 // Store
 import { Provider } from 'react-redux'
 import initStore from './store/store.js'
+import { PersistGate } from 'redux-persist/integration/react'
+
+const { store, persistor } = initStore()
 
 // Styles
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -38,12 +41,14 @@ const darkTheme = createMuiTheme({
 })
 
 ReactDom.render (
-   <Provider store={ initStore() }>
-      <ConnectedRouter history={ history }>
-         <ThemeProvider theme={ darkTheme }>
-            <Router/>
-         </ThemeProvider>
-      </ConnectedRouter>
+   <Provider store={ store }>
+      <PersistGate loading={ null } persistor={ persistor }>
+         <ConnectedRouter history={ history }>
+            <ThemeProvider theme={ darkTheme }>
+               <Router/>
+            </ThemeProvider>
+         </ConnectedRouter>
+      </PersistGate>
    </Provider>,
    document.getElementById('app')
 )
