@@ -10,22 +10,27 @@ import {
 } from '@material-ui/core';
 import AssistantIcon from '@material-ui/icons/Assistant';
 import AddIcon from '@material-ui/icons/Add';
+import DelIcon from '@material-ui/icons/Delete';
 
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { addChat, blinkChat } from '../../store/actions/chatActions.js';
+import { addChat, delChat, blinkChat } from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
 const useStyles = (theme => ({
   root: {
     width: '30vh',
+    minWidth: '200px',
     marginTop: '70px',
   },
   itemIcon: {
     minWidth: '35px',
   },
+  delIcon: {
+    minWidth: '30px',
+  }
 }));
 
 class ChatList extends Component {
@@ -55,6 +60,10 @@ class ChatList extends Component {
       newChatName: '',
     });
   };
+  handleDelItemClick = (index) => {
+    this.props.push('/chat/1/');
+    this.props.delChat(index);
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if(this.props.chatWithNewMsg) {
@@ -77,11 +86,17 @@ class ChatList extends Component {
             button
             selected={this.state.selectedIndex === (i-1) }
             onClick={() => this.handleListItemClick(i)}
-            key={i}>
+            key={i}
+            disableGutters>
               <ListItemIcon className={classes.itemIcon}>
                 <AssistantIcon />
               </ListItemIcon>
-              <ListItemText primary={`${chats[i].title}`}/>
+                <ListItemText primary={`${chats[i].title}`} />
+              <ListItemIcon
+              className={classes.delIcon}
+              onClick={() => this.handleDelItemClick(i)}>
+                <DelIcon />
+              </ListItemIcon>
             </ListItem>
         );
       }
@@ -127,6 +142,7 @@ const mapStateToProps = ({ chatReducer }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
     addChat,
+    delChat,
     blinkChat,
     push,
   },

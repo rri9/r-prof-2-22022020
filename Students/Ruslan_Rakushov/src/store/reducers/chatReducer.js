@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { ADD_MESSAGE_COUNT, ADD_CHAT, BLINK_CHAT } from '../actions/chatActions.js';
+import { ADD_MESSAGE_COUNT, ADD_CHAT, BLINK_CHAT, DEL_CHAT } from '../actions/chatActions.js';
 
 const initialStore = {
   chats: {
@@ -8,6 +8,7 @@ const initialStore = {
     3: { title: 'Chat 3', msgsCount: 0 },
   },
   chatWithNewMsg: null,
+  currentChatId: 1,
 };
 
 export default function chatReducer(store = initialStore, action) {
@@ -31,7 +32,25 @@ export default function chatReducer(store = initialStore, action) {
       return update(store, {
         chatWithNewMsg: {$set: action.chatId}
       });
-
+    case DEL_CHAT:
+      const existChatsId = Object.keys(store.chats); 
+      if(existChatsId.length === 1) return null;
+      
+      let newCurrentChatId;
+      for(let i=0; i<existChatsId.length; i++) {
+        if(existChatsId[i]!==action.chatId) {
+          newCurrentChatId = i;
+          break;
+        }
+      }
+      
+      return update(store, {
+        chats: {
+          $unset: [action.chatId]
+        },
+        currentChatId: {$set: newCurrentChatId},
+      });
+    
     default:
       return store;
   }

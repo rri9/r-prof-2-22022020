@@ -29,6 +29,9 @@ class Layout extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        {/* //TODO Выпилить chatId, т.к. он теперь в storage
+            //TODO Исправить все пропы chatId на currentChatId из storage
+         */}
         <Header chatId={this.props.chatId} />
         <ChatList selectedIndex={this.props.chatId - 1}/>
         <MessageField chatId={this.props.chatId}/>
