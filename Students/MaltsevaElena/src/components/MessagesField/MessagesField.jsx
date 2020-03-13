@@ -28,13 +28,13 @@ const useStyles = (theme => ({
 }))
 
 // Children components
-import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
+import Header from '../MessagesHeader/MessagesHeader.jsx'
 import Message from '../Message/Message.jsx'
 
 class Messages extends Component {
    static propTypes = {
       chatId: PropTypes.number.isRequired,
-      chats: PropTypes.object.isRequired,
+      chatRooms: PropTypes.object.isRequired,
       messages: PropTypes.object.isRequired,
       sendMessage: PropTypes.func.isRequired,
       classes: PropTypes.object
@@ -48,7 +48,9 @@ class Messages extends Component {
    msgList = React.createRef()
 
    scrollToNewMsg () {
-      this.msgList.current.lastChild.scrollIntoView({block: 'end', behavior: 'smooth'})
+      if (this.msgList.current.lastChild) {
+         this.msgList.current.lastChild.scrollIntoView({block: 'end', behavior: 'smooth'})
+      }
    }
 
    sendMsg = ( text, sender ) => {
@@ -76,6 +78,7 @@ class Messages extends Component {
    componentDidUpdate (prevProps) {
       let { chatId, messages } = this.props
       let chatMessages = messages[chatId]
+
       if (Object.keys(prevProps.messages[chatId]).length < Object.keys(chatMessages).length &&
          chatMessages[Object.keys(chatMessages).length].user === this.state.usr) {
          setTimeout(() => {
@@ -86,7 +89,7 @@ class Messages extends Component {
    }
 
    render() {
-      let { chatId, chats, messages, classes } = this.props
+      let { chatId, chatRooms, messages, classes } = this.props
       let chatMessages = messages[chatId]
 
       let MessagesArr = []
@@ -97,18 +100,18 @@ class Messages extends Component {
                text={ chatMessages[messageId].text } 
                key={ messageId }
                chatId={ chatId }
-               chats={ chats }
+               chatRooms={ chatRooms }
             /> 
          )
       })
 
       return (
          <div>
-            <Navbar title={ chats[chatId].title }/>
+            <Header title={ chatRooms[chatId].title }/>
 
             <Box className={ classes.msgBlock }>
                <Box className={ classes.msgList } ref={ this.msgList }>
-                  { MessagesArr }
+                  { MessagesArr ? MessagesArr : '' }
                </Box>
             </Box>
 
@@ -116,10 +119,11 @@ class Messages extends Component {
             <Box className={ classes.sendForm }>
                <Box width="85%" mr={2}>
                   <Input placeholder="Type your message..."
+                     autoFocus={ true }
                      fullWidth={ true }
                      onChange={ this.handleChange } 
                      onKeyUp={ this.handleChange }
-                     value={ this.state.msg }/>
+                     value={ this.state.msg } />
                </Box>
                <IconButton aria-label="send" onClick={ () => this.handleSendMsg(this.state.msg, this.state.usr ) }>
                   <Send />
