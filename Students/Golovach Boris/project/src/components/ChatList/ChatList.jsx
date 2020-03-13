@@ -29,17 +29,18 @@ class ChatList extends React.Component {
     }
 
     handleAdd = () => {
+        let { chats } = this.props
+        const chatId = Object.keys(chats).length + 1;
+
         if (this.state.input !== '') {
-            this.props.addChat(this.state.input)
+            this.props.addChat(chatId, this.state.input)
             this.setState({ input: '' })
         }
     }
 
     render() {
         let { chats } = this.props
-        console.log(this.props)
         let chatsArray = []
-        
         Object.keys(chats).forEach(key => {
             chatsArray.push(
             <Link to={ `/chat/${key}` }>
@@ -50,10 +51,6 @@ class ChatList extends React.Component {
 
         return (
             <List>
-                <div className="chatsListBlock">
-                    { chatsArray }
-                </div>
-                
                 <ListItem 
                     key="Add new chat"
                     leftIcon = { <AddIcon /> }
@@ -69,6 +66,9 @@ class ChatList extends React.Component {
                         />
                     }
                 />
+                <div className="chatsListBlock">
+                    { chatsArray }
+                </div>
             </List>
             
         )
