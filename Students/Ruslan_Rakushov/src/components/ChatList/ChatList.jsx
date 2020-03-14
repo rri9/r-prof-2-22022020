@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
-import { Link } from 'react-router-dom';
+import { push } from "connected-react-router";
 import { withStyles } from '@material-ui/core/styles';
 import {
   List, ListItem, ListItemText, ListItemIcon, TextField,
@@ -8,35 +8,39 @@ import {
 } from '@material-ui/core';
 import AssistantIcon from '@material-ui/icons/Assistant';
 import AddIcon from '@material-ui/icons/Add';
+import DelIcon from '@material-ui/icons/Delete';
 
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { addChat } from '../../store/actions/chatActions.js';
+import { addChat, delChat, blinkChat, setCurrentChatId } from '../../store/actions/chatActions.js';
+
+import './ChatList.css';
 
 const useStyles = (theme => ({
   root: {
     width: '30vh',
+    minWidth: '200px',
     marginTop: '70px',
   },
   itemIcon: {
     minWidth: '35px',
   },
+  delIcon: {
+    minWidth: '30px',
+  }
 }));
 
 class ChatList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: this.props.selectedIndex,
       newChatName: '',
     };
-    this.chats = this.props.chats;
   }
-  handleListItemClick = (event, index) => {
-    this.setState({
-      selectedIndex: index,
-    });
+  handleListItemClick = (index) => {
+    this.props.setCurrentChatId(index);
+    this.props.push(`/chat/${index}/`);
   };
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
@@ -51,25 +55,47 @@ class ChatList extends Component {
       newChatName: '',
     });
   };
+  handleDelItemClick = (event, index) => {
+    event.stopPropagation();
+    this.props.delChat(index);
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.chatWithNewMsg) {
+      setTimeout(() => {
+        this.props.blinkChat(null);
+      }, 1500);
+    }
+  };
 
   render() {
     const { classes } = this.props;
     const { chats } = this.props;
+    let { currentChatId } = this.props;
     const listsArr = [];
     for (let i in chats) {
+      i = +i;
+      currentChatId = +currentChatId;
+      const blinkClass = this.props.chatWithNewMsg == i ? 'blink' : '';
       if (chats.hasOwnProperty(i)) {
         listsArr.push(
-          <Link to={`/chat/${i}/`} key={i}>
             <ListItem
+            className={blinkClass}
             button
-            selected={this.state.selectedIndex === (i-1) }
-            onClick={event => this.handleListItemClick(event, i-1)}>
+            selected={currentChatId === (i) }
+            onClick={() => this.handleListItemClick(i)}
+            key={i}
+            disableGutters>
               <ListItemIcon className={classes.itemIcon}>
                 <AssistantIcon />
               </ListItemIcon>
-              <ListItemText primary={`${chats[i].title}`}/>
+                <ListItemText primary={`${chats[i].title}`} />
+              <ListItemIcon
+              className={classes.delIcon}
+              onClick={(evt) => this.handleDelItemClick(evt, i)}>
+                <DelIcon />
+              </ListItemIcon>
             </ListItem>
-          </Link>
         );
       }
     }
@@ -108,10 +134,18 @@ class ChatList extends Component {
 
 const mapStateToProps = ({ chatReducer }) => ({
   chats: chatReducer.chats,
+  chatWithNewMsg: chatReducer.chatWithNewMsg,
+  currentChatId: chatReducer.currentChatId,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  addChat,
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    addChat,
+    delChat,
+    blinkChat,
+    push,
+    setCurrentChatId,
+  },
+  dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(ChatList));

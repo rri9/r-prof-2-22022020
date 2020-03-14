@@ -1,3 +1,6 @@
+//TODO Поиск по сообщениям
+//TODO Удаление сообщение
+
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
@@ -13,7 +16,6 @@ import Message from '../Message/Message.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {IconButton, TextField, Tooltip } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
-import chatReducer from '../../store/reducers/chatReducer.js';
 
 const useStyles = (theme => ({
   wrapper: {
@@ -58,10 +60,11 @@ class MessageField extends Component {
   }
   //methods
   handleSendMsg = (message, sender) => {
-    const {msgs, chatId} = this.props;
+    const {msgs, currentChatId} = this.props;
     const msgId = Object.keys(msgs).length + 1;
-    this.props.sendMessage(msgId, sender, message, chatId);
-    this.props.addMsgCount(chatId);
+    //FIX Выпилить расчет id в reducer - это дело хранилища/апи/бд
+    this.props.sendMessage(msgId, sender, message, currentChatId);
+    this.props.addMsgCount(currentChatId);
     this.setState({
       msgText: '',
     });
@@ -114,31 +117,21 @@ class MessageField extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { chatId } = this.props;
-    
-    if (this.props.chats[chatId].msgsCount > prevProps.chats[chatId].msgsCount && 
-      this.getLastMsgInChat(this.props.chatId, this.props.msgs).sender === 'Me') {
-        setTimeout(() => {
-          const text = 'Leave me alone, human...';
-          const sender = 'Bot';
-          this.handleSendMsg(text, sender);
-        }, 1000);
-      }
     this.scrollToBottom();
     this.setFocusOnInput();
   };
 
   render() {
     const { classes } = this.props;
-    const { msgs, chatId } = this.props;
-    const currentChatMsgs = this.getAllMsgsInChat(chatId, msgs);
+    const { msgs, currentChatId } = this.props;
+    const currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs);
     let MessagesArr = [];
-    if (currentChatMsgs) {
+    if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
         <Message key={index.toString()} msg={msg} />
       ));
     } else {
-      MessagesArr.push(
+      MessagesArr = (
         <span>Сообщений пока нет...</span>
       );
     }
@@ -177,6 +170,7 @@ class MessageField extends Component {
 const mapStateToProps = ({ messageReducer, chatReducer }) => ({
   msgs: messageReducer.msgs,
   chats: chatReducer.chats,
+  currentChatId: chatReducer.currentChatId,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
