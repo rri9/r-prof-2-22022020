@@ -24,7 +24,18 @@ class Messages extends Component {
         const { messages } = this.props
         const messageId = Object.keys(messages).length + 1;
 
-        this.props.sendMessage(messageId, sender, text)
+        // this.props.sendMessage(messageId, sender, text)
+
+        let newMsg = {
+            sender: sender,
+            text: text,
+            chatId: '1'
+        }
+
+        fetch('api/message', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newMsg)
+        })
     }
 
     handleSendMessage = (message, sender) => {
@@ -44,6 +55,17 @@ class Messages extends Component {
     
     handle = () => {
         this.setState({ show: !this.state.show })
+    }
+
+    componentDidMount() {
+        let msgs = null
+
+        fetch('api/messages')
+        .then(d => d.json())
+        .then(data => msgs = data)
+        .finally(() => {
+            console.log(msgs)
+        })
     }
 
     render() {
