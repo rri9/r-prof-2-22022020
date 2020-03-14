@@ -1,6 +1,7 @@
 export let ADD_CHAT = '@@chat/ADD_CHAT'
 
-export let addChat = (title) => ({
+export let addChat = (chatId, title) => ({
     type: ADD_CHAT,
-    title: title
+    title: title,
+    chatId: chatId
 })

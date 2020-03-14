@@ -3,17 +3,9 @@ import ReactDom from 'react-dom';
 
 import Message from '../Message/Message.jsx'
 
-//
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-//import TextField from '@material-ui/core/TextField';
+//material-ui
 import { TextField, FloatingActionButton } from 'material-ui';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import AppBar from 'material-ui/AppBar';
-import SendIcon from 'material-ui/svg-icons/content/send';
-import {cyan500} from 'material-ui/styles/colors';
-//
+import Button from '@material-ui/core/Button';
 
 //actions
 import { sendMessage } from '../../store/actions/messages_actions.js'
@@ -25,17 +17,17 @@ import connect from 'react-redux/es/connect/connect'
 class Messages extends Component {
     constructor(props) {
         super(props)
-        //где-то тут... 
         this.state = {
             msg: '',
         }
     }
     //methods
     sendMessage = (text, sender) => {
-        const { messages } = this.props
+        const { chatId } = this.props
+        const messages = this.props.messages[chatId]
         const messageId = Object.keys(messages).length + 1;
 
-        this.props.sendMessage(messageId, sender, text)
+        this.props.sendMessage(messageId, sender, text, chatId)
     }
 
     handleSendMessage = (message, sender) => {
@@ -54,19 +46,18 @@ class Messages extends Component {
     
     render() {
         //let user = this.props.usr
-        let usr = 'Darth'
-        let { messages } = this.props
-
-
+        let usr = 'Darth Vader'
+        let { messages, chatId } = this.props
         let MessagesArr = []
-        
-        Object.keys(messages).forEach(key => {
+        let numberChat = messages[chatId]
+        Object.keys(numberChat).forEach(key => {
             MessagesArr.push(<Message 
-                sender={ messages[key].user } 
-                text={ messages[key].text }
+                sender={ numberChat[key].user } 
+                text={ numberChat[key].text }
                 key={ key }
             />)
         })
+ 
         return (
             <div className="container-fluid align-items-center">
                 <div className="col-md-3">

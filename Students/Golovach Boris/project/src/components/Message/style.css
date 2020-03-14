@@ -27,5 +27,6 @@
 }
 .messagesBlock{
     overflow-y: auto;
-    height: 570px;
+    /* height: 570px; */
+    height: 50vh;
 }
