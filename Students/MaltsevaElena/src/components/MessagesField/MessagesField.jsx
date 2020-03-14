@@ -48,7 +48,7 @@ class Messages extends Component {
    msgList = React.createRef()
 
    scrollToNewMsg () {
-      if (this.msgList.current.lastChild) {
+      if (this.msgList.current && this.msgList.current.lastChild) {
          this.msgList.current.lastChild.scrollIntoView({block: 'end', behavior: 'smooth'})
       }
    }
@@ -84,20 +84,23 @@ class Messages extends Component {
       let chatMessages = messages[chatId]
 
       let MessagesArr = []
-      Object.keys(chatMessages).forEach(messageId => {
-         MessagesArr.push( 
-            <Message 
-               sender={ chatMessages[messageId].user } 
-               text={ chatMessages[messageId].text } 
-               key={ messageId }
-               chatId={ chatId }
-               chatRooms={ chatRooms }
-            /> 
-         )
-      })
+      if (chatMessages) {
+         Object.keys(chatMessages).forEach(messageId => {
+            MessagesArr.push( 
+               <Message 
+                  sender={ chatMessages[messageId].user } 
+                  text={ chatMessages[messageId].text } 
+                  key={ messageId }
+                  chatId={ chatId }
+                  chatRooms={ chatRooms }
+               /> 
+            )
+         })
+      }
 
       return (
          <div>
+         { chatMessages && <div>
             {/* Header: chat's title, search and other functions */}
             <Header title={ chatRooms[chatId].title }/>
 
@@ -128,7 +131,7 @@ class Messages extends Component {
                   <AttachmentRounded />
                </IconButton>
             </Box>
-
+         </div> }
          </div>
       )
    }

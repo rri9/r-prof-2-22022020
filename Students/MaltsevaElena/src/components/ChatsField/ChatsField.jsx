@@ -54,6 +54,7 @@ class ChatList extends Component {
       chatRooms: PropTypes.object.isRequired,
       addChat: PropTypes.func.isRequired,
       addChatToMsgStore: PropTypes.func.isRequired,
+      deleteChat: PropTypes.func.isRequired,
       push: PropTypes.func.isRequired,
       messages: PropTypes.object.isRequired,
       classes: PropTypes.object
@@ -96,22 +97,26 @@ class ChatList extends Component {
    }
 
    render() {
-      const { chatId, chatRooms, messages, classes } = this.props
+      const { chatId, chatRooms, deleteChat, messages, classes } = this.props
 
       let ChatRoomsArr = []
       Object.keys(chatRooms).forEach(chatRoomId => {
          let lastMsgIndex
          messages[chatRoomId] ? lastMsgIndex = Object.keys(messages[chatRoomId]).length : ''
-         ChatRoomsArr.push( 
-            <Chat 
-               handleNavigate={ this.handleNavigate }
-               link={ `/chat/${chatRoomId}` }
-               title={ chatRooms[chatRoomId].title }
-               message={ lastMsgIndex ? messages[chatRoomId][lastMsgIndex].text : '* No messages yet *'}
-               isSelected={ chatId === +chatRoomId }
-               key={ chatRoomId }
-            />
-         )
+         
+         if (chatRooms[chatRoomId] !== undefined) {
+            ChatRoomsArr.push( 
+               <Chat 
+                  handleNavigate={ this.handleNavigate }
+                  chatRoomId={ chatRoomId }
+                  deleteChat={ deleteChat }
+                  title={ chatRooms[chatRoomId].title }
+                  message={ lastMsgIndex ? messages[chatRoomId][lastMsgIndex].text : '* No messages yet *'}
+                  isSelected={ chatId === +chatRoomId }
+                  key={ chatRoomId }
+               />
+            )
+         }
       })
 
       let ChatRoomsFiltered = []

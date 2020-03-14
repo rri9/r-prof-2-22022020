@@ -5,3 +5,10 @@ export let addChat = (chatId, title) => ({
    chatId: chatId,
    title: title
 })
+
+export let DEL_CHAT = '@@chat/DEL_CHAT'
+
+export let deleteChat = (chatId) => ({
+   type: DEL_CHAT,
+   chatId
+})

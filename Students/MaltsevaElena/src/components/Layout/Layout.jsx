@@ -7,7 +7,7 @@ import './style.css'
 import { bindActionCreators } from 'redux'
 import connect from 'react-redux/es/connect/connect'
 import { sendMessage, addChatToMsgStore } from '../../store/actions/messages_action.js'
-import { addChat } from '../../store/actions/chats_action.js'
+import { addChat, deleteChat } from '../../store/actions/chats_action.js'
 import { push } from 'connected-react-router'
 
 // Components
@@ -20,6 +20,7 @@ class Layout extends Component {
       chatRooms: PropTypes.object.isRequired,
       addChat:PropTypes.func.isRequired,
       addChatToMsgStore: PropTypes.func.isRequired,
+      deleteChat: PropTypes.func.isRequired,
       push: PropTypes.func.isRequired,
       messages: PropTypes.object.isRequired,
       sendMessage: PropTypes.func.isRequired,
@@ -29,7 +30,7 @@ class Layout extends Component {
    }
 
    render () {
-      let { chatId, chatRooms, messages, sendMessage, addChat, addChatToMsgStore, push } = this.props
+      let { chatId, chatRooms, messages, sendMessage, addChat, addChatToMsgStore, deleteChat, push } = this.props
       
       return (
          <div className="container">
@@ -39,7 +40,8 @@ class Layout extends Component {
                      chatId={ chatId } 
                      chatRooms={ chatRooms } 
                      messages={ messages } 
-                     addChat={ addChat } 
+                     addChat={ addChat }
+                     deleteChat={ deleteChat } 
                      addChatToMsgStore={ addChatToMsgStore } 
                      push={ push } />
                </Grid>
@@ -60,6 +62,6 @@ const mapStateToProps = ({ msgReducer, chatReducer }) => ({
    messages: msgReducer.messages,
    chatRooms: chatReducer.chatRooms
 })
-const mapDespatchToProps = dispatch => bindActionCreators( { sendMessage, addChatToMsgStore, addChat, push }, dispatch)
+const mapDespatchToProps = dispatch => bindActionCreators( { sendMessage, addChatToMsgStore, addChat, deleteChat, push }, dispatch)
 
 export default connect(mapStateToProps, mapDespatchToProps)(Layout)
