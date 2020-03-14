@@ -7,3 +7,10 @@ export let sendMessage = (chatId, messageId, sender=null, text) => ({
    sender: sender,
    text: text
 })
+
+export let NEW_CHAT = '@@messages/NEW_CHAT'
+
+export let addChatToMsgStore = (chatId) => ({
+   type: NEW_CHAT,
+   chatId: chatId
+})
