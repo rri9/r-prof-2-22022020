@@ -123,13 +123,12 @@ class MessageField extends Component {
     const { msgs, currentChatId } = this.props;
     const currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs);
     let MessagesArr = [];
-    if (currentChatMsgs) {
+    if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
         <Message key={index.toString()} msg={msg} />
       ));
     } else {
-      //Fix пустой чат - не отображает сообщение ниже
-      MessagesArr.push(
+      MessagesArr = (
         <span>Сообщений пока нет...</span>
       );
     }
