@@ -1,3 +1,6 @@
+//TODO Поиск по сообщениям
+//TODO Удаление сообщение
+
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
