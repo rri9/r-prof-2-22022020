@@ -13,7 +13,6 @@ import Message from '../Message/Message.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {IconButton, TextField, Tooltip } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
-import chatReducer from '../../store/reducers/chatReducer.js';
 
 const useStyles = (theme => ({
   wrapper: {
@@ -58,10 +57,11 @@ class MessageField extends Component {
   }
   //methods
   handleSendMsg = (message, sender) => {
-    const {msgs, chatId} = this.props;
+    const {msgs, currentChatId} = this.props;
     const msgId = Object.keys(msgs).length + 1;
-    this.props.sendMessage(msgId, sender, message, chatId);
-    this.props.addMsgCount(chatId);
+    //FIX Выпилить расчет id в reducer - это дело хранилища/апи/бд
+    this.props.sendMessage(msgId, sender, message, currentChatId);
+    this.props.addMsgCount(currentChatId);
     this.setState({
       msgText: '',
     });
@@ -120,14 +120,15 @@ class MessageField extends Component {
 
   render() {
     const { classes } = this.props;
-    const { msgs, chatId } = this.props;
-    const currentChatMsgs = this.getAllMsgsInChat(chatId, msgs);
+    const { msgs, currentChatId } = this.props;
+    const currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs);
     let MessagesArr = [];
     if (currentChatMsgs) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
         <Message key={index.toString()} msg={msg} />
       ));
     } else {
+      //Fix пустой чат - не отображает сообщение ниже
       MessagesArr.push(
         <span>Сообщений пока нет...</span>
       );
@@ -167,6 +168,7 @@ class MessageField extends Component {
 const mapStateToProps = ({ messageReducer, chatReducer }) => ({
   msgs: messageReducer.msgs,
   chats: chatReducer.chats,
+  currentChatId: chatReducer.currentChatId,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

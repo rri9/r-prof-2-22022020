@@ -1,5 +1,7 @@
 import update from 'immutability-helper';
-import { ADD_MESSAGE_COUNT, ADD_CHAT, BLINK_CHAT, DEL_CHAT } from '../actions/chatActions.js';
+import {
+  ADD_MESSAGE_COUNT, ADD_CHAT, BLINK_CHAT, DEL_CHAT, SET_CURRENT_CHAT
+} from '../actions/chatActions.js';
 
 const initialStore = {
   chats: {
@@ -13,13 +15,15 @@ const initialStore = {
 
 export default function chatReducer(store = initialStore, action) {
   switch (action.type) {
+    //-------------------
     case ADD_CHAT:
-      const newId = Object.keys(store.chats).length + 1;
+      const newId = +Object.keys(store.chats)[Object.keys(store.chats).length-1] + 1;
       return update(store, {
         chats: {
           [newId]: {$set: {title: action.title, msgsCount: 0}}
         }
       });
+    //-------------------
     case ADD_MESSAGE_COUNT:
       return update(store, {
         chats: {
@@ -28,18 +32,20 @@ export default function chatReducer(store = initialStore, action) {
           }}
         }
       });
+    //-------------------
     case BLINK_CHAT:
       return update(store, {
         chatWithNewMsg: {$set: action.chatId}
       });
+    //-------------------
     case DEL_CHAT:
-      const existChatsId = Object.keys(store.chats); 
+      const existChatsId = Object.keys(store.chats).map((i) => +i);
       if(existChatsId.length === 1) return null;
       
       let newCurrentChatId;
       for(let i=0; i<existChatsId.length; i++) {
         if(existChatsId[i]!==action.chatId) {
-          newCurrentChatId = i;
+          newCurrentChatId = existChatsId[i];
           break;
         }
       }
@@ -50,6 +56,12 @@ export default function chatReducer(store = initialStore, action) {
         },
         currentChatId: {$set: newCurrentChatId},
       });
+    //-------------------
+    case SET_CURRENT_CHAT:
+      return update(store, {
+        currentChatId: {$set: action.chatId}
+      });
+    //-------------------
     
     default:
       return store;

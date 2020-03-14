@@ -15,7 +15,7 @@ import DelIcon from '@material-ui/icons/Delete';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { addChat, delChat, blinkChat } from '../../store/actions/chatActions.js';
+import { addChat, delChat, blinkChat, setCurrentChatId } from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
@@ -37,14 +37,11 @@ class ChatList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: this.props.selectedIndex,
       newChatName: '',
     };
   }
   handleListItemClick = (index) => {
-    this.setState({
-      selectedIndex: index-1,
-    });
+    this.props.setCurrentChatId(index);
     this.props.push(`/chat/${index}/`);
   };
   handleChange = (evt) => {
@@ -60,8 +57,8 @@ class ChatList extends Component {
       newChatName: '',
     });
   };
-  handleDelItemClick = (index) => {
-    this.props.push('/chat/1/');
+  handleDelItemClick = (event, index) => {
+    event.stopPropagation();
     this.props.delChat(index);
   };
 
@@ -76,15 +73,18 @@ class ChatList extends Component {
   render() {
     const { classes } = this.props;
     const { chats } = this.props;
+    let { currentChatId } = this.props;
     const listsArr = [];
     for (let i in chats) {
+      i = +i;
+      currentChatId = +currentChatId;
       const blinkClass = this.props.chatWithNewMsg == i ? 'blink' : '';
       if (chats.hasOwnProperty(i)) {
         listsArr.push(
             <ListItem
             className={blinkClass}
             button
-            selected={this.state.selectedIndex === (i-1) }
+            selected={currentChatId === (i) }
             onClick={() => this.handleListItemClick(i)}
             key={i}
             disableGutters>
@@ -94,7 +94,7 @@ class ChatList extends Component {
                 <ListItemText primary={`${chats[i].title}`} />
               <ListItemIcon
               className={classes.delIcon}
-              onClick={() => this.handleDelItemClick(i)}>
+              onClick={(evt) => this.handleDelItemClick(evt, i)}>
                 <DelIcon />
               </ListItemIcon>
             </ListItem>
@@ -137,6 +137,7 @@ class ChatList extends Component {
 const mapStateToProps = ({ chatReducer }) => ({
   chats: chatReducer.chats,
   chatWithNewMsg: chatReducer.chatWithNewMsg,
+  currentChatId: chatReducer.currentChatId,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
@@ -145,6 +146,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     delChat,
     blinkChat,
     push,
+    setCurrentChatId,
   },
   dispatch);
 

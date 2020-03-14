@@ -18,23 +18,13 @@ const useStyles = (theme => ({
 }));
 
 class Layout extends Component {
-  static propTypes = {
-    chatId: PropTypes.number,
-  };
-  static defaultProps = {
-    chatId: 1,
-  };
-
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        {/* //TODO Выпилить chatId, т.к. он теперь в storage
-            //TODO Исправить все пропы chatId на currentChatId из storage
-         */}
-        <Header chatId={this.props.chatId} />
-        <ChatList selectedIndex={this.props.chatId - 1}/>
-        <MessageField chatId={this.props.chatId}/>
+        <Header />
+        <ChatList />
+        <MessageField />
       </div>
     );
   };
