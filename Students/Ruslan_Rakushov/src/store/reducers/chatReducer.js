@@ -21,7 +21,8 @@ export default function chatReducer(store = initialStore, action) {
       return update(store, {
         chats: {
           [newId]: {$set: {title: action.title, msgsCount: 0}}
-        }
+        },
+        currentChatId: {$set: newId},
       });
     //-------------------
     case ADD_MESSAGE_COUNT:

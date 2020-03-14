@@ -1,5 +1,3 @@
-//TODO Switch to new chat after adding it
-
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { push } from "connected-react-router";
