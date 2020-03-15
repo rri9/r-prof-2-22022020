@@ -1,9 +1,6 @@
 import update from 'react-addons-update'
 // ACTIONS
 import {
-    SEND_MSG
-} from '../actions/chat_actions.js'
-import {
     ADD_CHAT
 } from '../actions/room_actions.js'
 

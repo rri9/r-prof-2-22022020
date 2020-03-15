@@ -27,9 +27,10 @@ class Messages extends Component {
     this.messagesEndRef = React.createRef();
   }
   scrollToBottom = () => {
-    this.messagesEndRef.current.lastElementChild.scrollIntoView({
-      behavior: "smooth"
-    });
+    if (this.messagesEndRef.current.lastElementChild !== null)
+      this.messagesEndRef.current.lastElementChild.scrollIntoView({
+        behavior: "smooth"
+      });
   };
 
   componentDidMount() {

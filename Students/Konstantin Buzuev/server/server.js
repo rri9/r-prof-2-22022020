@@ -6,6 +6,30 @@ const Message = require("./models/message.js");
 const app = express();
 app.use(express.json());
 
-app.listen(27017, () => {
-    console.log("Server listening...");
+mongoose.connect('mongodb://localhost/reactgram-v2', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        console.log("Connected to database reactgram-v2")
+    })
+    .catch(() => {
+        console.log("Connect to database reactgram-v2 failed")
+    })
+
+app.post('/message', async (req, res) => {
+    let message = new Message(req.body)
+    await message.save();
+    res.send(JSON.stringify({
+        status: 1
+    }))
+})
+app.get('/messages', async (req, res) => {
+    const messages = await Message.find()
+    res.json(messages)
+})
+
+
+app.listen(3300, () => {
+    console.log("Server listening 3300...");
 });

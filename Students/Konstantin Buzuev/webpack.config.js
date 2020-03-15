@@ -14,15 +14,15 @@ module.exports = {
     mode: 'development', //'production'
     // mode: 'production',
     devServer: {
-        contentBase: './dist',
+        // contentBase: './dist',
         port: 3000,
         hot: true,
         open: true,
         proxy: {
-            '/api': {
-                target: 'http://localhost:27017',
+            '/apis': {
+                target: 'http://localhost:3300',
                 pathRewrite: {
-                    '^/api': ''
+                    '^/apis': ''
                 },
                 secure: false,
                 changeOrigin: true

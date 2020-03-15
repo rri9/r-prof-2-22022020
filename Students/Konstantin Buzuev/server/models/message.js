@@ -5,7 +5,7 @@ const messageSchema = new Schema({
     messageID: {
         type: String,
         required: true,
-        default: 'MSG' + Date.now()
+        default: Date.now
     },
     chatID: {
         type: String,

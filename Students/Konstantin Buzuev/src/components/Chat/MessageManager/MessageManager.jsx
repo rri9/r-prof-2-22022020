@@ -40,11 +40,15 @@ class MessageManager extends Component {
     else this.handleSendMessage(this.state.message, this.props.user);
   };
 
-  scrollToBottom = () => {
-    this.messagesEndRef.current.lastElementChild.scrollIntoView({
-      behavior: "smooth"
-    });
-  };
+  componentDidMount() {
+    fetch("api/messages.json")
+      .then(body => body.json())
+      .then(json => {
+        json.forEach(msg => {
+          this.props.sendMessage(msg.messageID, msg.chatID, msg.user, msg.text);
+        });
+      });
+  }
 
   render() {
     const { classes } = this.props;
