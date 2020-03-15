@@ -19,9 +19,6 @@ const useStyles = theme => ({
   },
   gridList: {
     width: "100%"
-  },
-  bottomPanel: {
-    padding: "10px"
   }
 });
 class Messages extends Component {
