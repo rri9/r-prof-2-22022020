@@ -3,14 +3,7 @@ import update from 'immutability-helper';
 import { ADD_CHAT } from '../actions/chats_action.js';
 
 const initialStore = {
-   chats: {
-      1: { 
-         title: 'Chat 1',
-      },
-      2: { 
-         title: 'Chat 2',
-      },
-   }
+   chats: [],
 };
 
 export default function chatReducer( store = initialStore, action ) {
@@ -18,11 +11,10 @@ export default function chatReducer( store = initialStore, action ) {
       case ADD_CHAT: {
          return update(store, {
             chats: {
-               $merge: {
-                  [action.chatId]: { 
-                     title: action.title
-                  }
-               }
+               $push: [{
+                   title: action.title,
+                   chatId: action.chatId,
+               }]
             }
          });
       }

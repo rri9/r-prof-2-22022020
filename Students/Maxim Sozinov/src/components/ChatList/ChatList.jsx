@@ -1,7 +1,7 @@
 import React from 'react';
 
-import PropTypes from "prop-types"; 
-import { push } from 'connected-react-router'; 
+import PropTypes from "prop-types";
+import { push } from 'connected-react-router';
 
 import { Button, Form, ListGroup, InputGroup, } from 'react-bootstrap';
 import './style.css';
@@ -12,11 +12,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 class ChatList extends React.Component {
-   static propTypes = { 
-          chats: PropTypes.object.isRequired, 
-          addChat: PropTypes.func.isRequired, 
-          push: PropTypes.func.isRequired, 
-      };
+   static propTypes = {
+      chats: PropTypes.array.isRequired,
+      addChat: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
+   };
 
    state = {
       newChatTitle: ''
@@ -24,27 +24,56 @@ class ChatList extends React.Component {
 
    handleChange = (event) => {
       event.keyCode !== 13 ?
-          this.setState({
+         this.setState({
             newChatTitle: event.target.value
-          }) :
-          this.addNewChat( this.state.newChatTitle );
-  }
-
-   addNewChat = ( title ) => {
-      const { chats } = this.props;
-      const chatId = Object.keys(chats).length + 1;
-      if ( title !== '') {
-         this.props.addChat(chatId, title);
-      }
-      this.setState({
-         newChatTitle: ''
-     });
-     this.handleNavigate(`/chat/${chatId}`);
+         }) :
+         this.addNewChat(this.state.newChatTitle);
    }
 
-   handleNavigate = (link) => { 
-      this.props.push(link); 
-  };
+   addNewChat = (title) => {
+      const { chats } = this.props;
+      const chatId = chats[chats.length - 1].chatId + 1;
+
+      if (title !== '') {
+         this.setState({
+            newChatTitle: ''
+         });
+         const newChat = {
+            chatId,
+            title
+         };
+         fetch("/api/chat", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newChat)
+         })
+            .then(response => response.json())
+            .then(data => {
+                 console.log(data);
+               this.props.addChat(data.chatId, data.title);
+               this.handleNavigate(`/chat/${data.chatId}`);
+            })
+            .catch(err => {
+               console.log(err);
+            });
+      }
+   }
+
+   handleNavigate = (link) => {
+      this.props.push(link);
+   };
+
+   componentDidMount() {
+
+      fetch('/api/chats')
+          .then(response => response.json())
+          .then(data => {
+              console.log(data)
+              data.forEach( chat => this.props.addChat( chat.chatId, chat.title ) );
+          });
+  }
 
    render() {
 
@@ -52,19 +81,17 @@ class ChatList extends React.Component {
       const { chats } = this.props;
       const { chatId } = this.props;
 
-      let chatsArray = [];
-
-      Object.keys(chats).forEach(key => {
-         chatsArray.push(
-               <ListGroup.Item
-                  key={key}
-                  action
-                  className={chatId == key ? 'active' : ''}
-                  onClick={ () => this.handleNavigate(`/chat/${key}`) } 
-               >
-                  {chats[key].title}
-               </ListGroup.Item>
-            );
+      let chatsArray = chats.map( chat => {
+         return (
+            <ListGroup.Item
+               key={chat.chatId}
+               action
+               className={chatId == chat.chatId ? 'active' : ''}
+               onClick={() => this.handleNavigate(`/chat/${chat.chatId}`)}
+            >
+               {chat.title}
+            </ListGroup.Item>
+         );
       });
 
       return (
@@ -75,15 +102,15 @@ class ChatList extends React.Component {
                   <Form.Control
                      placeholder="New chat"
                      className="border-primary"
-                     onChange={ this.handleChange }
-                     onKeyUp= { this.handleChange }
-                     value = { this.state.newChatTitle }
+                     onChange={this.handleChange}
+                     onKeyUp={this.handleChange}
+                     value={this.state.newChatTitle}
                   />
                   <InputGroup.Append>
-                     <Button 
+                     <Button
                         variant="outline-primary"
                         className="font-weight-bold"
-                        onClick={ () => this.addNewChat( this.state.newChatTitle ) }
+                        onClick={() => this.addNewChat(this.state.newChatTitle)}
                      >
                         +
                      </Button>

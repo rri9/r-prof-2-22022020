@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// let newMsgId = 'MS' + Date.now()
-
 const messageSchema = new Schema({
    sender: {
       type: String,

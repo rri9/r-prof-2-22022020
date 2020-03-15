@@ -43,7 +43,6 @@ class Messages extends Component {
           })
             .then(response => response.json())
             .then(data => {
-              console.log(data._id);
               this.props.sendMessage(data._id, sender, text, chatId);
             })
             .catch(err => {

@@ -14,7 +14,7 @@ const persistConfig = {
    storage, 
    stateReconciler: autoMergeLevel2, 
    whitelist: [    
-      'chatsReducer',
+      // 'chatsReducer',
       'userReducer',
    ], 
 };

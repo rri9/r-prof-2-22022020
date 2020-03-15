@@ -8,20 +8,8 @@ const initialStore = {
 
 export default function msgReducer(store = initialStore, action) {
    switch (action.type) {
+      case ADD_MSG:
       case SEND_MSG: {
-         return update(store, {
-            messages: {
-               $merge: {
-                  [action.messageId]: {
-                     user: action.sender,
-                     text: action.text,
-                     chatId: action.chatId
-                  }
-               }
-            }
-         });
-      }
-      case ADD_MSG: {
          return update(store, {
             messages: {
                $merge: {
