@@ -62,13 +62,11 @@ class Messages extends Component {
         const block = this.refs["msgBlock"];
         block.scrollTop = block.scrollHeight;
 
-        // let msgs = null;
-
         fetch('/api/messages')
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                data.forEach( msg => this.props.addMessage( msg._id, msg.sender, msg.text, +msg.chatId ) );
+                data.forEach( msg => this.props.addMessage( msg._id, msg.sender, msg.text, msg.chatId ) );
             });
     }
 

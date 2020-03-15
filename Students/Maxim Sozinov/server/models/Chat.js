@@ -6,10 +6,10 @@ const chatSchema = new Schema({
       type: String,
       required: true
    },
-   chatId: {
-      type: Number,
-      required: true
-   },
+   // chatId: {
+   //    type: Number,
+   //    required: true
+   // },
 });
 
 module.exports = mongoose.model('chat', chatSchema);

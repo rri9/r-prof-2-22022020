@@ -8,7 +8,8 @@ import {
 } from '../actions/chats_action.js';
 
 const initialStore = {
-   chats: [],
+   chats: {},
+   defaultChat: null,
    isLoading: false,
 };
 
@@ -17,10 +18,11 @@ export default function chatReducer( store = initialStore, action ) {
       case ADD_CHAT: {
          return update(store, {
             chats: {
-               $push: [{
-                   title: action.title,
-                   chatId: action.chatId,
-               }]
+               $merge: {
+                  [action.chatId]:{
+                     title: action.title,
+                  }
+               }
             }
          });
       }
@@ -30,13 +32,18 @@ export default function chatReducer( store = initialStore, action ) {
          }); 
      } 
      case SUCCESS_CHATS_LOADING: { 
-         const chats = []; 
-         action.payload.forEach( chat => { 
-             chats.push( { title: chat.title, chatId: chat.chatId } ); 
+         const chats = {}; 
+         let defaultChat = null;
+         action.payload.forEach( chat => {
+             chats[chat._id] = {title: chat.title};
+             if (!defaultChat) {
+                 defaultChat = chat._id;
+             }
          }); 
-         return update(store, { 
-             chats: { $set: chats }, 
-             isLoading: { $set: false }, 
+         return update(store, {
+            defaultChat: { $set: defaultChat},
+            chats: { $set: chats },
+            isLoading: { $set: false },
          }); 
      } 
      case ERROR_CHATS_LOADING: { 

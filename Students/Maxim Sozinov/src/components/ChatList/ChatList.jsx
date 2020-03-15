@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 
 class ChatList extends React.Component {
    static propTypes = {
-      chats: PropTypes.array.isRequired,
+      chats: PropTypes.object.isRequired,
       addChat: PropTypes.func.isRequired,
       push: PropTypes.func.isRequired,
    };
@@ -32,14 +32,13 @@ class ChatList extends React.Component {
 
    addNewChat = (title) => {
       const { chats } = this.props;
-      const chatId = chats[chats.length - 1].chatId + 1;
+      // const chatId = chats[chats.length - 1].chatId + 1;
 
       if (title !== '') {
          this.setState({
             newChatTitle: ''
          });
          const newChat = {
-            chatId,
             title
          };
          fetch("/api/chat", {
@@ -52,8 +51,8 @@ class ChatList extends React.Component {
             .then(response => response.json())
             .then(data => {
                  console.log(data);
-               this.props.addChat(data.chatId, data.title);
-               this.handleNavigate(`/chat/${data.chatId}`);
+               this.props.addChat(data._id, data.title);
+               this.handleNavigate(`/chat/${data._id}`);
             })
             .catch(err => {
                console.log(err);
@@ -83,15 +82,15 @@ class ChatList extends React.Component {
       const { chats } = this.props;
       const { chatId } = this.props;
 
-      let chatsArray = chats.map( chat => {
+      let chatsArray = Object.keys(chats).map( key => {
          return (
             <ListGroup.Item
-               key={chat.chatId}
+               key={key}
                action
-               className={chatId == chat.chatId ? 'active' : ''}
-               onClick={() => this.handleNavigate(`/chat/${chat.chatId}`)}
+               className={chatId == key ? 'active' : ''}
+               onClick={() => this.handleNavigate(`/chat/${key}`)}
             >
-               {chat.title}
+               {chats[key].title}
             </ListGroup.Item>
          );
       });
