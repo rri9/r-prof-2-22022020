@@ -73,12 +73,12 @@ class ChatManager extends React.Component {
 
   addChat(chatID, name, description, type) {
     this.props.addChat(chatID, name, description, type);
-    // this.props.sendMessage(
-    //   this.props.currentID,
-    //   chatID,
-    //   "Bot",
-    //   `Welcome to  ${name} chatroom`
-    // );
+    this.props.sendMessage(
+      this.props.currentID,
+      chatID,
+      "Bot",
+      `Welcome to  ${name} chatroom`
+    );
   }
   handleAddChat(_name, _description, _type) {
     const { chats } = this.props;
@@ -107,6 +107,20 @@ class ChatManager extends React.Component {
       this.state.type
     );
   };
+  componentDidMount() {
+    fetch("staticapi/chats.json")
+      .then(body => body.json())
+      .then(json => {
+        Object.keys(json).forEach(key => {
+          this.props.addChat(
+            key,
+            json[key].name,
+            json[key].description,
+            json[key].type
+          );
+        });
+      });
+  }
 
   render() {
     const { classes } = this.props;

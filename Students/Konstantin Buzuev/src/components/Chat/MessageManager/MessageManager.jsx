@@ -41,7 +41,7 @@ class MessageManager extends Component {
   };
 
   componentDidMount() {
-    fetch("api/messages.json")
+    fetch("staticapi/messages.json")
       .then(body => body.json())
       .then(json => {
         json.forEach(msg => {

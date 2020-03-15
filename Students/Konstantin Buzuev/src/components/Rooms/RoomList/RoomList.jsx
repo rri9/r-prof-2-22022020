@@ -55,9 +55,10 @@ class RoomList extends React.Component {
     this.chatsEndRef = React.createRef();
   }
   scrollToBottom = () => {
-    this.chatsEndRef.current.lastElementChild.scrollIntoView({
-      behavior: "smooth"
-    });
+    if (this.messagesEndRef !== undefined)
+      this.chatsEndRef.current.lastElementChild.scrollIntoView({
+        behavior: "smooth"
+      });
   };
 
   componentDidMount() {

@@ -1,28 +1,17 @@
 import update from 'react-addons-update'
 // ACTIONS
 import {
-    ADD_CHAT
+    ADD_CHAT,
+    START_MESSAGES_LOADING,
+    SUCCESS_MESSAGES_LOADING,
+    ERROR_MESSAGES_LOADING,
+
 } from '../actions/room_actions.js'
 
 
 let initialStore = {
-    chats: {
-        1: {
-            name: "Room 1",
-            description: "First room",
-            type: "normal",
-        },
-        2: {
-            name: "Room 2",
-            description: "Second room",
-            type: "important",
-        },
-        3: {
-            name: "Room 3",
-            description: "Third room",
-            type: "VIP",
-        }
-    },
+    chats: {},
+    isLoading: false
 }
 
 export default function chatReducer(store = initialStore, action) {
@@ -38,6 +27,34 @@ export default function chatReducer(store = initialStore, action) {
                         }
                     }
                 }
+            });
+            return store;
+        }
+        case START_MESSAGES_LOADING: {
+            store = update(store, {
+                isLoading: {
+                    $set: true
+                },
+            });
+            return store;
+        }
+        case SUCCESS_MESSAGES_LOADING: {
+            const chats = action.payload;
+            store = update(store, {
+                chats: {
+                    $merge: chats
+                },
+                isLoading: {
+                    $set: false
+                },
+            });
+            return store;
+        }
+        case ERROR_MESSAGES_LOADING: {
+            store = update(store, {
+                isLoading: {
+                    $set: false
+                },
             });
             return store;
         }
