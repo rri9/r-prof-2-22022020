@@ -34,6 +34,11 @@ app.post ('/message', async (req, res) => {
    res.send(newMessage);
 });
 
+app.get('/messages', async (req, res) => {
+   const messages = await Message.find();
+   res.json(messages);
+});
+
 app.listen(3300, () => {
     console.log('Server listening at port 3300...', new Date());
 });

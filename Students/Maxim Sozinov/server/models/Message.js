@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // let newMsgId = 'MS' + Date.now()
 
@@ -12,11 +12,11 @@ const messageSchema = new Schema({
       type: String,
       required: true
    },
-   messageId: {
-      type: String,
-      required: true,
-      default: "timestamp"
-   },
+   // messageId: {
+   //    type: String,
+   //    required: true,
+   //    default: "timestamp"
+   // },
    chatId: {
       type: String,
       required: true
