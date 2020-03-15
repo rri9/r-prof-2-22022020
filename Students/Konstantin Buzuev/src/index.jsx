@@ -6,14 +6,18 @@ import { Provider } from "react-redux";
 import initStore, { history } from "./store/store.js";
 import Router from "./router/router.jsx";
 import { ConnectedRouter } from "connected-react-router";
-//import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
+
+const { store, persistor } = initStore();
 let user = "Constantine";
 
 ReactDom.render(
-  <Provider store={initStore()}>
-    <ConnectedRouter history={history}>
-      <Router user={user} />
-    </ConnectedRouter>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <ConnectedRouter history={history}>
+        <Router user={user} />
+      </ConnectedRouter>
+    </PersistGate>
   </Provider>,
 
   document.getElementById("app")

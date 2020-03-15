@@ -31,7 +31,7 @@ let initialStore = {
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
         case ADD_CHAT: {
-            initialStore = update(store, {
+            store = update(store, {
                 chats: {
                     $merge: {
                         [action.chatID]: {
@@ -42,7 +42,7 @@ export default function chatReducer(store = initialStore, action) {
                     }
                 }
             });
-            return initialStore;
+            return store;
         }
 
         default:

@@ -68,7 +68,7 @@ let initialStore = {
 export default function messageReducer(store = initialStore, action) {
     switch (action.type) {
         case SEND_MSG: {
-            initialStore = update(store, {
+            store = update(store, {
                 messages: {
                     $push: [{
                         messageID: action.messageID,
@@ -79,7 +79,7 @@ export default function messageReducer(store = initialStore, action) {
                     }]
                 }
             });
-            return initialStore;
+            return store;
         }
         default:
             return store;
