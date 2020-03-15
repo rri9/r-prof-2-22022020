@@ -6,7 +6,7 @@ import { push } from 'connected-react-router';
 import { Button, Form, ListGroup, InputGroup, } from 'react-bootstrap';
 import './style.css';
 
-import { addChat } from '../../store/actions/chats_action.js';
+import { addChat, loadChats } from '../../store/actions/chats_action.js';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -67,12 +67,14 @@ class ChatList extends React.Component {
 
    componentDidMount() {
 
-      fetch('/api/chats')
-          .then(response => response.json())
-          .then(data => {
-              console.log(data)
-              data.forEach( chat => this.props.addChat( chat.chatId, chat.title ) );
-          });
+      this.props.loadChats();
+
+      // fetch('/api/chats')
+      //     .then(response => response.json())
+      //     .then(data => {
+      //         console.log(data)
+      //         data.forEach( chat => this.props.addChat( chat.chatId, chat.title ) );
+      //     });
   }
 
    render() {
@@ -134,6 +136,6 @@ const mapStateToProps = ({ chatsReducer, userReducer }) => ({
    usr: userReducer.user,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, loadChats, push }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
