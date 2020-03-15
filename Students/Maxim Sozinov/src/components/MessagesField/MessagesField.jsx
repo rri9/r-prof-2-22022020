@@ -19,14 +19,35 @@ class Messages extends Component {
        }
 
     addNewMessage = (text, sender) => {
-        const { messages } = this.props;
+        // const { messages } = this.props;
         const { chatId } = this.props;
-        const messageId = Object.keys(messages).length + 1;
+        // const messageId = Object.keys(messages).length + 1;
 
-        this.props.sendMessage(messageId, sender, text, chatId);
         this.setState({
             newMessage: ''
         });
+
+        const newMessage = {
+            sender,
+            text,
+            chatId,
+        };
+
+        fetch("/api/message", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newMessage)
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data._id);
+              this.props.sendMessage(data._id, sender, text, chatId);
+            })
+            .catch(err => {
+              console.log(err);
+            });
     }
 
     handleChange = (event) => {
