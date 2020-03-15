@@ -27,7 +27,7 @@ class MessageManager extends Component {
   sendMessage = (text, sender) => {
     const chatID = this.props.chatID;
     const currentID = this.props.currentID;
-    this.props.sendMessage(currentID, chatID, sender, text);
+    //    this.props.sendMessage(currentID, chatID, sender, text);
   };
 
   handleSendMessage(message, sender) {

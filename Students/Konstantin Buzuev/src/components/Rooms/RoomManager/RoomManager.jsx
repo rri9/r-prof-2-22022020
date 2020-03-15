@@ -73,12 +73,12 @@ class ChatManager extends React.Component {
 
   addChat(chatID, name, description, type) {
     this.props.addChat(chatID, name, description, type);
-    this.props.sendMessage(
-      this.props.currentID,
-      chatID,
-      "Bot",
-      `Welcome to  ${name} chatroom`
-    );
+    // this.props.sendMessage(
+    //   this.props.currentID,
+    //   chatID,
+    //   "Bot",
+    //   `Welcome to  ${name} chatroom`
+    // );
   }
   handleAddChat(_name, _description, _type) {
     const { chats } = this.props;
