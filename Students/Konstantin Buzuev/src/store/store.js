@@ -1,10 +1,18 @@
 import initialReducers from './reducers'
 import {
-    createStore
+    createStore,
+    compose,
+    applyMiddleware
 } from 'redux'
 
+import middlewares from '../middlewares/index.js'
 
-export default function initStore() {
+function initStore() {
     let initialStore = {}
-    return createStore(initialReducers, initialStore)
+    return createStore(initialReducers,
+        initialStore,
+        compose(applyMiddleware(...middlewares),
+            window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : () => {}))
 }
+
+export default initStore

@@ -66,10 +66,15 @@ class Messages extends Component {
     );
   }
 }
-const mapStateToProps = ({ chatReducer }, ownProps) => {
+const mapStateToProps = ({ messageReducer }, ownProps) => {
   const { chatID } = ownProps;
+  const { messages } = messageReducer;
+  let chatMessages = [];
+  messages.forEach(message => {
+    if (message.chatID === chatID) chatMessages.push(message);
+  });
   return {
-    messages: chatReducer.chats[chatID].messages
+    messages: chatMessages
   };
 };
 
