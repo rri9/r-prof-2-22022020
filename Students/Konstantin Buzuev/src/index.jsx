@@ -3,16 +3,17 @@ import ReactDom from "react-dom";
 import "bootstrap";
 
 import { Provider } from "react-redux";
-import initStore from "./store/store.js";
+import initStore, { history } from "./store/store.js";
 import Router from "./router/router.jsx";
-import { BrowserRouter } from "react-router-dom";
+import { ConnectedRouter } from "connected-react-router";
+//import { BrowserRouter } from "react-router-dom";
 let user = "Constantine";
 
 ReactDom.render(
   <Provider store={initStore()}>
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <Router user={user} />
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>,
 
   document.getElementById("app")

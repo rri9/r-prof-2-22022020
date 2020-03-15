@@ -1,23 +1,21 @@
-import {
-    SEND_MSG,
-    sendMessage
-} from '../store/actions/chat_actions.js'
+import { SEND_MSG, sendMessage } from "../store/actions/chat_actions.js";
 
-
-export default store => next => (action) => {
-    switch (action.type) {
-        case SEND_MSG:
-            if (!!action.sender) {
-                setTimeout(() => {
-                    let currentID = store.getState().messageReducer.messages.length + 1;
-                    store.dispatch(sendMessage(
-                        currentID,
-                        action.chatID,
-                        null,
-                        null
-                    ))
-                }, 300);
-            }
-    }
-    return next(action)
-}
+export default store => next => action => {
+  switch (action.type) {
+    case SEND_MSG:
+      action.sender = action.sender ? action.sender : "Bot";
+      action.text = action.text ? action.text : "Sorry, I'm busy ...";
+      let sendAnswer = action.sender !== "Bot";
+      if (action.text === "111") {
+        action.type = null;
+        sendAnswer = false;
+      }
+      if (sendAnswer) {
+        setTimeout(() => {
+          let currentID = store.getState().messageReducer.messages.length + 1;
+          store.dispatch(sendMessage(currentID, action.chatID, null, null));
+        }, 300);
+      }
+  }
+  return next(action);
+};

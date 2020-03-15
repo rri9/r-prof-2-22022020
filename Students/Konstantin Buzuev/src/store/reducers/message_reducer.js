@@ -9,7 +9,7 @@ let initialStore = {
     messages: [{
             messageID: 1,
             chatID: 1,
-            user: null,
+            user: "Bot",
             text: "Welcome to Chat 1!"
         },
         {
@@ -21,13 +21,13 @@ let initialStore = {
         {
             messageID: 3,
             chatID: 1,
-            user: null,
+            user: "Bot",
             text: 'NOOOOOOOOO'
         },
         {
             messageID: 4,
             chatID: 2,
-            user: null,
+            user: "Bot",
             text: "Welcome to Chat 2!"
         },
         {
@@ -39,13 +39,13 @@ let initialStore = {
         {
             messageID: 6,
             chatID: 2,
-            user: null,
+            user: "Bot",
             text: 'Go away!!!'
         },
         {
             messageID: 7,
             chatID: 3,
-            user: null,
+            user: "Bot",
             text: "Welcome to Chat 3!"
         },
         {
@@ -57,7 +57,7 @@ let initialStore = {
         {
             messageID: 9,
             chatID: 3,
-            user: null,
+            user: "Bot",
             text: 'Do you have a cookies?'
         },
 
