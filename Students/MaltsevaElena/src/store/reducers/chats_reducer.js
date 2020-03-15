@@ -1,6 +1,6 @@
 import update from 'react-addons-update'
 //import ACTIONS
-import { ADD_CHAT } from '../actions/chats_action.js'
+import { ADD_CHAT, DEL_CHAT } from '../actions/chats_action.js'
 
 const initialStore = {
    chatRooms: {
@@ -16,6 +16,13 @@ export default function chatReducer (store = initialStore, action) {
          return update(store, {
             chatRooms: {
                $merge: { [action.chatId]: { title: action.title } }
+            }
+         })
+      }
+      case DEL_CHAT: {
+         return update(store, {
+            chatRooms: {
+               [action.chatId]: { $set: undefined }
             }
          })
       }

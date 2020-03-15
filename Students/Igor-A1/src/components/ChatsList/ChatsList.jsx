@@ -77,7 +77,7 @@ class ChatsList extends Component {
 
   state = {
     input: '',
-    selectedIndex: 0
+    selectedIndex: this.props.chatId - 1
   };
 
   handleListItemClick = (e, index) => {
