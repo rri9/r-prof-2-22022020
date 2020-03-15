@@ -17,8 +17,12 @@ module.exports = {
         contentBase: './dist',
         port: 3037,
         hot: true,
-        open: true
+        open: true,
+        historyApiFallback: {
+            index: 'index.html'
+        }
     },
+    devtool: 'cheap-inline-module-source-map' ,
     module: {
         rules: [
             {

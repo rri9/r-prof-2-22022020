@@ -1,5 +1,14 @@
-import React, {Component} from 'react';
+//TODO Поиск по сообщениям
+//TODO Удаление сообщение
+
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+
+//redux
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+import { sendMessage } from '../../store/actions/messageActions.js';
+import { addMsgCount } from '../../store/actions/chatActions.js';
 
 import Message from '../Message/Message.jsx';
 
@@ -12,6 +21,9 @@ const useStyles = (theme => ({
   wrapper: {
     width: '70vh',
     marginTop: '70px',
+    // TODO height 70vh (в body или верхний контейнер 100vh,
+    //  дальше вложенным делаем свои или 100.
+    //  еще можно футером прибить (см.какое-то свойство css)
   },
   root: {
     display: 'flex',
@@ -42,77 +54,110 @@ class MessageField extends Component {
     super(props);
     this.state = {
       msgText: '',
-      msgs: props.msgs,
     };
+    this.msgTextInput = React.createRef()
+    this.messageFieldEndRef = React.createRef();
   }
-  messageFieldEndRef = React.createRef();
   //methods
-  sendMsg = () => {
-    // const msg = document.querySelector('#msg'); //Так плохо, потому что не логично обращаться к DOM напрямую!!!
-    this.setState ({
-      msgs : [...this.state.msgs, {
-        sender: 'Me',
-        text: this.state.msgText,
-      }],
+  handleSendMsg = (message, sender) => {
+    const {msgs, currentChatId} = this.props;
+    const msgId = Object.keys(msgs).length + 1;
+    //FIX Выпилить расчет id в reducer - это дело хранилища/апи/бд
+    this.props.sendMessage(msgId, sender, message, currentChatId);
+    this.props.addMsgCount(currentChatId);
+    this.setState({
       msgText: '',
     });
   };
   handleChange = (evt) => {
-    if (evt.keyCode !== 13) {
-      this.setState({ msgText: evt.target.value });
+    if (evt.keyCode === 13) {
+      this.handleSendMsg(evt.target.value, 'Me');
     } else {
-      this.sendMsg();
+      this.setState({ [evt.target.name]: evt.target.value });
     }
   };
   scrollToBottom = () => {
-    this.messageFieldEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+    if (this.messageFieldEndRef.current.lastElementChild) {
+      this.messageFieldEndRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+    }
   };
+  setFocusOnInput = () => {
+    if (this.msgTextInput.current) {
+      this.msgTextInput.current.focus();
+    }
+  }
+  
+  getLastMsgInChat(chatId, msgsObj) {
+    for (let i = Object.keys(msgsObj).length; i > 0; i--) {
+      if (msgsObj[i].chatId === chatId) {
+        return msgsObj[i];
+      }
+    }
+  }
+  getAllMsgsInChat(chatId, msgsObj) {
+    const msgsArr = [];
+    // for (let i = 1; i <= Object.keys(msgsObj).length; i++) {
+    //   if (msgsObj[i].chatId === chatId) {
+    //     msgsArr.push(msgsObj[i]);
+    //   }
+    // }
+    //lets try smth else =)
+    for (let i in msgsObj) {
+      if (msgsObj.hasOwnProperty(i) && msgsObj[i].chatId === chatId) {
+        msgsArr.push(msgsObj[i]);
+      }
+    }
+    return msgsArr;
+  }
 
   //hooks
   componentDidMount() {
     this.scrollToBottom();
+    this.setFocusOnInput();
   };
 
-  componentDidUpdate() {
-    //Отвечаем на каждое нечетное сообщение через 0.1 сек
-    if(this.state.msgs.length %2 === 1) {
-      setTimeout(() => {
-        this.setState({
-          msgs: [...this.state.msgs, {
-            sender: null,
-            text: 'Leave me alone, human...',
-          }]
-        });
-      }, 100);
-    }
+  componentDidUpdate(prevProps, prevState) {
     this.scrollToBottom();
+    this.setFocusOnInput();
   };
 
   render() {
     const { classes } = this.props;
-    let MessagesArr = this.state.msgs.map((msg, index) => <Message key={index.toString()} msg={msg} />);
+    const { msgs, currentChatId } = this.props;
+    const currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs);
+    let MessagesArr = [];
+    if (currentChatMsgs.length) {
+      MessagesArr = currentChatMsgs.map((msg, index) => (
+        <Message key={index.toString()} msg={msg} />
+      ));
+    } else {
+      MessagesArr = (
+        <span>Сообщений пока нет...</span>
+      );
+    }
     return (
       <div className={classes.wrapper}>
         <div className={classes.root} ref={this.messageFieldEndRef}>
           { MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
-          <Tooltip title="Введите текст сообщения">
-            <TextField
-              className={classes.sendText}
-              variant="outlined"
-              size="small"
-              onChange={this.handleChange}
-              onKeyUp = {this.handleChange}
-              value = {this.state.msgText}
-              />
-          </Tooltip>
+          <TextField
+            placeholder = 'Введите сообщение...'
+            inputRef = {this.msgTextInput}
+            className = {classes.sendText}
+            variant = "outlined"
+            size = "small"
+            onChange = {this.handleChange}
+            onKeyUp = {this.handleChange}
+            value = {this.state.msgText}
+            name = 'msgText'
+            />
           <Tooltip title="Отправить">
             <IconButton 
               className={classes.sendBtn}
               // size="small"
               name="sendMsgUI"
-              onClick={this.sendMsg}>
+              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}>
                 <SendOutlinedIcon />
               </IconButton>
           </Tooltip>
@@ -122,4 +167,15 @@ class MessageField extends Component {
   }
 }
 
-export default withStyles(useStyles)(MessageField);
+const mapStateToProps = ({ messageReducer, chatReducer }) => ({
+  msgs: messageReducer.msgs,
+  chats: chatReducer.chats,
+  currentChatId: chatReducer.currentChatId,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  sendMessage,
+  addMsgCount,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));

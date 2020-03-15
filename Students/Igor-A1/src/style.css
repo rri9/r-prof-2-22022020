@@ -4,93 +4,6 @@
   box-sizing: border-box;
 }
 
-/* --- Only for design stage --- */
-/* blocks elements and containers */
-address,
-article,
-aside,
-blockquote,
-dd,
-div,
-dl,
-dt,
-details,
-fieldset,
-figcaption,
-figure,
-footer,
-form,
-h1, h2, h3, h4, h5, h6,
-header,
-hr,
-li,
-legend,
-nav,
-noscript,
-ol,
-output,
-optgroup,
-option,
-p,
-pre,
-section,
-summary,
-table,
-ul {
-  outline: 1px dotted blue;
-}
-
-/* inline elements and containers */
-a,
-area,
-b,
-bdo,
-bdi,
-cite,
-code,
-dfn,
-del,
-em,
-i,
-iframe,
-img,
-ins,
-kbd,
-label,
-map,
-mark,
-s,
-samp,
-small,
-span,
-strong,
-sub,
-sup,
-time,
-q,
-ruby,
-u,
-var {
-  outline: 1px dotted green;
-}
-
-/* inline-blocks elements and containers */
-audio,
-button,
-canvas,
-embed,
-input,
-keygen,
-meter,
-object,
-progress,
-select,
-textarea,
-video {
-  outline: 1px dotted red;
-}
-/* --- +++ --- */
-
 html,
 body,
 #app {
@@ -105,14 +18,13 @@ body {
 .chats {
   display: grid;
   align-content: space-between;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   grid-template-columns: 1fr;
   grid-template-areas: 
     "chats-head"
-    "chats-list"
-    "chats-foot";
+    "chats-body";
   grid-area: chats;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .msgs {
@@ -127,6 +39,18 @@ body {
   overflow: auto;
 }
 
+.chats-body {
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "chats-list"
+    "chats-foot";
+  grid-area: chats-body;
+  overflow: auto;
+}
+
 .msgs-body {
   display: grid;
   align-content: space-between;
@@ -137,6 +61,7 @@ body {
     "msgs-foot";
   grid-area: msgs-body;
   overflow: auto;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .grid {
@@ -159,17 +84,6 @@ body {
     "chats"
     "msgs";
   }
-  
-  .chats {
-    grid-template-rows: auto auto auto;
-  }  
-}
-
-header,
-.chats-list,
-.msgs-list,
-footer {
-  /* padding: 8px; */
 }
 
 .chat-item,
@@ -197,10 +111,15 @@ footer {
 
 .chats-foot {
   grid-area: chats-foot;
+  display: flex;
+  padding: 8px;
 }
 
 .msgs-head {
   grid-area: msgs-head;
+  display: flex;
+  justify-content: space-between;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 .msgs-list {
   grid-area: msgs-list;
@@ -210,21 +129,22 @@ footer {
 }
 
 .msg-item {
-  min-width: 240px;
   max-width: 80%;
+  width: max-content;
   padding: 8px;
   border-radius: 8px;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 14;
+  word-wrap: break-word;
 }
 
 .msg-self {
   align-self: flex-end;
   width: 100%;
   border-radius: 8px 8px 0 8px;
-}
-
-.msg-robot {
-  background-color: #D1C4E9;
-  color: #4527A0;
+  background-color: cyan;
+  color: blue;
 }
 
 .msgs-foot {
@@ -233,7 +153,7 @@ footer {
   padding: 8px;
 }
 
+.chat-input,
 .msg-input {
   flex-grow: 1;
 }
-

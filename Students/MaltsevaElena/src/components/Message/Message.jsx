@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDom from 'react-dom'
+
+// Styles, UI
 import { Box, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import './style.css'
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -24,10 +25,10 @@ let msg = (props) => {
 
    const classes = useStyles()
 
-   let { sender, text} = props
-   sender ? sender = sender : sender = 'HelpDesk'
+   let { sender, text, chatId, chatRooms} = props
+   sender ? sender = sender : sender = chatRooms[chatId].title
 
-   let boxView = props.sender ? classes.myAnswer : classes.botAnswer
+   let boxView = (sender === 'Me' ? classes.myAnswer : classes.botAnswer)
 
    return (
       <Grid container wrap="nowrap" className={ classes.root }>
@@ -36,7 +37,7 @@ let msg = (props) => {
                <Typography variant="caption"> { sender } </Typography>
             </Grid>
             <Grid item >
-               <Typography variant="body1"> { props.sender || (!props.sender && text) ? text : "Trolololo"} </Typography>
+               <Typography variant="body1"> { text } </Typography>
             </Grid>
          </Box>
       </Grid>

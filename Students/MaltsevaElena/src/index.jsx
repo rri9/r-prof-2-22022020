@@ -1,18 +1,22 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import 'bootstrap'
-import { Grid, Container } from '@material-ui/core'
+
+// Routing
+import Router from './router/router.jsx'
+import { ConnectedRouter } from 'connected-react-router'
+import { history } from './store/store.js'
+
+// Store
+import { Provider } from 'react-redux'
+import initStore from './store/store.js'
+import { PersistGate } from 'redux-persist/integration/react'
+
+const { store, persistor } = initStore()
+
+// Styles
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import 'typeface-roboto'
 import './index.css'
-
-import Messages from './components/MessagesField/MessagesField.jsx'
-import Chats from './components/ChatsField/ChatsField.jsx'
-
-import { Provider } from 'react-redux'
-import initStore from './store/store.js'
-
-let user = 'Me'
 
 const darkTheme = createMuiTheme({
    palette: {
@@ -37,19 +41,14 @@ const darkTheme = createMuiTheme({
 })
 
 ReactDom.render (
-   <Provider store={ initStore() }>
-      <ThemeProvider theme={ darkTheme }>
-         <Container fixed>
-            <Grid container spacing={0}>
-               <Grid item xs={3} style={{height: 100 + 'vh'}}>
-                  <Chats />
-               </Grid>
-               <Grid item xs={9} style={{height: 100 + 'vh'}}>
-                  <Messages usr={user} />
-               </Grid>
-            </Grid>
-         </Container>
-      </ThemeProvider>
+   <Provider store={ store }>
+      <PersistGate loading={ null } persistor={ persistor }>
+         <ConnectedRouter history={ history }>
+            <ThemeProvider theme={ darkTheme }>
+               <Router/>
+            </ThemeProvider>
+         </ConnectedRouter>
+      </PersistGate>
    </Provider>,
    document.getElementById('app')
 )

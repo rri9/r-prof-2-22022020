@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-// import ReactDom from 'react-dom';
 
-import { Button, Form, Row, Container } from 'react-bootstrap';
-import './style.css';
+import { Button, Form, Row, } from 'react-bootstrap';
+// import './style.css';
 
 import Message from '../Message/Message.jsx';
 
@@ -34,51 +33,39 @@ class Messages extends Component {
         event.keyCode !== 13 ?
             this.setState({
                 newMessage: event.target.value
-            }) :
-            this.addNewMessage(this.state.newMessage, this.props.usr);
+            })
+            : this.addNewMessage(this.state.newMessage, this.props.usr);
     }
 
     componentDidMount() {
-        let block = this.refs["msgBlock"];
+        const block = this.refs["msgBlock"];
         block.scrollTop = block.scrollHeight;
     }
 
     componentDidUpdate () {
-
-        const { messages } = this.props;
-        const lastMsg = messages[Object.keys(messages).length];
-
-        if (lastMsg.user === this.props.usr) {
-            setTimeout(() => {
-                    this.addNewMessage( 'NOOOOOOOOOO...', null);
-            }, 500);
-        }
-        let block = this.refs["msgBlock"];
+        const block = this.refs["msgBlock"];
         block.scrollTop = block.scrollHeight;
     }
 
     render() {
 
-        let { usr } = this.props;
-        let { messages } = this.props;
+        const { usr } = this.props;
+        const { messages } = this.props;
         const { chatId } = this.props;
 
-        let MessagesArr = [];
-
-        Object.keys(messages).forEach(key => {
-            if ( messages[key].chatId === chatId ) {
-                MessagesArr.push( <Message 
-                                    key={ key }
-                                    sender={ messages[key].user }
-                                    text={ messages[key].text }
-                                    chatId={ chatId }
-                                /> );
-            }
-        });
-
+        const MessagesArr = Object.keys(messages).map( key => {
+                if ( messages[key].chatId === chatId ) {
+                    return ( <Message 
+                                key={ key }
+                                sender={ messages[key].user }
+                                text={ messages[key].text }
+                                chatId={ chatId }
+                            /> );
+                }
+            });
 
         return (
-            <Container className="d-flex flex-column justify-content-end h-100 col-10">
+            <div className="d-flex flex-column justify-content-end h-100 col-10">
 
                 <div className="d-flex flex-column overflow-auto" ref="msgBlock">
                     { MessagesArr }
@@ -94,17 +81,23 @@ class Messages extends Component {
                         value = { this.state.newMessage }
                     />
 
-                    <Button className="m-2" onClick={ () => this.addNewMessage (this.state.newMessage, usr) }>Send&nbsp;Message</Button>
+                    <Button 
+                        className="m-2" 
+                        onClick={ () => this.addNewMessage (this.state.newMessage, usr) }
+                    >
+                        Send&nbsp;Message
+                    </Button>
                 </Row>
 
-            </Container>
+            </div>
         );
 
     }
 }
 
-const mapStateToProps = ({ msgReducer }) => ({
-    messages: msgReducer.messages
+const mapStateToProps = ({ msgReducer, userReducer }) => ({
+    messages: msgReducer.messages,
+    usr: userReducer.user,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators( { sendMessage }, dispatch );
