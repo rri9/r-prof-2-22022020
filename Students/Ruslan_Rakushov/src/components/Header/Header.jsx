@@ -32,13 +32,15 @@ class Header extends Component {
   static propTypes = {
     chats: PropTypes.object.isRequired,
     currentChatId: PropTypes.number.isRequired,
+    profile: PropTypes.object.isRequired,
   };
   handleAccBtnClick = () => {
     this.props.push('/profile/');
   };
 
   render() {
-    const { classes, chats, currentChatId } = this.props;
+    const { classes} = this.props;
+    const {chats, currentChatId, profile } = this.props;
     return (
       <div className={classes.root}>
         <AppBar className={classes.appbar}>
@@ -50,6 +52,7 @@ class Header extends Component {
               ReactGram &copy; {chats[currentChatId].title}
             </Typography>
             <div className={classes.rightMenu}>
+              {profile.userName}
               <IconButton aria-label="notifications" color="inherit">
                 <Badge badgeContent={2} color="secondary">
                   <NotificationsIcon />
@@ -67,9 +70,10 @@ class Header extends Component {
   };
 }
 
-const mapStateToProps = ({ chatReducer }) => ({
+const mapStateToProps = ({ chatReducer, profileReducer }) => ({
   chats: chatReducer.chats,
   currentChatId: chatReducer.currentChatId,
+  profile: profileReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
