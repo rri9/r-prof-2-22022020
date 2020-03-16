@@ -142,6 +142,7 @@ class MessageField extends Component {
         </div>
         <div className={classes.sendMsgField}>
           <TextField
+            //TODO use ui prop autoFocus
             placeholder = 'Введите сообщение...'
             inputRef = {this.msgTextInput}
             className = {classes.sendText}

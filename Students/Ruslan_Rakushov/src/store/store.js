@@ -14,7 +14,7 @@ const persistConfig = {
   key: 'Geek_React_by_rri9',
   storage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ['messageReducer', 'chatReducer'],
+  whitelist: ['messageReducer', 'chatReducer', 'profileReducer'],
 };
 
 export const history = createBrowserHistory();

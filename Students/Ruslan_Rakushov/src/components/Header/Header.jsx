@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
+import { push } from "connected-react-router";
 import { withStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Badge } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -32,6 +33,9 @@ class Header extends Component {
     chats: PropTypes.object.isRequired,
     currentChatId: PropTypes.number.isRequired,
   };
+  handleAccBtnClick = () => {
+    this.props.push('/profile/');
+  };
 
   render() {
     const { classes, chats, currentChatId } = this.props;
@@ -51,7 +55,8 @@ class Header extends Component {
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
-              <IconButton aria-label="account" color="inherit">
+              <IconButton aria-label="account" color="inherit"
+                onClick={this.handleAccBtnClick}>
                 <AccountCircle/>
               </IconButton>
             </div>
@@ -67,6 +72,8 @@ const mapStateToProps = ({ chatReducer }) => ({
   currentChatId: chatReducer.currentChatId,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  push,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Header));
