@@ -54,8 +54,7 @@ class Messages extends Component {
 
     newMessage = (sender, text) => {
         const { messages, match: { params } } = this.props;
-        const messageId = Object.keys(messages[params.chatId]).length + 1;
-        this.props.sendMessage(messageId, params.chatId, sender, text);
+        this.props.sendMessage(null, params.chatId, sender, text);
         this.setState({msg: ''});
         this.scrollToBottom();
     }
@@ -63,7 +62,6 @@ class Messages extends Component {
     render() {
         const { classes, messages, match: { params } } = this.props;
         const mapMessages = messages[params.chatId];
-        console.log(messages, params.chatId);
         const renderMessages = Object.keys(mapMessages).map(messageId => {
             return (
                 <Message 

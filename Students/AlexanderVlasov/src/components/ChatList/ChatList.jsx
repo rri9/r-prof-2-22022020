@@ -63,7 +63,6 @@ class ChatList extends React.Component {
 
   addChat = () => {
     this.props.addChat(this.state.newChatTitle);
-    this.props.addMessageId();
     this.setState({newChatTitle: ''});
   }
 
