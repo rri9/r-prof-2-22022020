@@ -5,11 +5,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/DeleteForeverRounded';
 
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
-import { withStyles, TextField, GridList } from '@material-ui/core';
+import { withStyles, TextField, GridList, IconButton, ListItemSecondaryAction } from '@material-ui/core';
 
 const useStyles = (theme => ({
   active: {
@@ -19,6 +20,11 @@ const useStyles = (theme => ({
     },
     color:  theme.pallete.primary.light,
     backgroundColor: theme.pallete.primary.dark
+  },
+  removeActive: {
+    '&:hover': {
+      backgroundColor: 'rgba(255,255,255, 0.14)'
+    }
   },
   listItem: {
     '&:hover, &:active' : {
@@ -32,8 +38,7 @@ const useStyles = (theme => ({
   }
 }));
 
-import { addChat } from '../../store/actions/chats_action.js';
-import { addMessageId } from '../../store/actions/messages_action.js';
+import { addChat, delChat } from '../../store/actions/chats_action.js';
 
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
@@ -61,6 +66,11 @@ class ChatList extends React.Component {
     this.props.history.push(link);
   }
 
+  deleteChat = (chatId) => {
+    this.props.delChat(chatId);
+    this.handleNavigate('/');
+  }
+
   addChat = () => {
     this.props.addChat(this.state.newChatTitle);
     this.setState({newChatTitle: ''});
@@ -74,8 +84,18 @@ class ChatList extends React.Component {
           <ListItem 
             button 
             className={ params.chatId === key ? classes.active : classes.listItem }
-            onClick={ () => this.handleNavigate(`/chat/${key}`) }>
+            onClick={ () => this.handleNavigate(`/chat/${key}`) }
+            key={ key }>
             <ListItemText primary={ chats[key].title } />
+            <ListItemSecondaryAction>
+              <IconButton 
+                edge="end" 
+                aria-label="delete" 
+                className={ params.chatId === key ? classes.removeActive : '' }
+                onClick={ () => this.deleteChat(key) }>
+                <DeleteIcon/>
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
       )
     })
@@ -84,7 +104,7 @@ class ChatList extends React.Component {
         <List component="nav" aria-label="main mailbox folders">
           <ListItem button>
             <ListItemIcon>
-              <AddIcon />
+              <AddIcon/>
             </ListItemIcon>
             <TextField
               className="flex-grow-1"
@@ -108,6 +128,6 @@ class ChatList extends React.Component {
 const mapStateToProps = ({ chatsReducer }) => ({
   chats: chatsReducer.chats
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, addMessageId }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, delChat }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(withRouter(ChatList)))

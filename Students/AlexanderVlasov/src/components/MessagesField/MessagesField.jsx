@@ -74,7 +74,7 @@ class Messages extends Component {
         return (
             <div className={ classes.root}>
                 <List className={ classes.gridList } cols={ 1 } spacing={ 0 } ref={this.messagesEndRef}>
-                    { renderMessages }
+                    { renderMessages.length ? renderMessages : <div></div> }
                 </List>
                 <TextField 
                     className="flex-grow-1"
