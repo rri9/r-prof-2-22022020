@@ -7,7 +7,7 @@ import ReactDom from 'react-dom';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { sendMessage } from '../../store/actions/messageActions.js';
+import { sendMessage, delMessage } from '../../store/actions/messageActions.js';
 
 import Message from '../Message/Message.jsx';
 
@@ -67,6 +67,11 @@ class MessageField extends Component {
       msgText: '',
     });
   };
+  handleDelMsg = (evt) => {
+    const id = evt.target.parentNode.parentNode.parentNode.parentNode.dataset.id;
+    this.props.delMessage(id);
+  };
+
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
       this.handleSendMsg(evt.target.value, 'Me');
@@ -85,13 +90,13 @@ class MessageField extends Component {
     }
   }
   
-  getLastMsgInChat(chatId, msgsObj) {
-    for (let i = Object.keys(msgsObj).length; i > 0; i--) {
-      if (msgsObj[i].chatId === chatId) {
-        return msgsObj[i];
-      }
-    }
-  }
+  // getLastMsgInChat(chatId, msgsObj) {
+  //   for (let i = Object.keys(msgsObj).length; i > 0; i--) {
+  //     if (msgsObj[i].chatId === chatId) {
+  //       return msgsObj[i];
+  //     }
+  //   }
+  // }
   getAllMsgsInChat(chatId, msgsObj) {
     const msgsArr = [];
     // for (let i = 1; i <= Object.keys(msgsObj).length; i++) {
@@ -102,7 +107,7 @@ class MessageField extends Component {
     //lets try smth else =)
     for (let i in msgsObj) {
       if (msgsObj.hasOwnProperty(i) && msgsObj[i].chatId === chatId) {
-        msgsArr.push(msgsObj[i]);
+        msgsArr.push({...msgsObj[i], id: i});
       }
     }
     return msgsArr;
@@ -135,7 +140,9 @@ class MessageField extends Component {
     }
     return (
       <div className={classes.wrapper}>
-        <div className={classes.root} ref={this.messageFieldEndRef}>
+        <div className={classes.root} ref={this.messageFieldEndRef}
+        onClick={this.handleDelMsg}
+        >
           { MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
@@ -174,6 +181,7 @@ const mapStateToProps = ({ messageReducer, chatReducer }) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
+  delMessage,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));
