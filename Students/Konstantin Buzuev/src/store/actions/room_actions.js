@@ -3,23 +3,23 @@ import {
     getJSON
 } from 'redux-api-middleware';
 
-export const START_MESSAGES_LOADING = '@@room/START_MESSAGES_LOADING';
-export const SUCCESS_MESSAGES_LOADING = '@@room/SUCCESS_MESSAGES_LOADING';
-export const ERROR_MESSAGES_LOADING = '@@room/ERROR_MESSAGES_LOADING';
+export const START_CHATS_LOADING = '@@room/START_CHATS_LOADING';
+export const SUCCESS_CHATS_LOADING = '@@room/SUCCESS_CHATS_LOADING';
+export const ERROR_CHATS_LOADING = '@@room/ERROR_CHATS_LOADING';
 
 export const loadChats = () => ({
     [RSAA]: {
         endpoint: '/staticapi/chats.json',
         method: 'GET',
         types: [
-            START_MESSAGES_LOADING,
+            START_CHATS_LOADING,
             {
-                type: SUCCESS_MESSAGES_LOADING,
+                type: SUCCESS_CHATS_LOADING,
                 payload: (action, state, res) => getJSON(res).then(
                     json => json,
                 ),
             },
-            ERROR_MESSAGES_LOADING,
+            ERROR_CHATS_LOADING,
         ],
     },
 });

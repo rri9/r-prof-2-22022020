@@ -2,10 +2,9 @@ import update from 'react-addons-update'
 // ACTIONS
 import {
     ADD_CHAT,
-    START_MESSAGES_LOADING,
-    SUCCESS_MESSAGES_LOADING,
-    ERROR_MESSAGES_LOADING,
-
+    START_CHATS_LOADING,
+    SUCCESS_CHATS_LOADING,
+    ERROR_CHATS_LOADING
 } from '../actions/room_actions.js'
 
 
@@ -30,7 +29,7 @@ export default function chatReducer(store = initialStore, action) {
             });
             return store;
         }
-        case START_MESSAGES_LOADING: {
+        case START_CHATS_LOADING: {
             store = update(store, {
                 isLoading: {
                     $set: true
@@ -38,7 +37,7 @@ export default function chatReducer(store = initialStore, action) {
             });
             return store;
         }
-        case SUCCESS_MESSAGES_LOADING: {
+        case SUCCESS_CHATS_LOADING: {
             const chats = action.payload;
             store = update(store, {
                 chats: {
@@ -50,7 +49,7 @@ export default function chatReducer(store = initialStore, action) {
             });
             return store;
         }
-        case ERROR_MESSAGES_LOADING: {
+        case ERROR_CHATS_LOADING: {
             store = update(store, {
                 isLoading: {
                     $set: false

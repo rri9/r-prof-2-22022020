@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import ReactDom from "react-dom";
 // ACTIONS
-import { sendMessage } from "../../../store/actions/chat_actions.js";
+import {
+  sendMessage,
+  loadMessage
+} from "../../../store/actions/chat_actions.js";
 // REDUX
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -45,7 +48,7 @@ class MessageManager extends Component {
       .then(body => body.json())
       .then(json => {
         json.forEach(msg => {
-          this.props.sendMessage(msg.messageID, msg.chatID, msg.user, msg.text);
+          this.props.loadMessage(msg.messageID, msg.chatID, msg.user, msg.text);
         });
       });
   }
@@ -103,7 +106,7 @@ const mapStateToProps = ({ messageReducer }, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ sendMessage }, dispatch);
+  bindActionCreators({ sendMessage, loadMessage }, dispatch);
 
 export default connect(
   mapStateToProps,

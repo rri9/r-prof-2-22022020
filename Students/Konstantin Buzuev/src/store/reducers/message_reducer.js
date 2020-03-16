@@ -1,10 +1,11 @@
 import update from 'react-addons-update'
 // ACTIONS
 import {
-    SEND_MSG,
+    SEND_MESSAGE,
+    LOAD_MESSAGE,
     START_MESSAGES_LOADING,
     SUCCESS_MESSAGES_LOADING,
-    ERROR_MESSAGES_LOADING,
+    ERROR_MESSAGES_LOADING
 } from '../actions/chat_actions.js'
 
 
@@ -15,7 +16,8 @@ let initialStore = {
 
 export default function messageReducer(store = initialStore, action) {
     switch (action.type) {
-        case SEND_MSG: {
+        case LOAD_MESSAGE:
+        case SEND_MESSAGE: {
             store = update(store, {
                 messages: {
                     $push: [{

@@ -25,10 +25,19 @@ export const loadMessages = () => ({
 });
 
 
-export let SEND_MSG = "@@chat/SEND_MSG";
+export let SEND_MESSAGE = "@@chat/SEND_MESSAGE";
 
 export let sendMessage = (messageID, chatID, sender, text) => ({
-  type: SEND_MSG,
+  type: SEND_MESSAGE,
+  messageID: messageID,
+  chatID: chatID,
+  sender: sender,
+  text: text
+});
+
+export let LOAD_MESSAGE = "@@chat/LOAD_MESSAGE";
+export let loadMessage = (messageID, chatID, sender, text) => ({
+  type: LOAD_MESSAGE,
   messageID: messageID,
   chatID: chatID,
   sender: sender,
