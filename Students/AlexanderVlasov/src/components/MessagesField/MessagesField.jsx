@@ -36,26 +36,12 @@ class Messages extends Component {
         this.state = {
             msg: ''
         }
-        console.log('test');
     }
 
     handleChanges = (event) => {
         event.keyCode !== 13 ?
             this.setState({msg: event.target.value}) :
             this.newMessage('Alex', this.state.msg);
-    }
-
-    componentDidUpdate(prevProps) {
-        const { messages, match: { params } } = this.props;
-        const currMessages = messages[params.chatId];
-        const prevLength = Object.keys(prevProps.messages[params.chatId]).length;
-        const currLength = Object.keys(currMessages).length;
-        if (prevLength < currLength && currMessages[Object.keys(currMessages).length].user === this.user) {
-            setTimeout(() => {
-                const messageId = Object.keys(messages[params.chatId]).length + 1;
-                this.props.sendMessage(messageId, params.chatId, null, 'NOOOOOOOOOO');
-            }, 500);
-        }
     }
 
     componentDidMount() {
@@ -77,7 +63,7 @@ class Messages extends Component {
     render() {
         const { classes, messages, match: { params } } = this.props;
         const mapMessages = messages[params.chatId];
-        console.log(Object.keys(mapMessages));
+        console.log(messages, params.chatId);
         const renderMessages = Object.keys(mapMessages).map(messageId => {
             return (
                 <Message 

@@ -29,9 +29,6 @@ const useStyles = (theme => ({
   list: {
     overflow: 'auto',
     maxHeight: 'calc(100vh - 152px)',
-  },
-  decorationNone: {
-    textDecoration: 'none'
   }
 }));
 
@@ -41,9 +38,11 @@ import { addMessageId } from '../../store/actions/messages_action.js';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 
+import { push } from 'connected-react-router';
+
 class ChatList extends React.Component {
   static propTypes = {
-    chatId: PropTypes.number,
+    chats: PropTypes.object.isRequired
   }
   static defaultProps = {
     chatId: 1
@@ -58,6 +57,10 @@ class ChatList extends React.Component {
         this.addChat();
   }
 
+  handleNavigate = (link) => {
+    this.props.history.push(link);
+  }
+
   addChat = () => {
     this.props.addChat(this.state.newChatTitle);
     this.props.addMessageId();
@@ -66,13 +69,15 @@ class ChatList extends React.Component {
 
   render() {
     const { classes, chats, match: { params } } = this.props;
+    console.log(this.props);
     const renderedChats = Object.keys(chats).map((key) => {
       return (
-        <Link key={ key } to={ `/chat/${key}` } className= { classes.decorationNone }>
-          <ListItem button className={ params.chatId === key ? classes.active : classes.listItem }>
+          <ListItem 
+            button 
+            className={ params.chatId === key ? classes.active : classes.listItem }
+            onClick={ () => this.handleNavigate(`/chat/${key}`) }>
             <ListItemText primary={ chats[key].title } />
           </ListItem>
-        </Link>
       )
     })
     return (
