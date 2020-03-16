@@ -1,0 +1,21 @@
+.blink {
+  background-color: lightskyblue !important;
+  animation: blink 1s ease-in-out infinite;
+  transition: 0.3s;
+}
+
+.blink span {
+  font-weight: bold !important;
+}
+
+@keyframes blink {
+  from {
+    background-color: lightskyblue !important;
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  to {
+    background-color: lightskyblue !important;
+  }
+}
