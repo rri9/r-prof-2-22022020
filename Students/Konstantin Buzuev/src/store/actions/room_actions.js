@@ -10,6 +10,7 @@ export const ERROR_CHATS_LOADING = '@@room/ERROR_CHATS_LOADING';
 export const loadChats = () => ({
     [RSAA]: {
         endpoint: '/staticapi/chats.json',
+        //        endpoint: '/api/',
         method: 'GET',
         types: [
             START_CHATS_LOADING,

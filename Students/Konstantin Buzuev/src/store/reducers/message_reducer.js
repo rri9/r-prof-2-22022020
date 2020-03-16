@@ -1,16 +1,20 @@
 import update from 'react-addons-update'
 // ACTIONS
 import {
-    SEND_MESSAGE,
     START_MESSAGES_LOADING,
     SUCCESS_MESSAGES_LOADING,
-    ERROR_MESSAGES_LOADING
+    ERROR_MESSAGES_LOADING,
+    SEND_MESSAGE,
+    START_MESSAGE_SEND,
+    SUCCESS_MESSAGE_SEND,
+    ERROR_MESSAGES_SEND,
 } from '../actions/chat_actions.js'
 
 
 let initialStore = {
     messages: [],
-    isLoading: true,
+    isMessageLoading: true,
+    isMessageSending: false
 }
 
 export default function messageReducer(store = initialStore, action) {
@@ -31,7 +35,7 @@ export default function messageReducer(store = initialStore, action) {
         }
         case START_MESSAGES_LOADING: {
             store = update(store, {
-                isLoading: {
+                isMessageLoading: {
                     $set: true
                 },
             });
@@ -43,20 +47,51 @@ export default function messageReducer(store = initialStore, action) {
                 messages: {
                     $push: messages
                 },
-                isLoading: {
+                isMessageLoading: {
                     $set: false
                 },
             });
             return store;
         }
         case ERROR_MESSAGES_LOADING: {
+            console.log("Message loading failed")
             store = update(store, {
-                isLoading: {
+                isMessageLoading: {
                     $set: false
                 },
             });
             return store;
         }
+        case START_MESSAGE_SEND: {
+            store = update(store, {
+                isMessageSending: {
+                    $set: true
+                },
+            });
+            return store;
+        }
+        case SUCCESS_MESSAGE_SEND: {
+            const message = action.payload;
+            store = update(store, {
+                messages: {
+                    $push: [message]
+                },
+                isMessageSending: {
+                    $set: false
+                },
+            });
+            return store;
+        }
+        case ERROR_MESSAGES_SEND: {
+            console.log("Message sent failed")
+            store = update(store, {
+                isMessageSending: {
+                    $set: false
+                },
+            });
+            return store;
+        }
+
         default:
             return store;
     }

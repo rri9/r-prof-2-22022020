@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const messageSchema = new Schema({
-    messageID: {
+    messageId: {
         type: String,
         required: true,
         default: Date.now
     },
-    chatID: {
+    chatId: {
         type: String,
         required: true
     },

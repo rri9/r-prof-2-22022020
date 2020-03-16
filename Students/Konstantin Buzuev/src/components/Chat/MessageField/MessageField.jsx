@@ -30,7 +30,7 @@ const useStyles = theme => ({
 });
 class Messages extends Component {
   static propTypes = {
-    isLoading: PropTypes.bool.isRequired,
+    isMessageLoading: PropTypes.bool.isRequired,
     messages: PropTypes.array.isRequired
   };
   constructor(props) {
@@ -49,7 +49,7 @@ class Messages extends Component {
   };
 
   componentDidMount() {
-    if (this.props.isLoading) this.props.loadMessages();
+    if (this.props.isMessageLoading) this.props.loadMessages();
     this.scrollToBottom();
   }
 
@@ -57,7 +57,7 @@ class Messages extends Component {
     this.scrollToBottom();
   }
   render() {
-    if (this.props.isLoading) {
+    if (this.props.isMessageLoading) {
       return <CircularProgress />;
     }
     const { classes } = this.props;
@@ -91,11 +91,15 @@ const mapStateToProps = ({ messageReducer }, ownProps) => {
   const { messages } = messageReducer;
   let chatMessages = [];
   messages.forEach(message => {
-    if (message.chatID === chatID) chatMessages.push(message);
+    message.chatID = Number(message.chatID);
   });
+  messages.forEach(message => {
+    if (+message.chatID === chatID) chatMessages.push(message);
+  });
+
   return {
     messages: chatMessages,
-    isLoading: messageReducer.isLoading
+    isMessageLoading: messageReducer.isMessageLoading
   };
 };
 

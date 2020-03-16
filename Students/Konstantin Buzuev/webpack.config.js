@@ -19,10 +19,10 @@ module.exports = {
         hot: true,
         open: true,
         proxy: {
-            '/apis': {
+            '/api': {
                 target: 'http://localhost:3300',
                 pathRewrite: {
-                    '^/apis': ''
+                    '^/api': ''
                 },
                 secure: false,
                 changeOrigin: true

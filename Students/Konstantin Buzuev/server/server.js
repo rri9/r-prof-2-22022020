@@ -19,10 +19,8 @@ mongoose.connect('mongodb://localhost/reactgram-v2', {
 
 app.post('/message', async (req, res) => {
     let message = new Message(req.body)
-    await message.save();
-    res.send(JSON.stringify({
-        status: 1
-    }))
+    //await message.save();
+    res.json(message)
 })
 app.get('/messages', async (req, res) => {
     const messages = await Message.find()

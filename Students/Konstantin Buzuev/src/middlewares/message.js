@@ -9,16 +9,19 @@ export default store => next => action => {
       action.sender = action.sender ? action.sender : "Bot";
       action.text = action.text ? action.text : "Sorry, I'm busy ...";
       let sendAnswer = action.sender !== "Bot";
-      if (action.text === "111") {
-        action.type = null;
-        sendAnswer = false;
-      }
+      // Здесь можно вставить произвольные фильтры
+      // if (action.text === "111") {
+      //   action.type = null;
+      //   sendAnswer = false;
+      // }
       if (sendAnswer) {
         setTimeout(() => {
           let currentID = store.getState().messageReducer.messages.length + 1;
           store.dispatch(sendMessage(currentID, action.chatID, null, null));
         }, 300);
       }
+      break
+
   }
   return next(action);
 };
