@@ -8,7 +8,6 @@ import ReactDom from 'react-dom';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { sendMessage } from '../../store/actions/messageActions.js';
-import { addMsgCount } from '../../store/actions/chatActions.js';
 
 import Message from '../Message/Message.jsx';
 
@@ -64,7 +63,6 @@ class MessageField extends Component {
     const msgId = Object.keys(msgs).length + 1;
     //FIX Выпилить расчет id в reducer - это дело хранилища/апи/бд
     this.props.sendMessage(msgId, sender, message, currentChatId);
-    this.props.addMsgCount(currentChatId);
     this.setState({
       msgText: '',
     });
@@ -176,7 +174,6 @@ const mapStateToProps = ({ messageReducer, chatReducer }) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
-  addMsgCount,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));
