@@ -4,7 +4,7 @@ import { push } from "connected-react-router";
 import {
   Card, CardContent, CardActions, Button, Typography,
   Dialog, DialogTitle, DialogContent, DialogActions,
-  TextField,
+  TextField, 
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // import { extend } from 'immutability-helper';
@@ -37,6 +37,21 @@ const useStyles = (theme => ({
       width: '100px',
       borderRight: '1px solid lightgrey',
     }
+  },
+  infoBtn: {
+    width: '100%',
+    padding: '5px 0',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  returnBtn: {
+    width: '100%',
+    padding: '5px 0',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  actions: {
+    flexDirection: 'column',
   },
 }));
 
@@ -77,6 +92,14 @@ class Profile extends Component {
     this.setState({
       openDialog: false,
     });
+  }
+  handleDelUserInfoClick = () => {
+    this.setState({
+      userNameErr: '',
+      userEmailErr: '',
+      userAgeErr: 0,
+    });
+    this.props.setUserInfo('', '', 0);
   }
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
@@ -121,17 +144,28 @@ class Profile extends Component {
             </tbody>
           </table>
         </CardContent>
-        <CardActions>
+          <CardActions
+            disableSpacing
+            className={classes.actions}>
+          <div className={classes.infoBtn}>
           <Button size="small"
               variant='outlined'
               onClick={this.handleSetUserInfoClick}>
               Ввести информацию о себе
-            </Button>
-            <Button size="small"
+          </Button>
+          <Button size="small"
+              variant='outlined'
+              onClick={this.handleDelUserInfoClick}>
+              Удалить информацию о себе
+          </Button>
+          </div>
+          <div className={classes.returnBtn}>
+          <Button size="small"
               variant='outlined'
               onClick={() => this.props.push(`/chat/${this.props.currentChatId}`)}>
               Вернуться к чатам...
-            </Button>
+          </Button>
+          </div>
         </CardActions>
         </Card>
         
