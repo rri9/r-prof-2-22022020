@@ -34,12 +34,3 @@ export let sendMessage = (messageID, chatID, sender, text) => ({
   sender: sender,
   text: text
 });
-
-export let LOAD_MESSAGE = "@@chat/LOAD_MESSAGE";
-export let loadMessage = (messageID, chatID, sender, text) => ({
-  type: LOAD_MESSAGE,
-  messageID: messageID,
-  chatID: chatID,
-  sender: sender,
-  text: text
-});

@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import ReactDom from "react-dom";
+import PropTypes from "prop-types";
 // ACTIONS
-import {
-  sendMessage,
-  loadMessage
-} from "../../../store/actions/chat_actions.js";
+import { sendMessage } from "../../../store/actions/chat_actions.js";
 // REDUX
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -22,6 +19,10 @@ const useStyles = theme => ({
   }
 });
 class MessageManager extends Component {
+  static propTypes = {
+    currentID: PropTypes.number.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -30,7 +31,7 @@ class MessageManager extends Component {
   sendMessage = (text, sender) => {
     const chatID = this.props.chatID;
     const currentID = this.props.currentID;
-    //    this.props.sendMessage(currentID, chatID, sender, text);
+    this.props.sendMessage(currentID, chatID, sender, text);
   };
 
   handleSendMessage(message, sender) {
@@ -43,15 +44,7 @@ class MessageManager extends Component {
     else this.handleSendMessage(this.state.message, this.props.user);
   };
 
-  componentDidMount() {
-    fetch("staticapi/messages.json")
-      .then(body => body.json())
-      .then(json => {
-        json.forEach(msg => {
-          this.props.loadMessage(msg.messageID, msg.chatID, msg.user, msg.text);
-        });
-      });
-  }
+  componentDidMount() {}
 
   render() {
     const { classes } = this.props;
@@ -92,21 +85,14 @@ class MessageManager extends Component {
   }
 }
 
-const mapStateToProps = ({ messageReducer }, ownProps) => {
-  const { chatID } = ownProps;
-  const { messages } = messageReducer;
-  let chatMessages = [];
-  messages.forEach(message => {
-    if (message.chatID === chatID) chatMessages.push(message);
-  });
+const mapStateToProps = ({ messageReducer }) => {
   return {
-    messages: chatMessages,
     currentID: messageReducer.messages.length + 1
   };
 };
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ sendMessage, loadMessage }, dispatch);
+  bindActionCreators({ sendMessage }, dispatch);
 
 export default connect(
   mapStateToProps,

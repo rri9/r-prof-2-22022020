@@ -1,10 +1,11 @@
 import initialReducers from './reducers';
 import {
-    createStore,
     compose,
     applyMiddleware
 } from 'redux'
-
+import {
+    createStore
+} from 'redux';
 import {
     createBrowserHistory
 } from 'history';
@@ -19,7 +20,7 @@ export const history = createBrowserHistory()
 
 
 function initStore() {
-    let initialStore = {}
+    const initialStore = {};
     const store = createStore(
         initialReducers(history),
         initialStore,

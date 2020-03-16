@@ -2,7 +2,6 @@ import update from 'react-addons-update'
 // ACTIONS
 import {
     SEND_MESSAGE,
-    LOAD_MESSAGE,
     START_MESSAGES_LOADING,
     SUCCESS_MESSAGES_LOADING,
     ERROR_MESSAGES_LOADING
@@ -11,12 +10,11 @@ import {
 
 let initialStore = {
     messages: [],
-    isLoading: false,
+    isLoading: true,
 }
 
 export default function messageReducer(store = initialStore, action) {
     switch (action.type) {
-        case LOAD_MESSAGE:
         case SEND_MESSAGE: {
             store = update(store, {
                 messages: {

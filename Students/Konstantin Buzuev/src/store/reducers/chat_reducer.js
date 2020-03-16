@@ -10,7 +10,7 @@ import {
 
 let initialStore = {
     chats: {},
-    isLoading: false
+    isLoading: true
 }
 
 export default function chatReducer(store = initialStore, action) {
