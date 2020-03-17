@@ -17,44 +17,7 @@ class Messages extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            msg: '',
-        //     msgArray: [{
-        //         user: 'Darth Vader',
-        //         text: 'Hallo'
-        //     },
-        //     {
-        //         user: null,
-        //         text: null
-        //     },
-        //     {
-        //         user: 'Darth Vader',
-        //         text: 'I am your father'
-        //     },
-        //     {
-        //         user: null,
-        //         text: 'NOOOOOOOOO'
-        //     },
-        //     {
-        //         user: 'Darth Vader',
-        //         text: 'Hallo'
-        //     },
-        //     {
-        //         user: null,
-        //         text: null
-        //     },
-        //     {
-        //         user: 'Darth Vader',
-        //         text: 'I am your father'
-        //     },
-        //     {
-        //         user: null,
-        //         text: 'NOOOOOOOOO'
-        //     },
-        //     {
-        //         user: 'Darth Vader',
-        //         text: 'Hallo'
-        //     }
-        // ]
+            msg: ''
         }
     }
 
@@ -64,10 +27,6 @@ class Messages extends Component {
         const { messages } = this.props
         const messageId = Object.keys(messages).length + 1;
         this.props.sendMessage(messageId, sender, text, chatId)
-        // this.setState ({
-        //     msgArray: [...this.state.msgArray, { user: this.props.usr, text: this.state.msg }], //ЯМы Дартвейдер
-        //     msg: ''
-        // })
     }
 
     handleChange = (evt) => {
@@ -84,19 +43,19 @@ class Messages extends Component {
 
 
     //hooks
-    componentDidUpdate (prevState) {
-        let { messages } = this.props
-        let msgLength = Object.keys(messages).length
-        console.log(messages)
-        let prevMsgLength = Object.keys(prevState.messages).length
-        if (prevMsgLength < msgLength &&
-            messages[msgLength].user === 'Darth Vader') {
-            setTimeout(() => {
-                const messageId = msgLength + 1;
-                this.props.sendAnswer(messageId, 'Luke', "I'm not your son, just bot", this.props.chatId)
-            }, 500)
-        }
-    }
+    // componentDidUpdate (prevState) {
+    //     let { messages } = this.props
+    //     let msgLength = Object.keys(messages).length
+    //     console.log(messages)
+    //     let prevMsgLength = Object.keys(prevState.messages).length
+    //     if (prevMsgLength < msgLength &&
+    //         messages[msgLength].user === 'Darth Vader') {
+    //         setTimeout(() => {
+    //             const messageId = msgLength + 1;
+    //             this.props.sendAnswer(messageId, 'Luke', "I'm not your son, just bot", this.props.chatId)
+    //         }, 500)
+    //     }
+    // }
 
     
 
@@ -124,7 +83,7 @@ class Messages extends Component {
           <Col sm="0" md="2" lg="3"></Col>
           <Col sm="12"  md="10" lg="6">       
             <InputGroup>
-                <Input onChange = {this.handleChange} value={this.state.msg}/>
+                <Input placeholder="текст сообщения" onChange = {this.handleChange} value={this.state.msg}/>
                 <InputGroupAddon addonType="append" >
                 <Button color="warning" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader', this.props.chatId) }>Отправить</Button>
                 </InputGroupAddon>
