@@ -24,7 +24,7 @@ class Router extends React.Component {
           exact
           key="0"
           path="/"
-          render={() => <Layout user={this.props.user} chatID={Number("1")} />}
+          render={() => <Layout user={this.props.user} chatID="" />}
         />
         {Routes}
       </Switch>

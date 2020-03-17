@@ -1,23 +1,24 @@
 import {
-  SEND_MESSAGE,
+  SUCCESS_MESSAGE_SEND,
   sendMessage
 } from "../store/actions/chat_actions.js";
 
 export default store => next => action => {
+  let payload = action.payload
   switch (action.type) {
-    case SEND_MESSAGE:
-      action.sender = action.sender ? action.sender : "Bot";
-      action.text = action.text ? action.text : "Sorry, I'm busy ...";
-      let sendAnswer = action.sender !== "Bot";
+    case SUCCESS_MESSAGE_SEND:
+      payload.user = payload.user ? payload.user : "Bot";
+      payload.text = payload.text ? payload.text : "Sorry, I'm busy ...";
+      let sendAnswer = payload.user !== "Bot";
       // Здесь можно вставить произвольные фильтры
-      // if (action.text === "111") {
-      //   action.type = null;
+      // if (payload.text === "111") {
+      //   payload.type = null;
       //   sendAnswer = false;
       // }
       if (sendAnswer) {
         setTimeout(() => {
           let currentID = store.getState().messageReducer.messages.length + 1;
-          store.dispatch(sendMessage(currentID, action.chatID, null, null));
+          store.dispatch(sendMessage(currentID, payload.chatID, null, null));
         }, 300);
       }
       break
