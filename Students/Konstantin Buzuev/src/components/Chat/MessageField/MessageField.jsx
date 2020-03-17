@@ -19,9 +19,6 @@ const useStyles = theme => ({
   },
   gridList: {
     width: "100%"
-  },
-  bottomPanel: {
-    padding: "10px"
   }
 });
 class Messages extends Component {
@@ -69,10 +66,15 @@ class Messages extends Component {
     );
   }
 }
-const mapStateToProps = ({ chatReducer }, ownProps) => {
+const mapStateToProps = ({ messageReducer }, ownProps) => {
   const { chatID } = ownProps;
+  const { messages } = messageReducer;
+  let chatMessages = [];
+  messages.forEach(message => {
+    if (message.chatID === chatID) chatMessages.push(message);
+  });
   return {
-    messages: chatReducer.chats[chatID].messages
+    messages: chatMessages
   };
 };
 

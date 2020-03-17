@@ -52,6 +52,11 @@ const useStyles = theme => ({
 });
 
 class ChatManager extends React.Component {
+  static propTypes = {
+    addChat: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -68,7 +73,12 @@ class ChatManager extends React.Component {
 
   addChat(chatID, name, description, type) {
     this.props.addChat(chatID, name, description, type);
-    this.props.sendMessage(chatID, 1, null, `Welcome to  ${name} chatroom`);
+    this.props.sendMessage(
+      this.props.currentID,
+      chatID,
+      "Bot",
+      `Welcome to  ${name} chatroom`
+    );
   }
   handleAddChat(_name, _description, _type) {
     const { chats } = this.props;
@@ -170,9 +180,10 @@ class ChatManager extends React.Component {
   }
 }
 
-const mapStateToProps = ({ chatReducer }) => {
+const mapStateToProps = ({ chatReducer, messageReducer }) => {
   return {
-    chats: chatReducer.chats
+    chats: chatReducer.chats,
+    currentID: messageReducer.messages.length + 1
   };
 };
 
