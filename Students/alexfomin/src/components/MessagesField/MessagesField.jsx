@@ -60,10 +60,10 @@ class Messages extends Component {
 
 
     //methods
-    sendMessage = (text, sender) => {
+    sendMessage = (text, sender, chatId) => {
         const { messages } = this.props
         const messageId = Object.keys(messages).length + 1;
-        this.props.sendMessage(messageId, sender, text)
+        this.props.sendMessage(messageId, sender, text, chatId)
         // this.setState ({
         //     msgArray: [...this.state.msgArray, { user: this.props.usr, text: this.state.msg }], //ЯМы Дартвейдер
         //     msg: ''
@@ -76,28 +76,27 @@ class Messages extends Component {
         }
     }
 
-    handleSendMessage = (message, sender) => {
+    handleSendMessage = (message, sender, chatId) => {
         if (sender == 'Darth Vader') {
-            this.sendMessage(message, sender)
+            this.sendMessage(message, sender, chatId)
         }
     }
 
-    //hooks
-    // componentDidUpdate () {
-    //  console.log (this.state)
-    //     let msgs = this.state.msgArray
 
-    //     if (msgs.length % 2 === 1) {
-    //         setTimeout(() => {
-    //             this.setState ({
-    //                 msgArray: [...this.state.msgArray, { user: null, text: 'NOOOOOOOOOO...' }], //ЯМы Дартвейдер
-    //                 msg: ''
-    //             })
-    //         }, 500)
-    //     }
-    //     const messageId = Object.keys(this.state).length + 1;
-    //     this.props.sendAnswer(messageId, 'Luke', 'Oh, nooo!')
-    // }
+    //hooks
+    componentDidUpdate (prevState) {
+        let { messages } = this.props
+        let msgLength = Object.keys(messages).length
+        console.log(messages)
+        let prevMsgLength = Object.keys(prevState.messages).length
+        if (prevMsgLength < msgLength &&
+            messages[msgLength].user === 'Darth Vader') {
+            setTimeout(() => {
+                const messageId = msgLength + 1;
+                this.props.sendAnswer(messageId, 'Luke', "I'm not your son, just bot", this.props.chatId)
+            }, 500)
+        }
+    }
 
     
 
@@ -106,17 +105,19 @@ class Messages extends Component {
         let { messages } = this.props
         let MessagesArr = []
         Object.keys(messages).forEach(key => {
+            if (messages[key].chatId === this.props.chatId) {
             MessagesArr.push(<Message 
                 sender={ messages[key].user } 
                 text={ messages[key].text }
                 key={ key }
             />)
+            }
         })
         
         return (
             <>
             <Row className="rowContent">
-            <Col sm={{ size: 7, offset: 2 }} md={{ size: 6, offset: 2 }} lg={{ size: 6, offset: 3 }} ><div class="scrollContainer"><div class="MessagesContainer">{ MessagesArr }</div></div></Col>
+            <Col sm={{ size: 7, offset: 2 }} md={{ size: 6, offset: 2 }} lg={{ size: 6, offset: 3 }} ><div className="scrollContainer"><div className="MessagesContainer">{ MessagesArr }</div></div></Col>
             <Col sm="3"  md="4" lg="3"><ChatList/></Col>
         </Row>
         <Row className="rowSendButton">
@@ -125,7 +126,7 @@ class Messages extends Component {
             <InputGroup>
                 <Input onChange = {this.handleChange} value={this.state.msg}/>
                 <InputGroupAddon addonType="append" >
-                <Button color="warning" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Отправить</Button>
+                <Button color="warning" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader', this.props.chatId) }>Отправить</Button>
                 </InputGroupAddon>
                 </InputGroup>
             </Col>
