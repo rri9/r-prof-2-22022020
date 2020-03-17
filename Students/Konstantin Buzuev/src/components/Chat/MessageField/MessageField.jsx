@@ -1,11 +1,18 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 // REDUX
+import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
+// ACTIONS
+import { loadMessages } from "../../../store/actions/chat_actions.js";
 // MY COMPONENTS
 import Message from "../Message/Message.jsx";
 // STYLES
 import { withStyles } from "@material-ui/core/styles";
 import { Box, Fab, TextField, GridList, Grid } from "@material-ui/core";
+// MATERIAL
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 const useStyles = theme => ({
   root: {
     display: "flex",
@@ -22,17 +29,27 @@ const useStyles = theme => ({
   }
 });
 class Messages extends Component {
+  static propTypes = {
+    isMessageLoading: PropTypes.bool.isRequired,
+    messages: PropTypes.array.isRequired
+  };
   constructor(props) {
     super(props);
     this.messagesEndRef = React.createRef();
   }
   scrollToBottom = () => {
-    this.messagesEndRef.current.lastElementChild.scrollIntoView({
-      behavior: "smooth"
-    });
+    if (
+      this.messagesEndRef !== undefined &&
+      this.messagesEndRef.current !== null &&
+      this.messagesEndRef.current.lastElementChild !== null
+    )
+      this.messagesEndRef.current.lastElementChild.scrollIntoView({
+        behavior: "smooth"
+      });
   };
 
   componentDidMount() {
+    if (this.props.isMessageLoading) this.props.loadMessages();
     this.scrollToBottom();
   }
 
@@ -40,6 +57,9 @@ class Messages extends Component {
     this.scrollToBottom();
   }
   render() {
+    if (this.props.isMessageLoading) {
+      return <CircularProgress />;
+    }
     const { classes } = this.props;
     let { messages } = this.props;
     let Messages = [];
@@ -71,11 +91,22 @@ const mapStateToProps = ({ messageReducer }, ownProps) => {
   const { messages } = messageReducer;
   let chatMessages = [];
   messages.forEach(message => {
-    if (message.chatID === chatID) chatMessages.push(message);
+    message.chatID = Number(message.chatID);
   });
+  messages.forEach(message => {
+    if (+message.chatID === chatID) chatMessages.push(message);
+  });
+
   return {
-    messages: chatMessages
+    messages: chatMessages,
+    isMessageLoading: messageReducer.isMessageLoading
   };
 };
 
-export default connect(mapStateToProps)(withStyles(useStyles)(Messages));
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ loadMessages }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(useStyles)(Messages));

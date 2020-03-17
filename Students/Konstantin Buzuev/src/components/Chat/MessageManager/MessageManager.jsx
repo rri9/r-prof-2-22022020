@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactDom from "react-dom";
+import PropTypes from "prop-types";
 // ACTIONS
 import { sendMessage } from "../../../store/actions/chat_actions.js";
 // REDUX
@@ -19,6 +19,10 @@ const useStyles = theme => ({
   }
 });
 class MessageManager extends Component {
+  static propTypes = {
+    currentID: PropTypes.number.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -40,11 +44,7 @@ class MessageManager extends Component {
     else this.handleSendMessage(this.state.message, this.props.user);
   };
 
-  scrollToBottom = () => {
-    this.messagesEndRef.current.lastElementChild.scrollIntoView({
-      behavior: "smooth"
-    });
-  };
+  componentDidMount() {}
 
   render() {
     const { classes } = this.props;
@@ -85,15 +85,8 @@ class MessageManager extends Component {
   }
 }
 
-const mapStateToProps = ({ messageReducer }, ownProps) => {
-  const { chatID } = ownProps;
-  const { messages } = messageReducer;
-  let chatMessages = [];
-  messages.forEach(message => {
-    if (message.chatID === chatID) chatMessages.push(message);
-  });
+const mapStateToProps = ({ messageReducer }) => {
   return {
-    messages: chatMessages,
     currentID: messageReducer.messages.length + 1
   };
 };
