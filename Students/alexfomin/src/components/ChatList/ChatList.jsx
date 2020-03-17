@@ -5,7 +5,7 @@ import { ListGroup, ListGroupItem,  InputGroup, InputGroupAddon, Button, Input }
 import './style.css';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { addChat } from '../../store/actions/chats_actions.js'
+import { addChat, delChat } from '../../store/actions/chats_actions.js'
 import PropTypes from 'prop-types'
 import { push } from 'connected-react-router'
 
@@ -22,6 +22,10 @@ import { push } from 'connected-react-router'
         handleAddChat = () => {
             this.props.addChat(this.state.title)
             this.setState({ input: '' })
+        }
+
+        handleDelChat = (chatId) => {
+            this.props.delChat(chatId)
         }
 
         handleNavigate = (link) => {
@@ -41,7 +45,7 @@ import { push } from 'connected-react-router'
         
         Object.keys(chats).forEach(key => {
             chatsArray.push(
-                <ListGroupItem onClick = { () => this.handleNavigate(`/chat/${key}`) }>{chats[key].title}</ListGroupItem>
+                <ListGroupItem onClick = { () => this.handleNavigate(`/chat/${key}`) }>{chats[key].title}<Button close onClick = { this.handleDelChat(key) }/></ListGroupItem>
             )
         })
 
@@ -54,7 +58,7 @@ import { push } from 'connected-react-router'
         <InputGroup>
         <Input placeholder="название чата" onChange = {this.handleChangeChatName} value={this.state.title} />
         <InputGroupAddon addonType="append">
-        <Button color="info" onClick = { () => this.handleAddChat }>+</Button>
+        <Button color="info" onClick = { this.handleAddChat }>+</Button>
         </InputGroupAddon>
       </InputGroup>
         </ListGroupItem>
@@ -71,6 +75,6 @@ const mapStateToProps = ({ chatsReducer }) => ({
 })
 
 
-const mapDispatchToProps = dispatch => bindActionCreators( { addChat, push }, dispatch )
+const mapDispatchToProps = dispatch => bindActionCreators( { addChat, delChat, push }, dispatch )
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList)
