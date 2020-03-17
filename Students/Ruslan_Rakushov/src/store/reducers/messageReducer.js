@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { SEND_MESSAGE, DEL_MESSAGE } from '../actions/messageActions.js';
+import { SEND_MESSAGE, DEL_MESSAGE, SET_SEARCH_TEXT } from '../actions/messageActions.js';
 
 const initialStore = {
   msgs: {
@@ -28,7 +28,8 @@ const initialStore = {
       text: 'Hello, human!',
       chatId: 2,
     }
-  }
+  },
+  searchText: '',
 };
 
 export default function messageReducer(store = initialStore, action) {
@@ -44,6 +45,11 @@ export default function messageReducer(store = initialStore, action) {
     case DEL_MESSAGE:
       return update(store, {
         msgs: { $unset: [action.msgId] }
+      });
+    
+    case SET_SEARCH_TEXT:
+      return update(store, {
+        searchText: { $set: [action.str] }
       });
   
     default:

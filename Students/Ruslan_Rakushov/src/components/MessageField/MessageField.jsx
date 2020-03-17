@@ -1,5 +1,3 @@
-//TODO Поиск по сообщениям
-
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
@@ -110,6 +108,19 @@ class MessageField extends Component {
     return msgsArr;
   }
 
+  getFilteredMsgsInChat(chatId, msgsObj, filterStr) {
+    const regexp = new RegExp(filterStr);
+    const msgsArr = [];
+    for (let i in msgsObj) {
+      if (msgsObj.hasOwnProperty(i)
+        && msgsObj[i].chatId === chatId
+        && regexp.test(msgsObj[i].text)) {
+        msgsArr.push({...msgsObj[i], id: i});
+      }
+    }
+    return msgsArr;
+  }
+
   //hooks
   componentDidMount() {
     this.scrollToBottom();
@@ -123,8 +134,11 @@ class MessageField extends Component {
 
   render() {
     const { classes } = this.props;
-    const { msgs, currentChatId } = this.props;
-    const currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs);
+    const { msgs, currentChatId, searchText } = this.props;
+    let currentChatMsgs = [];
+    searchText === '' ?
+      currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs) :
+      currentChatMsgs = this.getFilteredMsgsInChat(currentChatId, msgs, searchText);
     let MessagesArr = [];
     if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
@@ -158,7 +172,6 @@ class MessageField extends Component {
           <Tooltip title="Отправить">
             <IconButton 
               className={classes.sendBtn}
-              // size="small"
               name="sendMsgUI"
               onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}>
                 <SendOutlinedIcon />
@@ -172,6 +185,7 @@ class MessageField extends Component {
 
 const mapStateToProps = ({ messageReducer, chatReducer }) => ({
   msgs: messageReducer.msgs,
+  searchText: messageReducer.searchText,
   chats: chatReducer.chats,
   currentChatId: chatReducer.currentChatId,
 });

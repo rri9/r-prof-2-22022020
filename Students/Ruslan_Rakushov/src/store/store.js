@@ -1,3 +1,5 @@
+//TODO Не сохранять searchText - см. nested persists
+
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
