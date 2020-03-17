@@ -55,10 +55,21 @@ class Messages extends Component {
 
    sendMsg = ( text, sender ) => {
       let { chatId, messages, sendMessage } = this.props
-      let chatMessages = messages[chatId]
-      const messageId = Object.keys(chatMessages).length + 1
+      // let chatMessages = messages[chatId]
+      // const messageId = Object.keys(chatMessages).length + 1
 
-      sendMessage(chatId, messageId, sender, text)
+      // sendMessage(chatId, messageId, sender, text)
+
+      let newMsg = {
+         sender: sender,
+         text: text,
+         chatId: chatId
+      }
+
+      fetch('/api/message', {
+         method: 'POST', headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(newMsg)
+      })
    }
 
    handleSendMsg = (text, sender) => {
@@ -73,6 +84,17 @@ class Messages extends Component {
          this.sendMsg(this.state.msg, this.state.usr)
          this.setState({ msg: ''})
       }
+   }
+
+   componentDidMount () {
+      let messages = null
+
+      fetch('/api/messages')
+         .then(data => data.json())
+         .then(data => messages = data)
+         .finally(() => {
+            console.log(messages)
+         })
    }
 
    componentDidUpdate () {
