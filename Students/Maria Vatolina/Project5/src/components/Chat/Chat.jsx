@@ -8,7 +8,6 @@ import { IconButton, Input, List,
          ListItemText, 
          Avatar, 
          Badge, 
-         Divider,
          Box } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles'
 import { withStyles } from '@material-ui/core/styles'
@@ -61,20 +60,20 @@ class Chat extends React.Component {
       }
    }
    render() {
-      const { classes, chats, title } = this.props 
+      const { classes, chats, title, chatId } = this.props 
 
       let chatsArray = []
 
-      Object.keys(chats).forEach(messageId => {
+      Object.keys(chats).forEach(chatId => {
          chatsArray.push(
-         <Link to={`/chat/${messageId}`}>
+         <Link to={`/chat/${chatId}`}>
             <ListItem divider={ true } button className={classes.item}>
                <ListItemAvatar>
                   <Badge color="secondary" overlap="circle" variant="dot">
-                     <Avatar className={classes.avatar}> </Avatar>
+                     <Avatar className={classes.avatar}>  </Avatar>
                   </Badge>
                </ListItemAvatar>
-               <ListItemText primary={chats[messageId].title} secondary="message" />
+               <ListItemText primary={chats[chatId].title} secondary={ chats[chatId].message } />
             </ListItem>
          </Link>)
       })
@@ -89,7 +88,7 @@ class Chat extends React.Component {
                </IconButton >
                
                <Input name="input"
-                  key="textField"
+                  key={ chats }
                   placeholder="Add new chat"
                   onChange = { this.handleChange }
                   value = { this.state.input }
@@ -102,8 +101,8 @@ class Chat extends React.Component {
 }
 {/* <Divider variant="inset" component="li" /> */}
 
-const mapStateToProps = ({ chatsReducer }) => ({
-   chats: chatsReducer.chats
+const mapStateToProps = ({ chatReducer }) => ({
+   chats: chatReducer.chats
 })
 const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch)
 

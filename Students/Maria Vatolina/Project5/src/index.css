@@ -1,13 +1,14 @@
 body {
-   height: 100vh;
+   min-height: 100vh;
    margin: 0;
    padding: 0;
    box-sizing: border-box;
    font-family: 'Roboto', sans-serif;
    background-color: #abe0e47e;
 }
-.container {
-   width: 80%;
-   margin: 0 auto;
-   height: 100%;
-} 
+a {
+   text-decoration: none;
+}
+a span {
+   color: white;
+}

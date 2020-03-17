@@ -10,11 +10,11 @@ const useStyles = makeStyles(theme => ({
        flexDirection: 'column',
        color: theme.palette.text.primary,
     },
-    myAnswer: {
+    myText: {
        alignSelf: 'flex-end',
        backgroundColor: theme.palette.primary.main,
     },
-    botAnswer: {
+    answer: {
        alignSelf: 'flex-start',
        backgroundColor: theme.palette.primary.light,
     }
@@ -23,10 +23,10 @@ const useStyles = makeStyles(theme => ({
 let msg = (props) => {
     const classes = useStyles()
 
-    let { sender, text} = props
+    let { sender, text, chatId, chats} = props
     sender ? sender = sender : sender = 'Luke'
 
-   let boxView = props.sender ? classes.myAnswer : classes.botAnswer
+   let boxView = props.sender ? classes.myText : classes.answer
 
     return (
         <Grid container wrap="nowrap" className={ classes.root }>

@@ -3,39 +3,30 @@ import { ADD_CHAT } from '../actions/chat_actions.js'
 
 let initialStore = {
     chats: {
-        1: {
-            title: 'Dart', 
-            messagesList: [] 
-        },
-        2: {
-            title: 'Support', 
-            messagesList: [] 
-        },
-        3: {
-            title: 'Friend', 
-            messagesList: [] 
-        }
+        1: { title: "Darth Vader"},
+        2: { title: "Support"},
+        3: { title: "Friend"},
     }
 }
 
 export default function chatReducer(store = initialStore, action) {
     switch(action.type) {
         case ADD_CHAT: {
-            let chatId = Object.keys(store.chats).length + 1;
+            console.log(store.chats)
+            // let chatId = Object.keys(store.chats).length + 1;
 
             return update(store, {
                 chats: { 
                     $merge: { 
-                        [chatId]: {
-                            title: action.sender, 
-                            messagesList: [] 
+                        [action.chatId]: {
+                            title: action.title 
+                            // messagesList: [] 
                         } 
                     } 
                 }
             });
         }
-        default: {
+        default: 
             return store
-        }
     }    
 }

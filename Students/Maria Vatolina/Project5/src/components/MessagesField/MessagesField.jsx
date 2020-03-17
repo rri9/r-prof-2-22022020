@@ -5,7 +5,7 @@ import { Input, IconButton, Box } from '@material-ui/core'
 import { Send, SentimentVerySatisfiedRounded, AttachmentRounded } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
 
-import Navbar from '../MessagesNavbar/MessagesNavbar.jsx'
+import Header from '../Header/Header.jsx'
 import Message from '../Message/Message.jsx'
 
 //ACTIONS
@@ -31,6 +31,7 @@ const useStyles = (theme => ({
       padding: theme.spacing(2)
    },
    sendForm: {
+      maxHeight: '60px',
       position: 'static',
       display: 'flex',
       justifyContent: 'space-between',
@@ -42,38 +43,42 @@ class Messages extends Component {
    constructor(props) {
       super(props)
       this.state = {
+         usr: 'Darth Vader',
          msg: '',
       }   
    }
 
    sendMessage = (text, sender) => {
-      const { messages } = this.props
-      const messageId = Object.keys(messages).length + 1;
-      this.props.sendMessage(messageId, sender, text)
-      
+      // console.log('props:', this.props)
+      let { chatId, messages, sendMessage } = this.props
+      let chatMessages = messages[chatId]
+      const messageId = Object.keys(chatMessages).length + 1;
+
+      sendMessage(chatId, messageId, sender, text)
+      // console.log('chatMessages:', messageId)
       this.scrollToBottom()   
    }
 
-   handleSendMessage = (message, sender) => {
+   handleSendMessage = (text, sender) => {
       this.setState({ msg: '' })
-      if (sender == 'Darth Vader') {
-         this.sendMessage (message, sender) 
-      }
+      if (sender == 'Darth Vader')
+         this.sendMessage (text, sender) 
    }
 
    handleChange = (event) => {
          if (event.keyCode !== 13 ) {
            this.setState({ msg: event.target.value })           
          } else {
-            this.sendMessage(this.state.msg, this.props.usr)
+            this.sendMessage(this.state.msg, this.state.usr)
             this.setState({ msg: ''})
          }
    }
 
-   componentDidUpdate () {
-      const { messages } = this.props;
-
-      if (Object.keys(messages).length % 2 === 1) {
+   componentDidUpdate (prevProps) {
+      const { messages, chatId } = this.props;
+      let chatMessages = messages[chatId]
+      if (Object.keys(prevProps.messages).length < Object.keys(chatMessages).length && 
+      chatMessages[Object.keys(chatMessages).length].user === this.state.usr) {
          setTimeout(() => {
          this.sendMessage('Please, wait...');
          }, 500)
@@ -92,21 +97,25 @@ class Messages extends Component {
    }
 
    render() {
-      let usr = 'Darth Vader'
-      let { messages, classes } = this.props
-      let MessagesArr =[]
+      let { messages, classes, chatId, chats } = this.props
+      let chatMessages = messages[chatId]
 
-      Object.keys(messages).forEach(messageId => {
-         MessagesArr.push( <Message 
-            sender={ messages[messageId].user } 
-            text={ messages[messageId].text } 
+      let MessagesArr = []
+
+      Object.keys(chatMessages).forEach(messageId => {
+         MessagesArr.push( 
+            <Message 
+            sender={ chatMessages[messageId].user } 
+            text={ chatMessages[messageId].text } 
             key={ messageId }
+            chatId={ chatId }
+            chats={ chats }
          />)
       })
 
       return (
          <div  className={classes.root}>
-         <Navbar title={ this.props.chatId }/>
+         
          <Box className={classes.msgBlock}>
             <Box className={classes.msgList} ref={this.mesagesRef}>
                { MessagesArr }
@@ -120,7 +129,7 @@ class Messages extends Component {
                   onKeyUp={ this.handleChange }
                   value={ this.state.msg }/>
             </Box>
-            <IconButton aria-label="send" onClick={ () => this.handleSendMessage(this.state.msg, usr) }>
+            <IconButton aria-label="send" onClick={ () => this.handleSendMessage(this.state.msg, this.state.usr) }>
                <Send />
             </IconButton>
             <IconButton aria-label="smile">

@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import ReactDom from 'react-dom'
 import PropTypes from 'prop-types'
 
-import './style.css'; 
 import { Box, AppBar, Toolbar, IconButton, InputBase  } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { ForumRounded, AccountCircleRounded, Settings } from '@material-ui/icons/'
 import SearchIcon from '@material-ui/icons/Search'
 
 import ChatList from '../Chat/Chat.jsx'
+import Footer from '../ChatFooter/ChatFooter.jsx'
 
 const useStyles = (theme => ({
    root: {
@@ -17,17 +17,6 @@ const useStyles = (theme => ({
       justifyContent: 'flex-start',
       borderRight: '4px solid rgba(0, 0, 0, .1)',
    },
-   appBar: {
-      width: '100%',
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.paper,
-      boxShadow: 'none',
-      borderTop: '1px solid',
-      borderColor: theme.palette.primary.main
-    },
-    toolbar: {
-      justifyContent: 'space-around'
-    },
     grow: {
       flexGrow: 1,
       width: '100%',
@@ -58,11 +47,14 @@ class Chats extends Component {
       super(props)
    }
    static propTypes = {
-      chatId: PropTypes.number
+      chatId: PropTypes.number,
+      chats: PropTypes.object,
+      messages: PropTypes.object,
+      classes: PropTypes.object
    }
-   static deafultProps = {
-      chatId: 1
-   }
+   // static deafultProps = {
+   //    chatId: 1
+   // }
 
    render() {
 
@@ -89,19 +81,7 @@ class Chats extends Component {
             </Box>
             
             {/* chatFooter */}
-            <AppBar position="static" color="primary" className={classes.appBar}>
-               <Toolbar className={classes.toolbar}>
-               <IconButton color="secondary">
-                  <ForumRounded />
-               </IconButton>
-               <IconButton color="inherit">
-                  <AccountCircleRounded />
-               </IconButton>
-               <IconButton color="inherit">
-                  <Settings />
-               </IconButton>
-               </Toolbar>
-            </AppBar>
+            <Footer />
          </Box>         
       )
    }
