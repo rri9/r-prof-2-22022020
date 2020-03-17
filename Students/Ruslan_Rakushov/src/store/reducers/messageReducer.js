@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { SEND_MESSAGE } from '../actions/messageActions.js';
+import { SEND_MESSAGE, DEL_MESSAGE, SET_SEARCH_TEXT } from '../actions/messageActions.js';
 
 const initialStore = {
   msgs: {
@@ -28,16 +28,28 @@ const initialStore = {
       text: 'Hello, human!',
       chatId: 2,
     }
-  }
+  },
+  searchText: '',
 };
 
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE:
+      const newId = +Object.keys(store.msgs)[Object.keys(store.msgs).length-1] + 1;
       return update(store, {
         msgs: { $merge: {
-            [action.msgId]: { sender: action.sender, text: action.text, chatId: action.chatId }
+            [newId]: { sender: action.sender, text: action.text, chatId: action.chatId }
         }}
+      });
+
+    case DEL_MESSAGE:
+      return update(store, {
+        msgs: { $unset: [action.msgId] }
+      });
+    
+    case SET_SEARCH_TEXT:
+      return update(store, {
+        searchText: { $set: [action.str] }
       });
   
     default:

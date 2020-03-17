@@ -5,9 +5,9 @@ import {
 
 const initialStore = {
   chats: {
-    1: { title: 'Chat 1', msgsCount: 4 },
-    2: { title: 'Chat 2', msgsCount: 1 },
-    3: { title: 'Chat 3', msgsCount: 0 },
+    1: { title: 'Chat 1' },
+    2: { title: 'Chat 2' },
+    3: { title: 'Chat 3' },
   },
   chatWithNewMsg: null,
   currentChatId: 1,
