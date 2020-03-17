@@ -34,9 +34,10 @@ const initialStore = {
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE:
+      const newId = +Object.keys(store.msgs)[Object.keys(store.msgs).length-1] + 1;
       return update(store, {
         msgs: { $merge: {
-            [action.msgId]: { sender: action.sender, text: action.text, chatId: action.chatId }
+            [newId]: { sender: action.sender, text: action.text, chatId: action.chatId }
         }}
       });
 

@@ -1,5 +1,4 @@
 //TODO Поиск по сообщениям
-//TODO Удаление сообщение
 
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
@@ -60,9 +59,7 @@ class MessageField extends Component {
   //methods
   handleSendMsg = (message, sender) => {
     const {msgs, currentChatId} = this.props;
-    const msgId = Object.keys(msgs).length + 1;
-    //FIX Выпилить расчет id в reducer - это дело хранилища/апи/бд
-    this.props.sendMessage(msgId, sender, message, currentChatId);
+    this.props.sendMessage(sender, message, currentChatId);
     this.setState({
       msgText: '',
     });
