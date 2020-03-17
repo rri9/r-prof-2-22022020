@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "typeface-roboto";
-import { Provider } from "react-redux";
+
 import {
   ThemeProvider,
   createMuiTheme,
@@ -10,54 +10,60 @@ import {
   Grid,
   Fab
 } from "@material-ui/core";
+import "./style.css";
 
-import Messages from "../MessagesField/MessagesField.jsx";
+import Messages from "../Chat/MessageField/MessageField.jsx";
+import MessageManager from "../Chat/MessageManager/MessageManager.jsx";
+import Chat from "../Chat/Chat.jsx";
 import Header from "../Header/Header.jsx";
-import ChatRooms from "../ChatRooms/ChatRooms.jsx";
-import initStore from "../../store/store.js";
+import Rooms from "../Rooms/Rooms.jsx";
 
 const theme = createMuiTheme({
   typography: {
     fontFamily: ["Roboto", "Arial"].join(",")
+  },
+  overrides: {
+    MuiContainer: {
+      root: {
+        height: "100vh",
+        overflow: "hidden"
+      }
+    }
   }
 });
 
 export default class Layout extends React.Component {
   static propTypes = {
-    chatId: PropTypes.number,
+    chatID: PropTypes.number,
     user: PropTypes.string
   };
   static defaultProps = {
-    chatId: 1,
+    chatID: 1,
     user: "Darth Vader"
   };
   render() {
     return (
-      <Provider store={initStore()}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline></CssBaseline>
-          <Container maxWidth="lg">
-            <Header chatId={this.props.chatId} />
-            <Grid
-              container
-              direction="row"
-              justify="space-around"
-              align-items="flex-start"
-              spacing={1}
-            >
-              <Grid item xs={3}>
-                <ChatRooms />
-              </Grid>
-              <Grid item xs={9}>
-                <Messages
-                  chatId={Number(this.props.chatId)}
-                  user={this.props.user}
-                />
-              </Grid>
+      <ThemeProvider theme={theme}>
+        <CssBaseline></CssBaseline>
+        <Container maxWidth="lg">
+          <Header chatID={this.props.chatID} />
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            align-items="flex-start"
+            spacing={1}
+            className="wrapperGrid"
+          >
+            <Grid item xs={3} className="panel">
+              <Rooms />
             </Grid>
-          </Container>
-        </ThemeProvider>
-      </Provider>
+            <Grid item xs={9} className="panel">
+              <Chat chatID={Number(this.props.chatID)} user={this.props.user} />
+            </Grid>
+          </Grid>
+        </Container>
+      </ThemeProvider>
     );
   }
 }

@@ -1,36 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import Router from './router/router.jsx';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import { PersistGate } from 'redux-persist/integration/react';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import initStore, { history } from './store/store.js';
 
-import Layout from './components/Layout/Layout.jsx';
-
+const { store, persistor } = initStore();
 
 const theme = createMuiTheme({
   //TODO add some theme styles
 });
 
-const msgs = [
-  {
-    sender: 'Me',
-    text: 'Hello!',
-  },
-  {
-    sender: null,
-    text: null,
-  },
-  {
-    sender: 'Me',
-    text: 'How are You?',
-  },
-  {
-    sender: null,
-    text: null,
-  },
-];
-
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <Layout msgs={msgs} />
-  </MuiThemeProvider>,
-  document.getElementById('app'),
+  <Provider store={ store } >
+    <PersistGate loading= {null} persistor={persistor}>
+      <ConnectedRouter history={history}>
+        <MuiThemeProvider theme={theme}>
+          <Router />
+        </MuiThemeProvider>
+      </ConnectedRouter>
+    </PersistGate>
+  </Provider>,
+    document.getElementById('app'),
 );

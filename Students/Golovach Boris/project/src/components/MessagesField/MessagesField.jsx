@@ -3,12 +3,9 @@ import ReactDom from 'react-dom';
 
 import Message from '../Message/Message.jsx'
 
-//
+//material-ui
+import { TextField, FloatingActionButton } from 'material-ui';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-//
 
 //actions
 import { sendMessage } from '../../store/actions/messages_actions.js'
@@ -26,15 +23,16 @@ class Messages extends Component {
     }
     //methods
     sendMessage = (text, sender) => {
-        const { messages } = this.props
+        const { chatId } = this.props
+        const messages = this.props.messages[chatId]
         const messageId = Object.keys(messages).length + 1;
 
-        this.props.sendMessage(messageId, sender, text)
+        this.props.sendMessage(messageId, sender, text, chatId)
     }
 
     handleSendMessage = (message, sender) => {
         this.setState({ msg: '' })
-        if (message) {
+        if (sender == 'Darth Vader') {
             this.sendMessage(message, sender)
         }
     }
@@ -42,38 +40,29 @@ class Messages extends Component {
     handleChange = (evt) => {
         if (evt.keyCode !== 13) {
             this.setState ({msg: evt.target.value})
-        }else if(evt.keyCode == 13){
-            this.handleSendMessage(this.state.msg, this.props.usr)
         }
+            //this.sendMessage(evt)
     }
-
-    componentDidUpdate () {
-        if(Object.keys(this.props.messages).length % 2 === 1){
-            setTimeout(() => {
-                this.sendMessage('NOOOOOOOOOOOOOO...', 'Luke')
-            }, 500);
-        }
-    }
-
+    
     render() {
-        let { usr } = this.props
-        let { messages } = this.props
-
+        //let user = this.props.usr
+        let usr = 'Darth Vader'
+        let { messages, chatId } = this.props
         let MessagesArr = []
-        
-        Object.keys(messages).forEach(key => {
+        let numberChat = messages[chatId]
+        Object.keys(numberChat).forEach(key => {
             MessagesArr.push(<Message 
-                sender={ messages[key].user } 
-                text={ messages[key].text }
+                sender={ numberChat[key].user } 
+                text={ numberChat[key].text }
                 key={ key }
             />)
         })
-
+ 
         return (
             <div className="container-fluid align-items-center">
-                    <div className="col-md-3">
+                <div className="col-md-3">
                     <div className="header">
-                        <h2>ReactGram</h2>
+                        <h2>ReactGram &copy;</h2>
                         <p>Hello { usr }!</p>
                     </div>
                     <div className="messagesBlock">
@@ -87,7 +76,10 @@ class Messages extends Component {
                         onKeyUp = { this.handleChange }
                         value = { this.state.msg }
                     />
-                    <Button fullWidth variant="contained" color="primary" onClick = { () => this.handleSendMessage (this.state.msg, 'Darth Vader') }>Send</Button>
+                    <Button fullWidth variant="contained" color="primary" onClick = { 
+                            () => this.handleSendMessage (this.state.msg, 'Darth Vader') 
+                        }>Send
+                    </Button>
                 </div>
             </div>
         )

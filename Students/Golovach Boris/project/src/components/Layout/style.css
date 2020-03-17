@@ -1,0 +1,14 @@
+.messageBlock{
+    width: 500px;
+}
+.chats_And_MessageBlock{
+    display: flex;
+    justify-content: center;
+}
+.container{
+    max-width: 850px;
+    margin: 0 auto;
+}
+/* .chatsListBlock{
+
+} */

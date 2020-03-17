@@ -15,7 +15,8 @@ const useStyles = theme => ({
   root: {
     flexGrow: 1,
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    maxHeight: "64px"
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -68,10 +69,10 @@ const useStyles = theme => ({
 
 class Header extends React.Component {
   static propTypes = {
-    chatId: PropTypes.number
+    chatID: PropTypes.number
   };
   static defaultProps = {
-    chatId: 1
+    chatID: 1
   };
   render() {
     const { classes } = this.props;
@@ -89,7 +90,7 @@ class Header extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              React ChatRoom {this.props.chatId}
+              React ChatRoom {this.props.chatID}
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
