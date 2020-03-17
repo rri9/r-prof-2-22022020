@@ -30,14 +30,11 @@ const useStyles = (theme => ({
 class Header extends Component {
   static propTypes = {
     chats: PropTypes.object.isRequired,
-    chatId: PropTypes.number.isRequired,
-  };
-  static defaultProps = {
-    chatId: 1,
+    currentChatId: PropTypes.number.isRequired,
   };
 
   render() {
-    const { classes, chats, chatId } = this.props;
+    const { classes, chats, currentChatId } = this.props;
     return (
       <div className={classes.root}>
         <AppBar className={classes.appbar}>
@@ -46,7 +43,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title}>
-              ReactGram &copy; {chats[chatId].title}
+              ReactGram &copy; {chats[currentChatId].title}
             </Typography>
             <div className={classes.rightMenu}>
               <IconButton aria-label="notifications" color="inherit">
@@ -67,6 +64,7 @@ class Header extends Component {
 
 const mapStateToProps = ({ chatReducer }) => ({
   chats: chatReducer.chats,
+  currentChatId: chatReducer.currentChatId,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);

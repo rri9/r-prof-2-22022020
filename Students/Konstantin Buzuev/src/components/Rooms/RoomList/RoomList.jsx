@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 // REDUX
 import connect from "react-redux/es/connect/connect";
 
+import { push } from "connected-react-router";
 import { Link } from "react-router-dom";
 function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
@@ -32,6 +33,7 @@ const useStyles = theme => ({
 });
 // MY COMPONENTS
 import { chatTypes } from "../dictionary.jsx";
+import { bindActionCreators } from "redux";
 function chatTypeToComponent(type) {
   let result = "";
   chatTypes.forEach(el => {
@@ -43,6 +45,11 @@ function chatTypeToComponent(type) {
 }
 
 class RoomList extends React.Component {
+  static propTypes = {
+    chats: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.chatsEndRef = React.createRef();
@@ -61,23 +68,25 @@ class RoomList extends React.Component {
     this.scrollToBottom();
   }
 
+  handleNavigate = link => {
+    this.props.push(link);
+  };
+
   render() {
     const { classes } = this.props;
     const { chats } = this.props;
     let Chats = [];
     Object.keys(chats).forEach(key => {
       Chats.push(
-        <Link to={"/chat/" + key} key={key}>
-          <ListItem button>
-            <ListItemAvatar>
-              <Avatar>{chatTypeToComponent(chats[key].type)}</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={chats[key].name}
-              secondary={chats[key].description}
-            />
-          </ListItem>
-        </Link>
+        <ListItem button onClick={() => this.handleNavigate(`/chat/${key}`)}>
+          <ListItemAvatar>
+            <Avatar>{chatTypeToComponent(chats[key].type)}</Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={chats[key].name}
+            secondary={chats[key].description}
+          />
+        </ListItem>
       );
     });
     return (
@@ -93,5 +102,8 @@ const mapStateToProps = ({ chatReducer }) => {
     chats: chatReducer.chats
   };
 };
-
-export default connect(mapStateToProps)(withStyles(useStyles)(RoomList));
+const mapDispatchToProps = dispatch => bindActionCreators({ push }, dispatch);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(useStyles)(RoomList));

@@ -13,7 +13,7 @@ class Router extends React.Component {
         <Route
           exact
           path={"/chat/" + key}
-          render={() => <Layout user={this.props.user} chatID={key} />}
+          render={() => <Layout user={this.props.user} chatID={Number(key)} />}
         />
       );
     });

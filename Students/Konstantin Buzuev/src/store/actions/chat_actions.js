@@ -1,9 +1,9 @@
 export let SEND_MSG = "@@chat/SEND_MSG";
 
-export let sendMessage = (chatID, messageID, sender, text) => ({
+export let sendMessage = (messageID, chatID, sender, text) => ({
   type: SEND_MSG,
-  chatID: chatID,
   messageID: messageID,
+  chatID: chatID,
   sender: sender,
   text: text
 });
