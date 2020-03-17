@@ -1,8 +1,6 @@
 import update from 'immutability-helper';
 
-import {
-   SEND_MSG,
-} from '../actions/messages_actions.js';
+import { SEND_MSG } from '../actions/messages_actions.js';
 
 const initialStore = {
    messages: {
@@ -13,7 +11,7 @@ const initialStore = {
       },
       2: {
          user: null,
-         text: null,
+         text: 'Go away!',
          chatId: 1
       },
       3: {
