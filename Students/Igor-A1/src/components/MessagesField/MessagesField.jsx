@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
+//import ReactDom from 'react-dom';
+
+import { sendMessage } from "../../store/actions/messages_actions";
 
 import
 { Box,
@@ -34,12 +36,10 @@ const useStyles = (theme => ({
    }
 }));
 
-import botData from './botData.json';
-const randomBotData = () => Math.floor(Math.random() * botData.emoji.length);
-const randomBotEmoj = () => String.fromCodePoint(botData.emoji[randomBotData()]);
-const randomBotMsg = () => botData.msg[randomBotData()];
-const botPrefix = 'bot :: ';
-
+// import botData from './botData.json';
+// const randomBotData = () => Math.floor(Math.random() * botData.emoji.length);
+// const randomBotEmoj = () => String.fromCodePoint(botData.emoji[randomBotData()]);
+// const randomBotMsg = () => botData.msg[randomBotData()];
 const scrolledId = 'scrolled_msg';
 
 import { bindActionCreators } from "redux";
@@ -50,7 +50,6 @@ class Messages extends Component {
     static propTypes = {
       chatId: PropTypes.number.isRequired,
       chats: PropTypes.object.isRequired,
-      messages: PropTypes.object.isRequired,
       sendMessage: PropTypes.func.isRequired,
     };
     
@@ -58,42 +57,39 @@ class Messages extends Component {
         super(props);
         
         this.scrolledEl = null;
-        
+        //this.botPrefix = `${this.props.chats[this.props.chatId].bot} :: `;
+
         this.state = {
-          msgArray: [
-            {
-                user: 'Darth Vader',
-                text: 'Hallo'
-            },
-            {
-                user: `${botPrefix}${randomBotEmoj()}`,
-                text: randomBotMsg()
-            },
-            {
-                user: 'Darth Vader',
-                text: 'I am your father'
-            },
-            {
-                user: `${botPrefix}${randomBotEmoj()}`,
-                text: 'NOOOOOOOOO'
+          msgArray: this.props.chats[this.props.chatId].msgList.map((msg, index) => {
+            return {
+              msgId: index + 1,
+              sender: msg.sender || `${this.props.chats[this.props.chatId].bot}`,
+              text: msg.text || String.fromCodePoint(0x1F47D)
             }
-          ],
+          })
         };
     };
 
-    sendMessage = (e) => {
-        this.setState ({
-            msgArray: [...this.state.msgArray, {
-              user: this.props.user,
-              text: this.state.msg || ''
-            }],
-            msg: '' // clear input field
-        });
+    _sendMessage = (e) => {
+      this.props.sendMessage(
+        this.props.chatId,
+        this.state.msgArray.length + 2,
+        this.props.chats[this.props.chatId].user,
+        this.state.msg || ''
+      )
+      this.setState ({
+          msgArray: [...this.state.msgArray, {
+            msgId: this.state.msgArray.length + 2,
+            sender: this.props.chats[this.props.chatId].user,
+            text: this.state.msg || ''
+          }],
+          msg: '' // clear input field
+      });
     };
 
     handleChange = (e) => {
-        e.keyCode === 13 ? this.sendMessage(e)
-          : this.setState ({msg: e.target.value})
+      e.keyCode === 13 ? this._sendMessage(e)
+        : this.setState ({msg: e.target.value});
     };
     
     scrollToBottom = () => {
@@ -107,77 +103,80 @@ class Messages extends Component {
     };
     
     componentDidUpdate(prevProps, prevState) {
-        if(prevState.msgArray.length < this.state.msgArray.length
-          &&
-          this.state.msgArray.length % 2 === 1)
-          {
-              setTimeout(() => {
-                  this.setState ({
-                      msgArray: [...this.state.msgArray, 
-                        {
-                          user: `${botPrefix}${randomBotEmoj()}`,
-                          text: randomBotMsg() 
-                        }
-                      ],
-                      msg: ''
-                  });
-              }, 500)
-          };
-        
-        this.scrollToBottom();
+      // if(prevState.msgArray.length < this.state.msgArray.length
+        // &&
+        // this.state.msgArray.length % 2 === 1)
+        // {
+            // setTimeout(() => {
+                // this.setState ({
+                    // msgArray: [...this.state.msgArray, 
+                      // {
+                        // msgId: this.state.msgArray.length + 2,
+                        // sender: `${this.botPrefix}${randomBotEmoj()}`,
+                        // text: randomBotMsg() 
+                      // }
+                    // ],
+                    // msg: ''
+                // });
+            // }, 500)
+        // };
+      
+      this.scrollToBottom();
     }
     
     render() {
-        let { user, classes } = this.props;
-        
-        const placeholder = `Новое сообщение ...`;
-        
-        let MessagesArr = this.state.msgArray.map( (message, index, self) => 
-          <Message
-            sender={ message.user }
-            text={ message.text }
-            bot={ message.user.slice(0, botPrefix.length) === botPrefix } 
-            self={ message.user === user }
-            key={ index }
-          />
-        );
-        
-        return (
-            <div className="msgs-body">
-                
-                <Box ref="messageList" className={ `msgs-list ${classes.root}` }>
-                    { MessagesArr }
-                    <div id={ scrolledId } />
-                </Box>
-                
-                <Divider variant="middle" />
-                    
-                <Box className={ `msgs-foot ${classes.foot}` }>
-                        
-                  <TextField
-                    className="msg-input"
-                    autoFocus
-                    color="secondary"
-                    variant = "filled"
-                    placeholder = { placeholder }
-                    onChange = { this.handleChange }
-                    onKeyUp = { this.handleChange }
-                    value = { this.state.msg || '' }
-                    InputProps={{ className: classes.input }}
-                  />
-                  
-                  <Fab
-                    className={classes.hovered}
-                    color="primary"
-                    aria-label="add"
-                    onClick = { this.sendMessage }
-                  >
-                    <Icon>send</Icon>
-                  </Fab>
+      let { sender } = this.props.chats[this.props.chatId],
+        { classes } = this.props;
 
-                </Box>
-            </div>
-        );
+        const placeholder = `Новое сообщение ...`;
+      
+      let MessagesArr = this.state.msgArray.map( message =>
+        <Message
+          sender={ message.sender }
+          text={ message.text }
+          //bot={ message.sender.slice(0, this.botPrefix.length) === this.botPrefix } 
+          bot={ message.sender.slice(0, this.props.chats[this.props.chatId].bot.length) === this.props.chats[this.props.chatId].bot } 
+          self={ message.sender === this.props.chats[this.props.chatId].user }
+          key={ message.msgId }
+        />
+      );
+      
+      return (
+          <div className="msgs-body">
+              
+              <Box ref="messageList" className={ `msgs-list ${classes.root}` }>
+                  { MessagesArr }
+                  <div id={ scrolledId } />
+              </Box>
+              
+              <Divider variant="middle" />
+                  
+              <Box className={ `msgs-foot ${classes.foot}` }>
+                      
+                <TextField
+                  className="msg-input"
+                  autoFocus
+                  color="secondary"
+                  variant = "filled"
+                  placeholder = { placeholder }
+                  onChange = { this.handleChange }
+                  onKeyUp = { this.handleChange }
+                  value = { this.state.msg || '' }
+                  InputProps={{ className: classes.input }}
+                />
+                
+                <Fab
+                  className={classes.hovered}
+                  color="primary"
+                  aria-label="add"
+                  onClick = { this._sendMessage }
+                >
+                  <Icon>send</Icon>
+                </Fab>
+
+              </Box>
+          </div>
+      );
     };
 };
 
@@ -186,7 +185,7 @@ const mapStateToProps = ({ chatsReducer }) => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({}, dispatch);
+  bindActionCreators({ sendMessage }, dispatch);
 
 export default
   connect(mapStateToProps, mapDispatchToProps)

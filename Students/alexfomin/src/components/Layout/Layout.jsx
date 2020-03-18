@@ -38,7 +38,7 @@ class Layout extends React.Component {
             <Row>
                 <Col sm={{ size: 7, offset: 2 }} md={{ size: 6, offset: 2 }} lg={{ size: 6, offset: 3 }} ><Header chatId = {this.props.chatId} /></Col>
             </Row>
-            <Messages  usr = { this.props.usr } />
+            <Messages  usr = { this.props.usr } chatId = {this.props.chatId} />
           </Container>
 
 

@@ -22,8 +22,6 @@ class Layout extends React.Component {
         chatId: 1,
     }
     render() {
-        
-        console.log('Layout this.props.usr', this.props.usr)
         return(
             <div className="container">
                 <Header chatId = { this.props.chatId }/>          
@@ -32,7 +30,7 @@ class Layout extends React.Component {
                         <ChatList />
                     </div>
                     <div className="layout-right-side messageBlock">
-                        <MessagesField usr = { this.props.usr }/>
+                        <MessagesField usr = { this.props.usr } chatId = { this.props.chatId }/>
                     </div>
                 </div>
             </div>

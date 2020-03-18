@@ -1,7 +1,6 @@
 import update from 'react-addons-update'
 //import ACTIONS
 import { ADD_CHAT } from '../actions/chats_actions.js'
-import { SEND_MSG } from '../actions/messages_actions.js'
 
 let initialStore = {
     chats: {

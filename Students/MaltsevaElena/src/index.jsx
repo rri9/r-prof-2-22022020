@@ -3,11 +3,15 @@ import ReactDom from 'react-dom'
 
 // Routing
 import Router from './router/router.jsx'
-import { BrowserRouter } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
+import { history } from './store/store.js'
 
 // Store
 import { Provider } from 'react-redux'
 import initStore from './store/store.js'
+import { PersistGate } from 'redux-persist/integration/react'
+
+const { store, persistor } = initStore()
 
 // Styles
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -37,12 +41,14 @@ const darkTheme = createMuiTheme({
 })
 
 ReactDom.render (
-   <BrowserRouter>
-      <Provider store={ initStore() }>
-         <ThemeProvider theme={ darkTheme }>
-            <Router/>
-         </ThemeProvider>
-      </Provider>
-   </BrowserRouter>,
+   <Provider store={ store }>
+      <PersistGate loading={ null } persistor={ persistor }>
+         <ConnectedRouter history={ history }>
+            <ThemeProvider theme={ darkTheme }>
+               <Router/>
+            </ThemeProvider>
+         </ConnectedRouter>
+      </PersistGate>
+   </Provider>,
    document.getElementById('app')
 )

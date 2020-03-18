@@ -6,69 +6,57 @@ import { SEND_MSG } from '../actions/messages_actions.js';
 const initialStore = {
   chats: {
     1: {
-      title: 'Chat 1', 
+      title:  'Чат 1',
+      user:   'Я',
+      bot:    'робот',
       msgList: [
         {
-          chatId: 1,
-          msgId:  1,
           sender: 'Darth Vader',
           text:   'Hallo'
         },
         {
-          chatId: 1,
-          msgId:  2,
           sender: null,
           text:   null
         },
         {
-          chatId: 1,
-          msgId:  3,
           sender: 'Darth Vader',
           text:   'I am your father'
         },
         {
-          chatId: 1,
-          msgId:  4,
           sender: null,
           text:   'NOOOOOOOOO'
         }
       ]
     },
     2: {
-      title: 'Chat 2', 
+      title:  'Chat 2',
+      user:   'Me',
+      bot:    'bot',
       msgList: [
         {
-          chatId: 2,
-          msgId:  1,
           sender: 'Geek',
           text:   'Превед!'
         },
         {
-          chatId: 2,
-          msgId:  2,
           sender: null,
           text:   null
         },
         {
-          chatId: 2,
-          msgId:  3,
           sender: 'Geek',
           text:   'Чё ты гонишь?'
         }
       ]
     },
     3: {
-      title: 'Chat 3', 
+      title:  'Курам на смех!',
+      user:   'Васисуалий Пупкин-Таврический',
+      bot:    'конь-голова',
       msgList: [
         {
-          chatId: 3,
-          msgId:  1,
           sender: 'Администратор',
           text:   'Всем выйти из чата!'
         },
         {
-          chatId: 3,
-          msgId:  2,
           sender: null,
           text:   null
         }
