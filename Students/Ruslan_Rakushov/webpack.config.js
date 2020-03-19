@@ -16,8 +16,11 @@ module.exports = {
   // mode: 'production',
   devtool: 'inline-source-map',
   devServer: {
-    historyApiFallback: true,
-    contentBase: path.join(__dirname, 'dist'), //This tells webpack-dev-server to serve the files from the dist directory on localhost:8080
+    historyApiFallback: {
+      index: './src/index.html',
+    },
+    //TODO 7 Закоментить contentBase
+    // contentBase: path.join(__dirname, 'dist'), //This tells webpack-dev-server to serve the files from the dist directory on localhost:8080
     port: 3000,
     hot: true,
     open: true,

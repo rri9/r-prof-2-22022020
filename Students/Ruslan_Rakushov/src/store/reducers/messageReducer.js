@@ -1,41 +1,23 @@
 import update from 'immutability-helper';
-import { SEND_MESSAGE, DEL_MESSAGE, SET_SEARCH_TEXT } from '../actions/messageActions.js';
+import {
+  SEND_MESSAGE, DEL_MESSAGE, SET_SEARCH_TEXT,
+  START_MESSAGES_LOADING, SUCCESS_MESSAGES_LOADING, ERROR_MESSAGES_LOADING,
+} from '../actions/messageActions.js';
 
 const initialStore = {
   msgs: {
-    1: {
-      sender: 'Me',
-      text: 'Hello!',
-      chatId: 1,
-    },
-    2: {
-      sender: null,
-      text: null,
-      chatId: 1,
-    },
-    3: {
-      sender: 'Me',
-      text: 'How are You?',
-      chatId: 1,
-    },
-    4: {
-      sender: null,
-      text: null,
-      chatId: 1,
-    },
-    5: {
-      sender: null,
-      text: 'Hello, human!',
-      chatId: 2,
-    }
   },
+  isLoading: false,
   searchText: '',
 };
 
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE:
-      const newId = +Object.keys(store.msgs)[Object.keys(store.msgs).length-1] + 1;
+      let newId = 1;
+      if (Object.keys(store.msgs).length) {
+        newId = +Object.keys(store.msgs)[Object.keys(store.msgs).length - 1] + 1;
+      }
       return update(store, {
         msgs: { $merge: {
             [newId]: { sender: action.sender, text: action.text, chatId: action.chatId }
@@ -50,6 +32,22 @@ export default function messageReducer(store = initialStore, action) {
     case SET_SEARCH_TEXT:
       return update(store, {
         searchText: { $set: [action.str] }
+      });
+    
+    case START_MESSAGES_LOADING:
+      return update(store, {
+        isLoading: { $set: true }
+      });
+    
+    case SUCCESS_MESSAGES_LOADING:
+      return update(store, {
+        msgs: { $set: action.payload.msgs },
+        isLoading: { $set: false }
+      });
+    
+    case ERROR_MESSAGES_LOADING:
+      return update(store, {
+        isLoading: { $set: false }
       });
   
     default:
