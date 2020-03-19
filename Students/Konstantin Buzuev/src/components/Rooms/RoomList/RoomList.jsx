@@ -1,39 +1,14 @@
 import React from "react";
-import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 // REDUX
+import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
-
+// ROUTER
 import { push } from "connected-react-router";
-import { Link } from "react-router-dom";
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
-// STYLES
-import { withStyles } from "@material-ui/core/styles";
-import {
-  Avatar,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText
-} from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-import ChatIcon from "@material-ui/icons/Chat";
-import FeedbackOutlinedIcon from "@material-ui/icons/FeedbackOutlined";
-import AssistantOutlinedIcon from "@material-ui/icons/AssistantOutlined";
-import SmsOutlinedIcon from "@material-ui/icons/SmsOutlined";
-
-const useStyles = theme => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
-  }
-});
+// ACTIONS
+import { loadChats } from "../../../store/actions/room_actions.js";
 // MY COMPONENTS
 import { chatTypes } from "../dictionary.jsx";
-import { bindActionCreators } from "redux";
 function chatTypeToComponent(type) {
   let result = "";
   chatTypes.forEach(el => {
@@ -43,10 +18,34 @@ function chatTypeToComponent(type) {
   });
   return result;
 }
+// STYLES
+import { withStyles } from "@material-ui/core/styles";
+const useStyles = theme => ({
+  root: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper
+  }
+});
+// MATERIAL
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText
+} from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import SendIcon from "@material-ui/icons/Send";
+import ChatIcon from "@material-ui/icons/Chat";
+import FeedbackOutlinedIcon from "@material-ui/icons/FeedbackOutlined";
+import AssistantOutlinedIcon from "@material-ui/icons/AssistantOutlined";
+import SmsOutlinedIcon from "@material-ui/icons/SmsOutlined";
 
 class RoomList extends React.Component {
   static propTypes = {
     chats: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool.isRequired, //.isRequired - выпилил, поскольку в двух редюсерах пока не уживается
     push: PropTypes.func.isRequired
   };
 
@@ -55,12 +54,18 @@ class RoomList extends React.Component {
     this.chatsEndRef = React.createRef();
   }
   scrollToBottom = () => {
-    this.chatsEndRef.current.lastElementChild.scrollIntoView({
-      behavior: "smooth"
-    });
+    if (
+      this.chatsEndRef !== undefined &&
+      this.chatsEndRef.current !== null &&
+      this.chatsEndRef.current.lastElementChild !== null
+    )
+      this.chatsEndRef.current.lastElementChild.scrollIntoView({
+        behavior: "smooth"
+      });
   };
 
   componentDidMount() {
+    this.props.loadChats();
     this.scrollToBottom();
   }
 
@@ -73,12 +78,19 @@ class RoomList extends React.Component {
   };
 
   render() {
+    if (this.props.isLoading) {
+      return <CircularProgress />;
+    }
     const { classes } = this.props;
     const { chats } = this.props;
     let Chats = [];
     Object.keys(chats).forEach(key => {
       Chats.push(
-        <ListItem button onClick={() => this.handleNavigate(`/chat/${key}`)}>
+        <ListItem
+          button
+          key={key}
+          onClick={() => this.handleNavigate(`/chat/${key}`)}
+        >
           <ListItemAvatar>
             <Avatar>{chatTypeToComponent(chats[key].type)}</Avatar>
           </ListItemAvatar>
@@ -99,10 +111,12 @@ class RoomList extends React.Component {
 
 const mapStateToProps = ({ chatReducer }) => {
   return {
-    chats: chatReducer.chats
+    chats: chatReducer.chats,
+    isLoading: chatReducer.isLoading
   };
 };
-const mapDispatchToProps = dispatch => bindActionCreators({ push }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ push, loadChats }, dispatch);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
