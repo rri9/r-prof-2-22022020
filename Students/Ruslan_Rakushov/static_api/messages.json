@@ -25,7 +25,5 @@
       "text": "Hello, human!",
       "chatId": 2
     }
-  },
-  "isLoading": false,
-  "searchText": ""
+  }
 }

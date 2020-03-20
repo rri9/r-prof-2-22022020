@@ -1,3 +1,5 @@
+//TODO Возможно лучше загружать данные из api здесь, до отрисовки компонентов?
+
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { withStyles } from '@material-ui/core/styles';

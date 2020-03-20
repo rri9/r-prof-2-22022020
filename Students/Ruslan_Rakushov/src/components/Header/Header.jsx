@@ -18,6 +18,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { setSearchText } from "../../store/actions/messageActions.js";
+import { loadChats } from "../../store/actions/chatActions.js";
+import { loadProfile } from "../../store/actions/profileActions.js";
 
 const useStyles = (theme => ({
   root: {},
@@ -81,6 +83,11 @@ class Header extends Component {
     this.props.setSearchText(str);
   };
 
+  componentDidMount() {
+    this.props.loadChats();
+    this.props.loadProfile();
+  };
+
   render() {
     const { classes} = this.props;
     const {chats, currentChatId, profile } = this.props;
@@ -91,7 +98,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title}>
-              ReactGram &copy; {chats[currentChatId].title}
+              ReactGram &copy; {chats[currentChatId] && chats[currentChatId].title}
             </Typography>
             <div className={classes.rightMenu}>
               {profile.userName}
@@ -137,6 +144,8 @@ const mapStateToProps = ({ chatReducer, profileReducer }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   push,
   setSearchText,
+  loadChats,
+  loadProfile,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Header));

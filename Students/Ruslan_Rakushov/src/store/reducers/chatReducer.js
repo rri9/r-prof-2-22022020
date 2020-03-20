@@ -1,37 +1,30 @@
 import update from 'immutability-helper';
 import {
-  ADD_MESSAGE_COUNT, ADD_CHAT, BLINK_CHAT, DEL_CHAT, SET_CURRENT_CHAT
+  ADD_CHAT, BLINK_CHAT, DEL_CHAT, SET_CURRENT_CHAT,
+  START_CHATS_LOADING, SUCCESS_CHATS_LOADING, ERROR_CHATS_LOADING,
 } from '../actions/chatActions.js';
 
 const initialStore = {
   chats: {
-    1: { title: 'Chat 1' },
-    2: { title: 'Chat 2' },
-    3: { title: 'Chat 3' },
   },
   chatWithNewMsg: null,
   currentChatId: 1,
+  isLoading: false,
 };
 
 export default function chatReducer(store = initialStore, action) {
   switch (action.type) {
     //-------------------
     case ADD_CHAT:
-      const newId = +Object.keys(store.chats)[Object.keys(store.chats).length-1] + 1;
+      let newId = 1;
+      if (Object.keys(store.chats).length) {
+        newId = +Object.keys(store.chats)[Object.keys(store.chats).length-1] + 1;
+      };
       return update(store, {
         chats: {
           [newId]: {$set: {title: action.title, msgsCount: 0}}
         },
         currentChatId: {$set: newId},
-      });
-    //-------------------
-    case ADD_MESSAGE_COUNT:
-      return update(store, {
-        chats: {
-          [action.chatId]: {$merge: {
-              msgsCount: store.chats[action.chatId].msgsCount+1,
-          }}
-        }
       });
     //-------------------
     case BLINK_CHAT:
@@ -63,7 +56,23 @@ export default function chatReducer(store = initialStore, action) {
         currentChatId: {$set: action.chatId}
       });
     //-------------------
-    
+    case START_CHATS_LOADING:
+      return update(store, {
+        isLoading: { $set: true }
+      });
+    //-------------------
+    case SUCCESS_CHATS_LOADING:
+      return update(store, {
+        chats: { $set: action.payload.chats },
+        currentChatId: { $set: action.payload.currentChatId },
+        isLoading: { $set: false }
+      });
+    //-------------------
+    case ERROR_CHATS_LOADING:
+      return update(store, {
+        isLoading: { $set: false }
+      });
+    //-------------------
     default:
       return store;
   }

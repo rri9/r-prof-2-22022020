@@ -4,7 +4,7 @@ import { push } from "connected-react-router";
 import { withStyles } from '@material-ui/core/styles';
 import {
   List, ListItem, ListItemText, ListItemIcon, TextField,
-  Divider, Tooltip, IconButton, 
+  Divider, Tooltip, IconButton, CircularProgress, 
 } from '@material-ui/core';
 import AssistantIcon from '@material-ui/icons/Assistant';
 import AddIcon from '@material-ui/icons/Add';
@@ -61,6 +61,7 @@ class ChatList extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    //TODO Вынести в отдельную функцию мигание чата
     if(this.props.chatWithNewMsg) {
       setTimeout(() => {
         this.props.blinkChat(null);
