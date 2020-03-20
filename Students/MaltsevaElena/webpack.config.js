@@ -18,7 +18,7 @@ module.exports = {
       contentBase: './dist',
       port: 3000,
       hot: true,
-      open: true,
+      // open: true,
       historyApiFallback: true,
       proxy: {
          '/api': {
@@ -26,9 +26,9 @@ module.exports = {
             pathRewrite: { '^/api' : '' },
             secure: false,
             changeOrigin: true,
-            headers: {
-               Connection: 'keep-alive'  // a way to fix devServer proxy bug on macOS
-            },
+            // headers: {
+            //    Connection: 'keep-alive'  // a way to fix devServer proxy bug on macOS
+            // },
          }
       },
    },
