@@ -6,10 +6,9 @@ export default store => next => (action) => {
     case SEND_MESSAGE:
       if (action.sender === 'Me') {
         setTimeout(() => {
-          const msgId = Object.keys(store.getState().messageReducer.msgs).length + 1;
           const text = 'Leave me alone, human...';
           const sender = 'Bot';
-          store.dispatch(sendMessage(msgId, sender, text, action.chatId));
+          store.dispatch(sendMessage(sender, text, action.chatId));
         }, 1000);
       }
       if (action.sender === 'Bot') {
