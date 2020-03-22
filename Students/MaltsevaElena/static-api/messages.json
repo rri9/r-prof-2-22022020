@@ -1,0 +1,51 @@
+[
+   {
+      "_id":"5e7129a13189dd346227cf95",
+      "messageId":"1",
+      "sender":"HelpDesk",
+      "text":"Any problems?",
+      "chatId":"5e73426e28fbcc368e3cdc4a"
+   },
+   {
+      "_id":"5e7129c43189dd346227cf96",
+      "messageId":"2",
+      "sender":"Me",
+      "text":"I clicked something and everything disappeared",
+      "chatId":"5e73426e28fbcc368e3cdc4a"
+   },
+   {
+      "_id":"5e7129e93189dd346227cf97",
+      "messageId":"3",
+      "sender":"HelpDesk",
+      "text":"Trolololo",
+      "chatId":"5e73426e28fbcc368e3cdc4a"
+   },
+   {
+      "_id":"5e7129fd3189dd346227cf98",
+      "messageId":"4",
+      "sender":"Me",
+      "text":"Very useful answer",
+      "chatId":"5e73426e28fbcc368e3cdc4a"
+   },
+   {
+      "_id":"5e712a0e3189dd346227cf99",
+      "messageId":"5",
+      "sender":"Darth Vader",
+      "text":"Luke, I'm your father!",
+      "chatId":"5e73431528fbcc368e3cdc4b"
+   },
+   {
+      "_id":"5e712a1d3189dd346227cf9a",
+      "messageId":"6",
+      "sender":"Typical JS",
+      "text":"'5' + 3 = '53'",
+      "chatId":"5e73436bdf204037f2c13626"
+   },
+   {
+      "_id":"5e712a2c3189dd346227cf9b",
+      "messageId":"7",
+      "sender":"Me",
+      "text":"Whaaat?",
+      "chatId":"5e73436bdf204037f2c13626"
+   }
+]

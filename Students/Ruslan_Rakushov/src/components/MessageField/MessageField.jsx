@@ -1,14 +1,10 @@
-//TODO Поиск по сообщениям
-//TODO Удаление сообщение
-
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { sendMessage } from '../../store/actions/messageActions.js';
-import { addMsgCount } from '../../store/actions/chatActions.js';
+import { sendMessage, delMessage } from '../../store/actions/messageActions.js';
 
 import Message from '../Message/Message.jsx';
 
@@ -61,14 +57,16 @@ class MessageField extends Component {
   //methods
   handleSendMsg = (message, sender) => {
     const {msgs, currentChatId} = this.props;
-    const msgId = Object.keys(msgs).length + 1;
-    //FIX Выпилить расчет id в reducer - это дело хранилища/апи/бд
-    this.props.sendMessage(msgId, sender, message, currentChatId);
-    this.props.addMsgCount(currentChatId);
+    this.props.sendMessage(sender, message, currentChatId);
     this.setState({
       msgText: '',
     });
   };
+  handleDelMsg = (evt) => {
+    const id = evt.target.parentNode.parentNode.parentNode.parentNode.dataset.id;
+    this.props.delMessage(id);
+  };
+
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
       this.handleSendMsg(evt.target.value, 'Me');
@@ -87,13 +85,13 @@ class MessageField extends Component {
     }
   }
   
-  getLastMsgInChat(chatId, msgsObj) {
-    for (let i = Object.keys(msgsObj).length; i > 0; i--) {
-      if (msgsObj[i].chatId === chatId) {
-        return msgsObj[i];
-      }
-    }
-  }
+  // getLastMsgInChat(chatId, msgsObj) {
+  //   for (let i = Object.keys(msgsObj).length; i > 0; i--) {
+  //     if (msgsObj[i].chatId === chatId) {
+  //       return msgsObj[i];
+  //     }
+  //   }
+  // }
   getAllMsgsInChat(chatId, msgsObj) {
     const msgsArr = [];
     // for (let i = 1; i <= Object.keys(msgsObj).length; i++) {
@@ -104,7 +102,20 @@ class MessageField extends Component {
     //lets try smth else =)
     for (let i in msgsObj) {
       if (msgsObj.hasOwnProperty(i) && msgsObj[i].chatId === chatId) {
-        msgsArr.push(msgsObj[i]);
+        msgsArr.push({...msgsObj[i], id: i});
+      }
+    }
+    return msgsArr;
+  }
+
+  getFilteredMsgsInChat(chatId, msgsObj, filterStr) {
+    const regexp = new RegExp(filterStr);
+    const msgsArr = [];
+    for (let i in msgsObj) {
+      if (msgsObj.hasOwnProperty(i)
+        && msgsObj[i].chatId === chatId
+        && regexp.test(msgsObj[i].text)) {
+        msgsArr.push({...msgsObj[i], id: i});
       }
     }
     return msgsArr;
@@ -123,8 +134,11 @@ class MessageField extends Component {
 
   render() {
     const { classes } = this.props;
-    const { msgs, currentChatId } = this.props;
-    const currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs);
+    const { msgs, currentChatId, searchText } = this.props;
+    let currentChatMsgs = [];
+    searchText === '' ?
+      currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs) :
+      currentChatMsgs = this.getFilteredMsgsInChat(currentChatId, msgs, searchText);
     let MessagesArr = [];
     if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
@@ -137,11 +151,14 @@ class MessageField extends Component {
     }
     return (
       <div className={classes.wrapper}>
-        <div className={classes.root} ref={this.messageFieldEndRef}>
+        <div className={classes.root} ref={this.messageFieldEndRef}
+        onClick={this.handleDelMsg}
+        >
           { MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
           <TextField
+            //TODO use ui prop autoFocus
             placeholder = 'Введите сообщение...'
             inputRef = {this.msgTextInput}
             className = {classes.sendText}
@@ -155,7 +172,6 @@ class MessageField extends Component {
           <Tooltip title="Отправить">
             <IconButton 
               className={classes.sendBtn}
-              // size="small"
               name="sendMsgUI"
               onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}>
                 <SendOutlinedIcon />
@@ -169,13 +185,14 @@ class MessageField extends Component {
 
 const mapStateToProps = ({ messageReducer, chatReducer }) => ({
   msgs: messageReducer.msgs,
+  searchText: messageReducer.searchText,
   chats: chatReducer.chats,
   currentChatId: chatReducer.currentChatId,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
-  addMsgCount,
+  delMessage,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));
