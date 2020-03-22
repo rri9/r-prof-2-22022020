@@ -1,6 +1,11 @@
 Работа над проектом в рамках курса "ReactJS" на GeekBrains
 ________________________________________________________________________
 
+Homework 7:
+- создание сервера и базы данных (node.js, express, mongodb)
+- обработка запросов с redux-api-middleware
+
+
 Homework 6:
 - подключение middlewares, router к redux, redux persist
 - расширение функционала: удаление чатов
