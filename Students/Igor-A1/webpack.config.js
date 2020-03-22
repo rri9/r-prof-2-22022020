@@ -18,6 +18,14 @@ module.exports = {
         port: 3037,
         hot: true,
         open: true,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3038',
+                pathRewrite: { '^/api' : '' },
+                secure: false,
+                changeOrigin: true
+            }
+        },
         historyApiFallback: {
             index: 'index.html'
         }
@@ -63,6 +71,6 @@ module.exports = {
             filename: 'index.html',
             template: 'src/index.html',
             favicon: 'src/favicon.ico'
-          })
+        })
       ]
 }

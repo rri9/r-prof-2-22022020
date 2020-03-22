@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDom from 'react-dom';
 
 import Router from './router/router.jsx';
-import { BrowserRouter } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 
 import { Provider } from 'react-redux';
-import initStore from './store/store.js'; 
+import initStore, { history } from './store/store.js';
+
+const store = initStore(); 
 
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -36,12 +38,12 @@ const theme = createMuiTheme({
 });
 
 ReactDom.render (
-  <BrowserRouter>
-    <Provider store={ initStore() }> 
+  <Provider store={ store }>
+    <ConnectedRouter history={ history } >
       <ThemeProvider theme={theme}>
         <Router />
       </ThemeProvider>
-    </Provider>
-  </BrowserRouter>
+    </ConnectedRouter>
+  </Provider>
   , document.getElementById('app')
 );
