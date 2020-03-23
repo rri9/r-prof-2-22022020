@@ -24,6 +24,14 @@ module.exports = {
     port: 3000,
     hot: true,
     open: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3300',
+        pathRewrite: { '^/api': '' },
+        secure: false,
+        changeOrigin: true,
+      },
+    },
   },
   module: {
     rules: [

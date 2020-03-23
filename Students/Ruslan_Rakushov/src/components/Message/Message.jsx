@@ -54,16 +54,17 @@ const Message = (props) => {
   const sender = props.msg.sender ? props.msg.sender : 'Bot';
   const text = (props.msg.sender || props.msg.text) ? props.msg.text : 'Bot answering smth...';
   const msgStyle = (props.msg.sender === 'Me') ? classes.userAnswer : classes.botAnswer;
+  const id = props.msg._id;
   
   return (
-    <Paper className = {classes.root} data-id={props.msg.id}>
+    <Paper className = {classes.root} data-id={props.msg._id}>
       <div className = {classes.item}>
         <span className={msgStyle}> { sender }: </span>
         <p>{ text }</p>
       </div>
       <div className={classes.delBtn}>
         <IconButton size='small'
-        // onClick={}
+          onClick={() => props.delMessage(id)}
         >
           <HighlightOffIcon />
         </IconButton>

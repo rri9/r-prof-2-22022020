@@ -70,9 +70,9 @@ class MessageField extends Component {
       msgText: '',
     });
   };
-  handleDelMsg = (evt) => {
-    const id = evt.target.parentNode.parentNode.parentNode.parentNode.dataset.id;
-    this.props.delMessage(id);
+
+  handleDelMsg = (dataId) => {
+    this.props.delMessage(dataId);
   };
 
   handleChange = (evt) => {
@@ -92,7 +92,7 @@ class MessageField extends Component {
       this.msgTextInput.current.focus();
     }
   }
-  
+  //FIX для static_api
   getAllMsgsInChat(chatId, msgsObj) {
     const msgsArr = [];
     for (let i in msgsObj) {
@@ -103,6 +103,18 @@ class MessageField extends Component {
     return msgsArr;
   }
 
+  getAllMsgsInChatDB(chatId, msgs) {
+    const msgsArr = [];
+    msgs.forEach((msg) => {
+      //TODO chatId из базы д.б. строкой => ===
+      if (msg.chatId == chatId) {
+        msgsArr.push(msg);
+      }
+    });
+    return msgsArr;
+  }
+
+  //FIX для static_api
   getFilteredMsgsInChat(chatId, msgsObj, filterStr) {
     const regexp = new RegExp(filterStr);
     const msgsArr = [];
@@ -113,6 +125,17 @@ class MessageField extends Component {
         msgsArr.push({...msgsObj[i], id: i});
       }
     }
+    return msgsArr;
+  }
+  
+  getFilteredMsgsInChatDB(chatId, msgs, filterStr) {
+    const regexp = new RegExp(filterStr);
+    const msgsArr = [];
+    msgs.forEach((msg) => {
+      if (msg.chatId === chatId && regexp.test(msgsObj[i].text)) {
+        msgsArr.push(msg);
+      }
+    });
     return msgsArr;
   }
 
@@ -133,12 +156,15 @@ class MessageField extends Component {
     const { msgs, currentChatId, searchText, isLoading } = this.props;
     let currentChatMsgs = [];
     searchText === '' ?
-      currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs) :
-      currentChatMsgs = this.getFilteredMsgsInChat(currentChatId, msgs, searchText);
+      // For static api
+      // currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs) :
+      // currentChatMsgs = this.getFilteredMsgsInChat(currentChatId, msgs, searchText);
+      currentChatMsgs = this.getAllMsgsInChatDB(currentChatId, msgs) :
+      currentChatMsgs = this.getFilteredMsgsInChatDB(currentChatId, msgs, searchText);
     let MessagesArr = [];
     if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
-        <Message key={index.toString()} msg={msg} />
+        <Message key={index.toString()} msg={msg} delMessage={this.handleDelMsg}/>
       ));
     } else {
       MessagesArr = (
@@ -148,18 +174,16 @@ class MessageField extends Component {
     return (
       <div className={classes.wrapper}>
         <div className={classes.root} ref={this.messageFieldEndRef}
-        onClick={this.handleDelMsg}
         >
-          {isLoading && (
+          { isLoading ? (
             <div className={classes.loadingCircle}>
               <CircularProgress />
             </div>
-          )}
-          {!isLoading && MessagesArr}
+          )
+          : MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
           <TextField
-            //TODO use ui prop autoFocus
             placeholder = 'Введите сообщение...'
             inputRef = {this.msgTextInput}
             className = {classes.sendText}
@@ -174,7 +198,8 @@ class MessageField extends Component {
             <IconButton 
               className={classes.sendBtn}
               name="sendMsgUI"
-              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}>
+              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}
+            >
                 <SendOutlinedIcon />
               </IconButton>
           </Tooltip>

@@ -5,8 +5,7 @@ import {
 } from '../actions/messageActions.js';
 
 const initialStore = {
-  msgs: {
-  },
+  msgs: [],
   isLoading: false,
   searchText: '',
 };
@@ -14,19 +13,20 @@ const initialStore = {
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE:
-      let newId = 1;
-      if (Object.keys(store.msgs).length) {
-        newId = +Object.keys(store.msgs)[Object.keys(store.msgs).length - 1] + 1;
-      }
+      if (!action.msgId) break;
       return update(store, {
-        msgs: { $merge: {
-            [newId]: { sender: action.sender, text: action.text, chatId: action.chatId }
-        }}
+        msgs: {
+          $push: [{
+            _id: action.msgId, sender: action.sender, text: action.text, chatId: action.chatId
+          }]
+        }
       });
 
     case DEL_MESSAGE:
+      if (action.result !== 1) break;
+      const index = store.msgs.findIndex( msg => (msg._id === action.msgId) );
       return update(store, {
-        msgs: { $unset: [action.msgId] }
+        msgs: { $splice: [[index, 1]] }
       });
     
     case SET_SEARCH_TEXT:
@@ -41,7 +41,7 @@ export default function messageReducer(store = initialStore, action) {
     
     case SUCCESS_MESSAGES_LOADING:
       return update(store, {
-        msgs: { $set: action.payload.msgs },
+        msgs: { $set: action.payload },
         isLoading: { $set: false }
       });
     

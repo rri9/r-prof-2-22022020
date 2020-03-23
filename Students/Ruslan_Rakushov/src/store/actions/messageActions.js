@@ -4,7 +4,7 @@ export const START_MESSAGES_LOADING = '@@message/START_MESSAGES_LOADING';
 export const SUCCESS_MESSAGES_LOADING = '@@message/SUCCESS_MESSAGES_LOADING';
 export const ERROR_MESSAGES_LOADING = '@@message/ERROR_MESSAGES_LOADING';
 
-export const SEND_MESSAGE = '@@message/SEND_MESSAGE'; //TODO Что именно дает синтаксис @@
+export const SEND_MESSAGE = '@@message/SEND_MESSAGE';
 export const DEL_MESSAGE = '@@message/DEL_MESSAGE';
 export const SET_SEARCH_TEXT = '@@message/SET_SEARCH_TEXT';
 
@@ -27,7 +27,8 @@ export const setSearchText = (str) => ({
 
 export const loadMessages = () => ({
   [RSAA]: {
-    endpoint: '/static_api/messages.json',
+    // endpoint: '/static_api/messages.json',
+    endpoint: '/api/messages',
     method: 'GET',
     types: [
       START_MESSAGES_LOADING,
