@@ -4,13 +4,13 @@ import ReactDom from 'react-dom';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { sendMessage, delMessage } from '../../store/actions/messageActions.js';
+import { sendMessage, delMessage, loadMessages } from '../../store/actions/messageActions.js';
 
 import Message from '../Message/Message.jsx';
 
 //UI Components
 import { withStyles } from '@material-ui/core/styles';
-import {IconButton, TextField, Tooltip } from '@material-ui/core';
+import {IconButton, TextField, Tooltip, CircularProgress } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
 const useStyles = (theme => ({
@@ -43,6 +43,14 @@ const useStyles = (theme => ({
   sendBtn: {
     padding: '8px',
   },
+  loadingCircle: {
+    alignSelf: 'center',
+    width: '60px',
+    height: '60px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
 class MessageField extends Component {
@@ -56,15 +64,15 @@ class MessageField extends Component {
   }
   //methods
   handleSendMsg = (message, sender) => {
-    const {msgs, currentChatId} = this.props;
+    const { currentChatId } = this.props;
     this.props.sendMessage(sender, message, currentChatId);
     this.setState({
       msgText: '',
     });
   };
-  handleDelMsg = (evt) => {
-    const id = evt.target.parentNode.parentNode.parentNode.parentNode.dataset.id;
-    this.props.delMessage(id);
+
+  handleDelMsg = (dataId) => {
+    this.props.delMessage(dataId);
   };
 
   handleChange = (evt) => {
@@ -84,22 +92,9 @@ class MessageField extends Component {
       this.msgTextInput.current.focus();
     }
   }
-  
-  // getLastMsgInChat(chatId, msgsObj) {
-  //   for (let i = Object.keys(msgsObj).length; i > 0; i--) {
-  //     if (msgsObj[i].chatId === chatId) {
-  //       return msgsObj[i];
-  //     }
-  //   }
-  // }
+  //FIX для static_api
   getAllMsgsInChat(chatId, msgsObj) {
     const msgsArr = [];
-    // for (let i = 1; i <= Object.keys(msgsObj).length; i++) {
-    //   if (msgsObj[i].chatId === chatId) {
-    //     msgsArr.push(msgsObj[i]);
-    //   }
-    // }
-    //lets try smth else =)
     for (let i in msgsObj) {
       if (msgsObj.hasOwnProperty(i) && msgsObj[i].chatId === chatId) {
         msgsArr.push({...msgsObj[i], id: i});
@@ -108,6 +103,17 @@ class MessageField extends Component {
     return msgsArr;
   }
 
+  getAllMsgsInChatDB(chatId, msgs) {
+    const msgsArr = [];
+    msgs.forEach((msg) => {
+      if (msg.chatId === chatId) {
+        msgsArr.push(msg);
+      }
+    });
+    return msgsArr;
+  }
+
+  //FIX для static_api
   getFilteredMsgsInChat(chatId, msgsObj, filterStr) {
     const regexp = new RegExp(filterStr);
     const msgsArr = [];
@@ -120,29 +126,44 @@ class MessageField extends Component {
     }
     return msgsArr;
   }
+  
+  getFilteredMsgsInChatDB(chatId, msgs, filterStr) {
+    const regexp = new RegExp(filterStr);
+    const msgsArr = [];
+    msgs.forEach((msg) => {
+      if (msg.chatId === chatId && regexp.test(msg.text)) {
+        msgsArr.push(msg);
+      }
+    });
+    return msgsArr;
+  }
 
   //hooks
   componentDidMount() {
+    this.props.loadMessages();
     this.scrollToBottom();
     this.setFocusOnInput();
   };
 
   componentDidUpdate(prevProps, prevState) {
-    this.scrollToBottom();
-    this.setFocusOnInput();
+      this.scrollToBottom();
+      this.setFocusOnInput();
   };
 
   render() {
     const { classes } = this.props;
-    const { msgs, currentChatId, searchText } = this.props;
+    const { msgs, currentChatId, searchText, isLoading } = this.props;
     let currentChatMsgs = [];
     searchText === '' ?
-      currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs) :
-      currentChatMsgs = this.getFilteredMsgsInChat(currentChatId, msgs, searchText);
+      // For static api
+      // currentChatMsgs = this.getAllMsgsInChat(currentChatId, msgs) :
+      // currentChatMsgs = this.getFilteredMsgsInChat(currentChatId, msgs, searchText);
+      currentChatMsgs = this.getAllMsgsInChatDB(currentChatId, msgs) :
+      currentChatMsgs = this.getFilteredMsgsInChatDB(currentChatId, msgs, searchText);
     let MessagesArr = [];
     if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
-        <Message key={index.toString()} msg={msg} />
+        <Message key={index.toString()} msg={msg} delMessage={this.handleDelMsg}/>
       ));
     } else {
       MessagesArr = (
@@ -152,13 +173,16 @@ class MessageField extends Component {
     return (
       <div className={classes.wrapper}>
         <div className={classes.root} ref={this.messageFieldEndRef}
-        onClick={this.handleDelMsg}
         >
-          { MessagesArr }
+          { isLoading ? (
+            <div className={classes.loadingCircle}>
+              <CircularProgress />
+            </div>
+          )
+          : MessagesArr }
         </div>
         <div className={classes.sendMsgField}>
           <TextField
-            //TODO use ui prop autoFocus
             placeholder = 'Введите сообщение...'
             inputRef = {this.msgTextInput}
             className = {classes.sendText}
@@ -173,7 +197,8 @@ class MessageField extends Component {
             <IconButton 
               className={classes.sendBtn}
               name="sendMsgUI"
-              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}>
+              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}
+            >
                 <SendOutlinedIcon />
               </IconButton>
           </Tooltip>
@@ -185,6 +210,7 @@ class MessageField extends Component {
 
 const mapStateToProps = ({ messageReducer, chatReducer }) => ({
   msgs: messageReducer.msgs,
+  isLoading: messageReducer.isLoading,
   searchText: messageReducer.searchText,
   chats: chatReducer.chats,
   currentChatId: chatReducer.currentChatId,
@@ -193,6 +219,7 @@ const mapStateToProps = ({ messageReducer, chatReducer }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
   delMessage,
+  loadMessages,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(MessageField));

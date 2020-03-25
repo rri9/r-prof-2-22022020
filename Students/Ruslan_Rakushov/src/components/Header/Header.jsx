@@ -18,6 +18,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { setSearchText } from "../../store/actions/messageActions.js";
+import { loadChats } from "../../store/actions/chatActions.js";
+import { loadProfile } from "../../store/actions/profileActions.js";
 
 const useStyles = (theme => ({
   root: {},
@@ -49,17 +51,19 @@ class Header extends Component {
     }
   }
   static propTypes = {
-    chats: PropTypes.object.isRequired,
-    currentChatId: PropTypes.number.isRequired,
+    chats: PropTypes.array.isRequired,
+    currentChatId: PropTypes.string,
     profile: PropTypes.object.isRequired,
+  };
+  static defaultProps = {
+    currentChatId: '',
   };
 
   handleAccBtnClick = () => {
     this.props.push('/profile/');
   };
+
   handleSeachBtnClick = () => {
-    console.log('click search', this.state.isSearchVisible);
-    
     this.setState({
       isSearchVisible: !this.state.isSearchVisible,
     });
@@ -77,13 +81,20 @@ class Header extends Component {
   };
 
   handleSearch = (str) => {
-    console.log(str);
     this.props.setSearchText(str);
+  };
+
+  componentDidMount() {
+    this.props.loadChats();
+    this.props.loadProfile();
   };
 
   render() {
     const { classes} = this.props;
-    const {chats, currentChatId, profile } = this.props;
+    const { chats, currentChatId, profile } = this.props;
+    const currentChat = chats.find(chat => chat._id === currentChatId);
+    const currentChatTitle = currentChat ? currentChat.title : '';
+    
     return (
         <AppBar className={classes.appbar}>
           <Toolbar>
@@ -91,7 +102,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" className={classes.title}>
-              ReactGram &copy; {chats[currentChatId].title}
+              ReactGram &copy; {currentChatTitle}
             </Typography>
             <div className={classes.rightMenu}>
               {profile.userName}
@@ -100,11 +111,11 @@ class Header extends Component {
                 >
                 <SearchIcon/>
               </IconButton>
-              <IconButton aria-label="notifications" color="inherit">
+              {/* <IconButton aria-label="notifications" color="inherit">
                 <Badge badgeContent={2} color="secondary">
                   <NotificationsIcon />
                 </Badge>
-              </IconButton>
+              </IconButton> */}
               <IconButton aria-label="account" color="inherit"
                 onClick={this.handleAccBtnClick}>
                 <AccountCircle/>
@@ -114,12 +125,11 @@ class Header extends Component {
         {this.state.isSearchVisible &&
           <TextField
           name='searchText'
-          // value={this.state.searchText}
           className={classes.searchField}
           size='small'
           variant='outlined'
           autoFocus
-          label='Введите фразу и нажмите Enter'
+          label='Enter - поиск, Esc - отмена'
           onChange = {this.handleChange}
           onKeyUp = {this.handleChange}
           />}
@@ -137,6 +147,8 @@ const mapStateToProps = ({ chatReducer, profileReducer }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   push,
   setSearchText,
+  loadChats,
+  loadProfile,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Header));
