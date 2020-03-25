@@ -57,7 +57,7 @@ const Message = (props) => {
   const id = props.msg._id;
   
   return (
-    <Paper className = {classes.root} data-id={props.msg._id}>
+    <Paper className={classes.root}>
       <div className = {classes.item}>
         <span className={msgStyle}> { sender }: </span>
         <p>{ text }</p>

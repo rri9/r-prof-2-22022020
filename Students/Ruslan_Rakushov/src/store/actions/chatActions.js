@@ -31,7 +31,8 @@ export const setCurrentChatId = (chatId) => ({
 
 export const loadChats = () => ({
   [RSAA]: {
-    endpoint: '/static_api/chats.json',
+    // endpoint: '/static_api/chats.json',
+    endpoint: '/api/chats',
     method: 'GET',
     types: [
       START_CHATS_LOADING,

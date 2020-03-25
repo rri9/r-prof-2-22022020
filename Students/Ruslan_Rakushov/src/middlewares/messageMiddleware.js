@@ -17,6 +17,7 @@ export default store => next => async (action) => {
                 store.dispatch(sendMessage(sender, text, action.chatId));
         }, 1000);
       }
+      //TODO Мигать на любое новое "чужое" сообщение, не только бота
       if (action.sender === 'Bot') {
         store.dispatch(blinkChat(action.chatId));
       };

@@ -5,10 +5,9 @@ import {
 } from '../actions/chatActions.js';
 
 const initialStore = {
-  chats: {
-  },
+  chats: [],
   chatWithNewMsg: null,
-  currentChatId: 1,
+  // currentChatId: null,
   isLoading: false,
 };
 
@@ -16,15 +15,13 @@ export default function chatReducer(store = initialStore, action) {
   switch (action.type) {
     //-------------------
     case ADD_CHAT:
-      let newId = 1;
-      if (Object.keys(store.chats).length) {
-        newId = +Object.keys(store.chats)[Object.keys(store.chats).length-1] + 1;
-      };
+      let newId = action.chatId;
+      if (!newId) break;
       return update(store, {
-        chats: {
-          [newId]: {$set: {title: action.title, msgsCount: 0}}
-        },
-        currentChatId: {$set: newId},
+        chats: { $push: [
+          { _id: newId, title: action.title },
+        ]},
+        currentChatId: { $set: newId },
       });
     //-------------------
     case BLINK_CHAT:
@@ -33,23 +30,28 @@ export default function chatReducer(store = initialStore, action) {
       });
     //-------------------
     case DEL_CHAT:
-      const existChatsId = Object.keys(store.chats).map((i) => +i);
-      if(existChatsId.length === 1) return null;
+      if (action.result !== 1) break;
       
-      let newCurrentChatId;
-      for(let i=0; i<existChatsId.length; i++) {
-        if(existChatsId[i]!==action.chatId) {
-          newCurrentChatId = existChatsId[i];
+      let newCurrentChatId = null;
+      for (let i = 0; i < store.chats.length; i++) {
+        if (store.chats[i]._id !== action.chatId) {
+          newCurrentChatId = store.chats[i]._id
           break;
         }
       }
+      const index = store.chats.findIndex(chat => (chat._id === action.chatId));
       
-      return update(store, {
-        chats: {
-          $unset: [action.chatId]
-        },
-        currentChatId: {$set: newCurrentChatId},
-      });
+      if (newCurrentChatId) {
+        return update(store, {
+          chats: { $splice: [[index, 1]] },
+          currentChatId: { $set: newCurrentChatId },
+        });
+      } else {
+        return update(store, {
+          chats: { $splice: [[index, 1]] },
+          currentChatId: { $set: '' },
+        });
+      }
     //-------------------
     case SET_CURRENT_CHAT:
       return update(store, {
@@ -62,11 +64,19 @@ export default function chatReducer(store = initialStore, action) {
       });
     //-------------------
     case SUCCESS_CHATS_LOADING:
-      return update(store, {
-        chats: { $set: action.payload.chats },
-        currentChatId: { $set: action.payload.currentChatId },
-        isLoading: { $set: false }
-      });
+      const currentChatId = action.payload.length ? action.payload[0]._id : null;
+      if (currentChatId) {
+        return update(store, {
+          chats: { $set: action.payload },
+          currentChatId: {$set: currentChatId},
+          isLoading: { $set: false }
+        });
+      } else {
+        return update(store, {
+          chats: { $set: action.payload },
+          isLoading: { $set: false }
+        });
+      }
     //-------------------
     case ERROR_CHATS_LOADING:
       return update(store, {

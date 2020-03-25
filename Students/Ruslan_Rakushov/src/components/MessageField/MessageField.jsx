@@ -106,8 +106,7 @@ class MessageField extends Component {
   getAllMsgsInChatDB(chatId, msgs) {
     const msgsArr = [];
     msgs.forEach((msg) => {
-      //TODO chatId из базы д.б. строкой => ===
-      if (msg.chatId == chatId) {
+      if (msg.chatId === chatId) {
         msgsArr.push(msg);
       }
     });
@@ -132,7 +131,7 @@ class MessageField extends Component {
     const regexp = new RegExp(filterStr);
     const msgsArr = [];
     msgs.forEach((msg) => {
-      if (msg.chatId === chatId && regexp.test(msgsObj[i].text)) {
+      if (msg.chatId === chatId && regexp.test(msg.text)) {
         msgsArr.push(msg);
       }
     });

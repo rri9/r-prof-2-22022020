@@ -55,9 +55,9 @@ class ChatList extends Component {
       newChatName: '',
     });
   };
-  handleDelItemClick = (event, index) => {
+  handleDelItemClick = (event, id) => {
     event.stopPropagation();
-    this.props.delChat(index);
+    this.props.delChat(id);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -71,41 +71,38 @@ class ChatList extends Component {
 
   render() {
     const { classes } = this.props;
-    const { chats } = this.props;
-    let { currentChatId } = this.props;
+    const { chats, currentChatId, chatWithNewMsg } = this.props;
     const listsArr = [];
-    for (let i in chats) {
-      i = +i;
-      currentChatId = +currentChatId;
-      const blinkClass = this.props.chatWithNewMsg == i ? 'blink' : '';
-      if (chats.hasOwnProperty(i)) {
-        listsArr.push(
-            <ListItem
-            className={blinkClass}
-            button
-            selected={currentChatId === (i) }
-            onClick={() => this.handleListItemClick(i)}
-            key={i}
-            disableGutters>
-              <ListItemIcon className={classes.itemIcon}>
-                <AssistantIcon />
-              </ListItemIcon>
-                <ListItemText primary={`${chats[i].title}`} />
-              <ListItemIcon
-              className={classes.delIcon}
-              onClick={(evt) => this.handleDelItemClick(evt, i)}>
-                <DelIcon />
-              </ListItemIcon>
-            </ListItem>
-        );
-      }
-    }
+    chats.forEach(chat => {
+      const blinkClass = chatWithNewMsg === chat._id ? 'blink' : '';
+      listsArr.push(
+        <ListItem
+          className={blinkClass}
+          button
+          selected={currentChatId === chat._id}
+          onClick={() => this.handleListItemClick(chat._id)}
+          key={chat._id}
+          disableGutters
+          // data-id={chat._id}
+        >
+            <ListItemIcon className={classes.itemIcon}>
+              <AssistantIcon />
+            </ListItemIcon>
+              <ListItemText primary={`${chat.title}`} />
+            <ListItemIcon
+            className={classes.delIcon}
+            onClick={(evt) => this.handleDelItemClick(evt, chat._id)}>
+              <DelIcon />
+            </ListItemIcon>
+        </ListItem>
+      );
+    });
 
     return (
       <div className={classes.root}>
         <Divider />
         <List>
-          { listsArr }
+          {listsArr.length ? listsArr : (<span>Чатов пока нет...</span>)}
           <Divider />
           <ListItem>
             <TextField
