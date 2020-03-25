@@ -10,10 +10,10 @@ import initReducers from './reducers';
 import middlewares from '../middlewares';
 
 // const persistConfig = {
-//   key: 'geekmessenger',
-//   storage,
-//   stateReconciler: autoMergeLevel2,
-//   whitelist: [ 'chatReducer' ],
+  // key: 'geekmessenger',
+  // storage,
+  // stateReconciler: autoMergeLevel2,
+  // whitelist: [ 'chatReducer' ],
 // };
 
 export const history = createBrowserHistory();
@@ -22,19 +22,19 @@ function initStore() {
   const initialStore = {};
 
   const store = createStore(
-    // persistReducer(persistConfig, initReducers(history)),
+//    persistReducer(persistConfig, initReducers(history)),
     initReducers(history),
     initialStore,
     compose(
       applyMiddleware(routerMiddleware(history), ...middlewares),
         window.__REDUX_DEVTOOLS_EXTENSION__ ?
-          window.__REDUX_DEVTOOLS_EXTENSION__() : () => {}
+          window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => {f}
     )
   );
   
-  // const persistor = persistStore(store);
+//  const persistor = persistStore(store);
   
-  return store;//, persistor };
+  return store //, persistor };
 };
 
 export default initStore;

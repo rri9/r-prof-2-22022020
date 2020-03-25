@@ -12,7 +12,7 @@ module.exports = {
         filename: 'js/bundle.js'
     },
     mode: 'development', //'production'
-    // mode: 'production',
+    //mode: 'production',
     devServer: {
         contentBase: './dist',
         port: 3037,

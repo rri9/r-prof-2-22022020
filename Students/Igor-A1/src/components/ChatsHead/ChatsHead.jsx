@@ -38,6 +38,18 @@ const LightTooltip = withStyles(theme => ({
 }))(Tooltip);
 
 class ChatsHead extends Component {
+  
+  changePushStatus = e => {
+    // pushElement.dataset.checked = status;
+    // pushElement.checked = status;
+    // if(status) {
+      // pushElement.classList.add( 'active' ) ;
+      // pushImgElement.src = '../images/push-on.png' ;
+    // } else {
+      // pushElement.classList.remove( 'active' ) ;
+      // pushImgElement.src = '../images/push-off.png' ;
+    // }
+  };
 
   render() {
     let { classes } = this.props;
@@ -46,9 +58,14 @@ class ChatsHead extends Component {
       <div className="chats-head">
         <AppBar position="static">
           <Toolbar className={classes.root}>
-            <LightTooltip  className={ classes.tooltip } arrow title="настройки" aria-label="настройки" placement="right">
-              <Fab className={classes.hovered} color="primary" aria-label="menu">
-                <Icon>menu</Icon>
+            <LightTooltip  className={ classes.tooltip } arrow title="блокировать уведомления" aria-label="блокировать уведомления" placement="right">
+              <Fab
+                className={classes.hovered}
+                color="primary"
+                aria-label="notifications_off"
+                onClick = { this.changePushStatus }
+              >
+                <Icon>notifications_off</Icon>
               </Fab>
             </LightTooltip >
             
