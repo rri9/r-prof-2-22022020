@@ -59,6 +59,7 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      _id: '',
       userName: '',
       userEmail: '',
       userAge: 0,
@@ -79,7 +80,7 @@ class Profile extends Component {
       openDialog: false,
     });
   }
-  handleSetUserInfoSave = (userName, userEmail, userAge) => {
+  handleSetUserInfoSave = (_id, userName, userEmail, userAge) => {
     if (!userName || !userEmail || !userAge) {
       this.setState({
         userNameErr: !userName,
@@ -88,22 +89,22 @@ class Profile extends Component {
       });
       return;
     }
-    this.props.setUserInfo(userName, userEmail, userAge);
+    this.props.setUserInfo(_id, userName, userEmail, userAge);
     this.setState({
       openDialog: false,
     });
   }
-  handleDelUserInfoClick = () => {
+  handleDelUserInfoClick = (_id) => {
     this.setState({
-      userNameErr: '',
-      userEmailErr: '',
-      userAgeErr: 0,
+      userNameErr: false,
+      userEmailErr: false,
+      userAgeErr: false,
     });
-    this.props.setUserInfo('', '', 0);
+    this.props.setUserInfo(_id, '', '', 0);
   }
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
-      this.handleSetUserInfoSave(this.state.userName, this.state.userEmail, this.state.userAge);
+      this.handleSetUserInfoSave(this.state._id, this.state.userName, this.state.userEmail, this.state.userAge);
     } else {
       this.setState({ [evt.target.name]: evt.target.value });
       if (!!evt.target.value) {
@@ -113,6 +114,12 @@ class Profile extends Component {
       }
     }
   };
+
+  componentDidMount() {
+    this.setState({
+      _id: this.props.profile._id
+    });
+  }
 
   render() {
     const { classes, profile } = this.props;
@@ -155,7 +162,7 @@ class Profile extends Component {
           </Button>
           <Button size="small"
               variant='outlined'
-              onClick={this.handleDelUserInfoClick}>
+              onClick={() => this.handleDelUserInfoClick(this.state._id)}>
               Удалить информацию о себе
           </Button>
           </div>
@@ -219,7 +226,7 @@ class Profile extends Component {
           <Button onClick={this.handleSetUserInfoCancel} color="primary">
             Отмена
           </Button>
-          <Button onClick={() => this.handleSetUserInfoSave(this.state.userName, this.state.userEmail, this.state.userAge)}
+          <Button onClick={() => this.handleSetUserInfoSave(this.state._id, this.state.userName, this.state.userEmail, this.state.userAge)}
             color="primary">
             Сохранить
           </Button>

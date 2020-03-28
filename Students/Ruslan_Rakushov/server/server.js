@@ -5,6 +5,7 @@ const uri = "mongodb+srv://geek:geek@cluster0-4qota.gcp.mongodb.net/reactGramm-v
 
 const messageController = require('./Controllers/messageController.js');
 const chatController = require('./Controllers/chatController.js');
+const profileController = require('./Controllers/profileController.js');
 
 const app = express();
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(express.json());
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 })
   .then(() => { console.log('DB connected') })
   .catch((err) => { console.log('DB connection error', err) });
@@ -23,6 +25,9 @@ app.delete('/message/:id', messageController.delete);
 app.get('/chats', chatController.load);
 app.post('/chat', chatController.add);
 app.delete('/chat/:id', chatController.delete);
+
+app.get('/profile', profileController.load);
+app.post('/profile', profileController.send);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
