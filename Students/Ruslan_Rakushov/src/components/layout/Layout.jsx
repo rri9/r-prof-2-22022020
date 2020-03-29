@@ -5,26 +5,25 @@ import PropTypes from 'prop-types';
 import Header from '../Header/Header.jsx';
 import ChatList from '../ChatList/ChatList.jsx';
 import MessageField from '../MessageField/MessageField.jsx';
-
+import InstallPopup from "../InstallPopup/InstallPopup.jsx";
+import './Layout.css';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 
 const useStyles = (theme => ({
-  root: {
-    width: '550px',
-    display: 'flex',
-  },
+  // root: {},
 }));
 
 class Layout extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
+      <div className='layout'>
         <Header />
         <ChatList />
         <MessageField />
+        <InstallPopup />
       </div>
     );
   };

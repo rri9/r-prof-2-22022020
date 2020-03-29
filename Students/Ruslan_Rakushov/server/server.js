@@ -6,6 +6,7 @@ const uri = "mongodb+srv://geek:geek@cluster0-4qota.gcp.mongodb.net/reactGramm-v
 const messageController = require('./Controllers/messageController.js');
 const chatController = require('./Controllers/chatController.js');
 const profileController = require('./Controllers/profileController.js');
+const installController = require('./Controllers/installController.js');
 
 const app = express();
 app.use(express.json());
@@ -28,6 +29,8 @@ app.delete('/chat/:id', chatController.delete);
 
 app.get('/profile', profileController.load);
 app.post('/profile', profileController.send);
+
+app.get('/install', installController.installCount);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
