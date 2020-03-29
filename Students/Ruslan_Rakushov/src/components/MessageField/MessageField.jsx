@@ -13,45 +13,9 @@ import { withStyles } from '@material-ui/core/styles';
 import {IconButton, TextField, Tooltip, CircularProgress } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
-const useStyles = (theme => ({
-  wrapper: {
-    width: '70vh',
-    marginTop: '70px',
-    // TODO height 70vh (в body или верхний контейнер 100vh,
-    //  дальше вложенным делаем свои или 100.
-    //  еще можно футером прибить (см.какое-то свойство css)
-  },
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxHeight: '75vh',
-    padding: '5px',
-    border: '1px solid grey',
-    borderRadius: '5px',
-    backgroundColor: 'lightgrey',
-    boxSizing: 'border-box',
-    overflowY: 'auto',
-  },
-  sendMsgField: {
-    width: '400px',
-    margin: '10px 0px',
-    display: 'flex',
-  },
-  sendText: {
-    width: 'inherit',
-  },
-  sendBtn: {
-    padding: '8px',
-  },
-  loadingCircle: {
-    alignSelf: 'center',
-    width: '60px',
-    height: '60px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-}));
+import './MessageField.css';
+
+const useStyles = (theme => ({}));
 
 class MessageField extends Component {
   constructor(props) {
@@ -171,21 +135,21 @@ class MessageField extends Component {
       );
     }
     return (
-      <div className={classes.wrapper}>
-        <div className={classes.root} ref={this.messageFieldEndRef}
+      <div className='message-field-wrapper'>
+        <div className='message-field' ref={this.messageFieldEndRef}
         >
           { isLoading ? (
-            <div className={classes.loadingCircle}>
+            <div className='loading-circle'>
               <CircularProgress />
             </div>
           )
           : MessagesArr }
         </div>
-        <div className={classes.sendMsgField}>
+        <div className='send-msg-field'>
           <TextField
             placeholder = 'Введите сообщение...'
             inputRef = {this.msgTextInput}
-            className = {classes.sendText}
+            className = 'send-text'
             variant = "outlined"
             size = "small"
             onChange = {this.handleChange}
@@ -195,7 +159,7 @@ class MessageField extends Component {
             />
           <Tooltip title="Отправить">
             <IconButton 
-              className={classes.sendBtn}
+              className='send-btn'
               name="sendMsgUI"
               onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}
             >

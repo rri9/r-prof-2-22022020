@@ -18,17 +18,17 @@ import { addChat, delChat, blinkChat, setCurrentChatId } from '../../store/actio
 import './ChatList.css';
 
 const useStyles = (theme => ({
-  root: {
-    width: '30vh',
-    minWidth: '200px',
-    marginTop: '70px',
-  },
-  itemIcon: {
-    minWidth: '35px',
-  },
-  delIcon: {
-    minWidth: '30px',
-  }
+  // root: {
+  //   width: '30vh',
+  //   minWidth: '200px',
+  //   marginTop: '70px',
+  // },
+  // itemIcon: {
+  //   minWidth: '35px',
+  // },
+  // delIcon: {
+  //   minWidth: '30px',
+  // }
 }));
 
 class ChatList extends Component {
@@ -83,14 +83,13 @@ class ChatList extends Component {
           onClick={() => this.handleListItemClick(chat._id)}
           key={chat._id}
           disableGutters
-          // data-id={chat._id}
         >
-            <ListItemIcon className={classes.itemIcon}>
+            <ListItemIcon className='item-icon'>
               <AssistantIcon />
             </ListItemIcon>
               <ListItemText primary={`${chat.title}`} />
             <ListItemIcon
-            className={classes.delIcon}
+            className='del-icon'
             onClick={(evt) => this.handleDelItemClick(evt, chat._id)}>
               <DelIcon />
             </ListItemIcon>
@@ -99,13 +98,16 @@ class ChatList extends Component {
     });
 
     return (
-      <div className={classes.root}>
+      <div
+        className='chat-list'
+      >
         <Divider />
         <List>
           {listsArr.length ? listsArr : (<span>Чатов пока нет...</span>)}
           <Divider />
           <ListItem>
             <TextField
+              className='chat-list-item'
               placeholder='Добавить чат'
               name='newChatName'
               value={this.state.newChatName}
@@ -116,7 +118,7 @@ class ChatList extends Component {
             />
             <Tooltip title="Добавить чат">
             <IconButton 
-              className={classes.addBtn}
+              className='add-btn'
               name="addChatUI"
               onClick={() => this.handleNewChat(this.state.newChatName)}>
               <AddIcon />

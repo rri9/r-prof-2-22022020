@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 //redux
@@ -25,7 +24,7 @@ const useStyles = (theme => ({
   root: {},
   appbar: {
     backgroundColor: 'skyblue',
-    maxWidth: '600px',
+    maxWidth: '700px',
     right: 'auto',
   },
   menuButton: {},
@@ -105,21 +104,16 @@ class Header extends Component {
               ReactGram &copy; {currentChatTitle}
             </Typography>
             <div className={classes.rightMenu}>
-              {profile.userName}
               <IconButton aria-label="search" color="inherit"
                 onClick={this.handleSeachBtnClick}
                 >
                 <SearchIcon/>
               </IconButton>
-              {/* <IconButton aria-label="notifications" color="inherit">
-                <Badge badgeContent={2} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton> */}
               <IconButton aria-label="account" color="inherit"
                 onClick={this.handleAccBtnClick}>
                 <AccountCircle/>
               </IconButton>
+              {profile.userName}
             </div>
           </Toolbar>
         {this.state.isSearchVisible &&

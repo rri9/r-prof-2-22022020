@@ -1,3 +1,19 @@
+.chat-list {
+  width: 29%;
+  min-width: 200px;
+}
+.item-icon {
+  min-width: 35px !important;
+}
+.del-icon {
+  min-width: 30px !important;
+}
+.add-btn {}
+
+.chat-list-item {
+  width: 100%;
+}
+
 .blink {
   background-color: lightskyblue !important;
   animation: blink 1s ease-in-out infinite;
@@ -17,5 +33,11 @@
   }
   to {
     background-color: lightskyblue !important;
+  }
+}
+
+@media screen and (max-width: 600px){
+  .chat-list {
+    width: 100%;
   }
 }
