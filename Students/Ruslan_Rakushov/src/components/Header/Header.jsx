@@ -13,6 +13,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
+import PushToggle from '../PushToggle/PushToggle.jsx';
+
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
@@ -109,6 +111,9 @@ class Header extends Component {
                 >
                 <SearchIcon/>
               </IconButton>
+            
+              <PushToggle />
+              
               <IconButton aria-label="account" color="inherit"
                 onClick={this.handleAccBtnClick}>
                 <AccountCircle/>

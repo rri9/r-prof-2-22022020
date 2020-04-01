@@ -8,6 +8,7 @@
 .message-field {
   display: flex;
   flex-direction: column;
+  height: calc(100% - 70px);
   max-height: 75vh;
   padding: 5px;
   border: 1px solid grey;
@@ -43,5 +44,6 @@
 @media screen and (max-width: 600px){
   .message-field-wrapper {
     width: 100%;
+    height: calc(100% - 55px);
   }
 }

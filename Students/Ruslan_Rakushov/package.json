@@ -4,7 +4,6 @@
   "description": "GeekBrains ReactJS course",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "webpack-dev-server",
     "build": "webpack",
     "serve": "nodemon ./server/server.js"

@@ -30,13 +30,13 @@
     }
  </script>
  <script>
-    window.addEventListener('appinstalled', (evt) => {
-      fetch('/api/install', {
-        method: 'GET',
-        credentials: 'include',
+   window.addEventListener('appinstalled', (evt) => {
+     fetch('/api/install', {
+       method: 'GET',
+       credentials: 'include',
       });
     });
-  </script>
-
+    </script>
+  <script defer src="./notifications.js"></script>
 </body>
 </html>
