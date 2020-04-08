@@ -2,8 +2,8 @@ const Profile = require('../Models/profile.js');
 
 module.exports = {
   async load(req, res) {
-    const profile = await Profile.find();
-    if (profile.length === 0) {
+    const profile = await Profile.findOne({ 'tokens.token': req.cookies.token });
+    if (!profile || profile.length === 0) {
       res.status(404);
       res.send();
     } else {

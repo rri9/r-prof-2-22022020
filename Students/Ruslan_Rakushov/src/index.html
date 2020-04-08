@@ -6,13 +6,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <title>ReactGram</title>
-  <link rel="manifest" href="manifest/manifest.json">
+  <!-- <link rel="manifest" href="manifest/manifest.json"> -->
 </head>
 <body>
-  <!-- <h1>GeekBrains - ReactJS ...</h1> -->
   <div id="app" class="app"></div>
 
-  <script>
+  <!-- <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
@@ -28,7 +27,7 @@
     } else {
         console.log('ServiceWorker не поддерживается');
     }
- </script>
+ </script> -->
  <script>
    window.addEventListener('appinstalled', (evt) => {
      fetch('/api/install', {
@@ -37,6 +36,6 @@
       });
     });
     </script>
-  <script defer src="./notifications.js"></script>
+  <!-- <script defer src="./notifications.js"></script> -->
 </body>
 </html>

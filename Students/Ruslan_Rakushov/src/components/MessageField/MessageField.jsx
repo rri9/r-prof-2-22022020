@@ -41,7 +41,7 @@ class MessageField extends Component {
 
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
-      this.handleSendMsg(evt.target.value, 'Me');
+      this.handleSendMsg(evt.target.value, this.props.profile.userName);
     } else {
       this.setState({ [evt.target.name]: evt.target.value });
     }
@@ -127,7 +127,12 @@ class MessageField extends Component {
     let MessagesArr = [];
     if (currentChatMsgs.length) {
       MessagesArr = currentChatMsgs.map((msg, index) => (
-        <Message key={index.toString()} msg={msg} delMessage={this.handleDelMsg}/>
+        <Message
+          key={index.toString()}
+          msg={msg}
+          userName={this.props.profile.userName}
+          delMessage={this.handleDelMsg}
+        />
       ));
     } else {
       MessagesArr = (
@@ -147,6 +152,7 @@ class MessageField extends Component {
         </div>
         <div className='send-msg-field'>
           <TextField
+            autoComplete='off'
             placeholder = 'Введите сообщение...'
             inputRef = {this.msgTextInput}
             className = 'send-text'
@@ -161,7 +167,7 @@ class MessageField extends Component {
             <IconButton 
               className='send-btn'
               name="sendMsgUI"
-              onClick={() => this.handleSendMsg(this.state.msgText, 'Me')}
+              onClick={() => this.handleSendMsg(this.state.msgText, this.props.profile.userName)}
             >
                 <SendOutlinedIcon />
               </IconButton>
@@ -172,12 +178,13 @@ class MessageField extends Component {
   }
 }
 
-const mapStateToProps = ({ messageReducer, chatReducer }) => ({
+const mapStateToProps = ({ messageReducer, chatReducer, profileReducer }) => ({
   msgs: messageReducer.msgs,
   isLoading: messageReducer.isLoading,
   searchText: messageReducer.searchText,
   chats: chatReducer.chats,
   currentChatId: chatReducer.currentChatId,
+  profile: profileReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

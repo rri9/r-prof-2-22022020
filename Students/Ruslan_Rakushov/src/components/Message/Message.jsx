@@ -22,7 +22,7 @@ const useStyles = makeStyles((props) => ({
       opacity: '0.2',
     },
     alignSelf: props => 
-      props.msg.sender === 'Me' ? 'flex-end' : 'flex-start',
+      props.msg.sender === props.userName ? 'flex-end' : 'flex-start',
   },
   item: {
     '& span': {
@@ -50,10 +50,14 @@ const useStyles = makeStyles((props) => ({
 }));
 
 const Message = (props) => {
+  console.log('in MSG props.msg.sender=', props.msg.sender);
+  console.log('in MSG props.userName=', props.userName);
+  console.log((props.msg.sender === props.userName));
+  
   const classes = useStyles(props);
   const sender = props.msg.sender ? props.msg.sender : 'Bot';
   const text = (props.msg.sender || props.msg.text) ? props.msg.text : 'Bot answering smth...';
-  const msgStyle = (props.msg.sender === 'Me') ? classes.userAnswer : classes.botAnswer;
+  const msgStyle = (props.msg.sender === props.userName) ? classes.userAnswer : classes.botAnswer;
   const id = props.msg._id;
   
   return (

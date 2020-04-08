@@ -34,6 +34,11 @@ export const loadChats = () => ({
     // endpoint: '/static_api/chats.json',
     endpoint: '/api/chats',
     method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': '',
+    },
     types: [
       START_CHATS_LOADING,
       {
@@ -42,7 +47,12 @@ export const loadChats = () => ({
           return getJSON(res).then(json => json);
         },
       },
-      ERROR_CHATS_LOADING,
+      {
+        type: ERROR_CHATS_LOADING,
+        payload: (action, state, res) => {
+          return getJSON(res).then(json => json);
+        },
+      },
     ],
   },
 });

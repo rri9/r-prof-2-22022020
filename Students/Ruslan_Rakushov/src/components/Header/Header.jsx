@@ -19,8 +19,8 @@ import PushToggle from '../PushToggle/PushToggle.jsx';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { setSearchText } from "../../store/actions/messageActions.js";
-import { loadChats } from "../../store/actions/chatActions.js";
-import { loadProfile } from "../../store/actions/profileActions.js";
+// import { loadChats } from "../../store/actions/chatActions.js";
+// import { loadProfile } from "../../store/actions/profileActions.js";
 
 const useStyles = (theme => ({
   root: {},
@@ -61,7 +61,10 @@ class Header extends Component {
   };
 
   handleAccBtnClick = () => {
-    this.props.push('/profile/');
+    // this.props.push('/profile/');
+    // TODO Если авторизован, то направлять в профиль
+    // this.props.push('/register/');
+    
   };
 
   handleSeachBtnClick = () => {
@@ -85,10 +88,10 @@ class Header extends Component {
     this.props.setSearchText(str);
   };
 
-  componentDidMount() {
-    this.props.loadChats();
-    this.props.loadProfile();
-  };
+  // componentDidMount() {
+  //   this.props.loadChats();
+  //   this.props.loadProfile();
+  // };
 
   render() {
     const { classes} = this.props;
@@ -146,8 +149,8 @@ const mapStateToProps = ({ chatReducer, profileReducer }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   push,
   setSearchText,
-  loadChats,
-  loadProfile,
+  // loadChats,
+  // loadProfile,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(Header));

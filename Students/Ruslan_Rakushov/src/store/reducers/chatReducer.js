@@ -9,6 +9,7 @@ const initialStore = {
   chatWithNewMsg: null,
   // currentChatId: null,
   isLoading: false,
+  chatsLoadingError: '',
 };
 
 export default function chatReducer(store = initialStore, action) {
@@ -79,8 +80,10 @@ export default function chatReducer(store = initialStore, action) {
       }
     //-------------------
     case ERROR_CHATS_LOADING:
+      console.log('ERROR_CHATS_LOADING payload:', action.payload.error)
       return update(store, {
-        isLoading: { $set: false }
+        isLoading: { $set: false },
+        chatsLoadingError: { $set: action.payload.error },
       });
     //-------------------
     default:
