@@ -42,5 +42,16 @@ userSchema.statics.findByCredentials = async function (email, password) {
   return user;
 };
 
+userSchema.statics.deleteAuthToken = async function (email) {
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    console.log(`No user with email '${email}' found`);
+    throw new Error(`Email '${email}' didn't found`);
+  }
+  user.token = '';
+  await user.save();
+  return 1;
+};
+
 const User = mongoose.model('user', userSchema);
 module.exports = User;

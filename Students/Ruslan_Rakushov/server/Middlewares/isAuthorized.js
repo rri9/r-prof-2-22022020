@@ -15,7 +15,7 @@ const isAuthorized = async (req, res, next) => {
       token: token,
     });
     if (!user) {
-      throw new Error("User dosn't exist");
+      throw new Error("You are not authorized!");
     }
     req.token = token;
     next();

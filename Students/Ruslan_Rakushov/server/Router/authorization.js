@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../Models/user');
+const isAuthorized = require('../Middlewares/isAuthorized');
 
 const router = express.Router();
 
@@ -31,6 +32,15 @@ router.post('/login', async (req, res) => {
     // TODO Если выбрано "Запомнить" res.cookie(`token=${token}; HttpOnly; path='/'`);
     // TODO del password
     res.status(200).json({ user });
+  } catch (err) {
+    res.status(400).json({ error: err.message});
+  }
+});
+
+router.post('/logout', isAuthorized, async (req, res) => {
+  try {
+    if (await User.deleteAuthToken(req.body.email))
+    res.status(200).json({ message: 'Logout success' });
   } catch (err) {
     res.status(400).json({ error: err.message});
   }
