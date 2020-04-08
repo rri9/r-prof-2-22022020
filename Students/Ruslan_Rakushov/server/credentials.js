@@ -6,5 +6,5 @@ const JWT_KEY = 'SecretPhraseForGeneratingJsonWebToken';
 
 module.exports = {
   MongoDBUser, MongoDBPassword,
-  JWT_KEY,
+  JWT_KEY,  
 };

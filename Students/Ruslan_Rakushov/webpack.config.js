@@ -6,7 +6,6 @@ module.exports = {
   entry: {
     main: path.resolve(__dirname, 'src', 'index.jsx'),
   },
-  // context: path.resolve(__dirname, 'src'),
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '',//If your page expects to find the bundle files on a different path, you can change this with the publicPath
@@ -19,8 +18,6 @@ module.exports = {
     historyApiFallback: {
       index: './src/index.html',
     },
-    //TODO 7 Закоментить contentBase
-    // contentBase: path.join(__dirname, 'dist'), //This tells webpack-dev-server to serve the files from the dist directory on localhost:8080
     port: 3000,
     hot: true,
     open: true,
