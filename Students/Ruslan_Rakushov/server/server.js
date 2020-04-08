@@ -4,7 +4,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
-const isAuthorized = require('./Middlewares/auth');
+const isAuthorized = require('./Middlewares/isAuthorized');
 const authorization = require('./Router/authorization');
 
 const { MongoDBUser, MongoDBPassword } = require('./credentials');
