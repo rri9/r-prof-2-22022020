@@ -4,7 +4,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
-const userRouter = require('./Router/userRouter.js');
+const isAuthorized = require('./Middlewares/auth');
+const authorization = require('./Router/authorization');
 
 const { MongoDBUser, MongoDBPassword } = require('./credentials');
 const port = 3300;
@@ -30,7 +31,9 @@ function start() {
   //   next();
   // });
 
-  // app.use(userRouter);
+  app.use(authorization); // Открытый доступ к авторизации/регистрации
+
+  app.use(isAuthorized);
 
   app.get('/', (req, res) => {
     res.send('Server is up!');

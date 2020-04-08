@@ -5,11 +5,11 @@ const { JWT_KEY } = require('../credentials');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  name:     { type: String },
-  email:    { type: String },
-  age:      { type: Number },
+  name: { type: String },
+  email: { type: String },
+  age: { type: Number },
   password: { type: String },
-  tokens:   {type: Array},
+  token: { type: String },
 });
 
 userSchema.pre('save', async function (next) {
@@ -22,24 +22,22 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, userName: user.userName }, JWT_KEY);
-  user.tokens = user.tokens.concat({ token });
+  const token = jwt.sign({ _id: user._id, email: user.email }, JWT_KEY);
+  user.token = token;
   await user.save();
   return token;
 };
 
-userSchema.statics.findByCredentials = async function (userName, password) {
-  const hash = await bcrypt.hash(password, 12);
-  console.log('hash=', hash)
-  const user = await User.findOne({ userName: userName });
+userSchema.statics.findByCredentials = async function (email, password) {
+  const user = await User.findOne({ email: email });
   if (!user) {
-    console.log(`No user ${userName} found`)
-    throw new Error({ error: 'Wrong user name'});
+    console.log(`No user with email '${email}' found`);
+    throw new Error(`Email '${email}' didn't found`);
   }
   const isPasswordMatch = await bcrypt.compare(password, user.password);
   if (!isPasswordMatch) {
-    console.log(`Wrong password for ${userName}`)
-    throw new Error({ error: 'Wrong password'});
+    console.log(`Wrong password for email '${email}'`);
+    throw new Error(`Wrong password for email '${email}'`);
   }
   return user;
 };
