@@ -8,6 +8,7 @@ const isAuthorized = require('./Middlewares/isAuthorized');
 const authorization = require('./Router/authorization');
 
 const chatController = require('./Controllers/chatController');
+const userController = require('./Controllers/userController');
 
 const { MongoDBUser, MongoDBPassword } = require('./credentials');
 const port = 3300;
@@ -40,6 +41,8 @@ function start() {
   app.get('/chats', chatController.load);
   app.post('/chat', chatController.add);
   app.delete('/chat/:id', chatController.delete);
+
+  app.post('/user', userController.update);
 
   app.get('/', (req, res) => {
     res.send('Server is up!');
