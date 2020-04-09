@@ -1,4 +1,5 @@
 const Chat = require('../Models/chat');
+const { Message } = require('../Models/message');
 
 module.exports = {
   async load(req, res) {
@@ -12,7 +13,7 @@ module.exports = {
 
   async add(req, res) {
     try {
-      let chat = new Chat(req.body.chat);
+      const chat = new Chat(req.body.chat);
       await chat.save();
       res.status(201).json({ chatId: chat._id });
     } catch (err) {
@@ -26,6 +27,29 @@ module.exports = {
       res.status(200).json({ message: 'Delete chat success' });
     } catch (err) {
       res.status(500).json({ error: `Error deleting chat: ${err.message}` });
+    }
+  },
+
+  async addMessage(req, res) {
+    try {
+      const chat = await Chat.findById(req.body.chatId);
+      const message = new Message(req.body.message);
+      chat.messages.push(message);
+      await chat.save();
+      res.status(200).send();
+    } catch (err) {
+      res.status(500).json({ error: `Error adding message: ${err.message}` });
+    }
+  },
+
+  async deleteMessage(req, res) {
+    try {
+      const chat = await Chat.findOne({ _id: req.body.chatId });
+      await chat.messages.pull(req.body.messageId);
+      await chat.save();
+      res.status(200).send();
+    } catch (err) {
+      res.status(500).json({ error: `Error deleting message: ${err.message}` });
     }
   },
 }

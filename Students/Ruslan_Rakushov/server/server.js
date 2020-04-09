@@ -42,6 +42,9 @@ function start() {
   app.post('/chat', chatController.add);
   app.delete('/chat/:id', chatController.delete);
 
+  app.post('/message', chatController.addMessage);
+  app.delete('/message', chatController.deleteMessage);
+
   app.post('/user', userController.update);
 
   app.get('/', (req, res) => {

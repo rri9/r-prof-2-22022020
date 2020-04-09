@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-// const Message = require('./message');
-
-const messageSchema = new Schema({
-  sender: { type: String, required: true },
-  text:   { type: String, required: true },
-});
+const { messageSchema } = require('./message');
 
 const chatSchema = new Schema({
   title: { type: String, required: true },
