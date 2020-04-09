@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     // TODO del password
     res.status(200).json({ user });
   } catch (err) {
-    res.status(400).json({ error: err.message});
+    res.status(500).json({ error: err.message});
   }
 });
 
@@ -42,7 +42,7 @@ router.post('/logout', isAuthorized, async (req, res) => {
     if (await User.deleteAuthToken(req.body.email))
     res.status(200).json({ message: 'Logout success' });
   } catch (err) {
-    res.status(400).json({ error: err.message});
+    res.status(500).json({ error: err.message});
   }
 });
 
