@@ -14,7 +14,7 @@ router.post('/registration', async (req, res) => {
     const user = new User(req.body);
     user.token = '';
     await user.save();
-    // TODO del password
+    user.password = '';
     res.status(201).json({ user });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
     }
     await user.generateAuthToken();
     // TODO Если выбрано "Запомнить" res.cookie(`token=${token}; HttpOnly; path='/'`);
-    // TODO del password
+    user.password = '';
     res.status(200).json({ user });
   } catch (err) {
     res.status(500).json({ error: err.message});
