@@ -16,7 +16,7 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     historyApiFallback: {
-      index: './src/index.html',
+      index: './index.html',
     },
     port: 3000,
     hot: true,
