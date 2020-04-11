@@ -10,12 +10,12 @@ import {
 const initialStore = {
   chats: [],
   // chatWithNewMsg: null,
-  // currentChatId: null,
+  currentChatId: undefined,
   isLoading: false,
   chatsLoadingError: '',
 };
 
-export default function chatReducer(store = initialStore, action) {
+export default function chatReducers(store = initialStore, action) {
   switch (action.type) {
     //-------------------
     // case ADD_CHAT:
@@ -68,7 +68,7 @@ export default function chatReducer(store = initialStore, action) {
       });
     //-------------------
     case CHATS_LOADING_SUCCESS:
-      const currentChatId = action.payload.length ? action.payload[0]._id : null;
+      const currentChatId = action.payload.length ? action.payload[0]._id : undefined;
       if (currentChatId) {
         return update(store, {
           chats: { $set: action.payload },
@@ -78,16 +78,16 @@ export default function chatReducer(store = initialStore, action) {
         });
       } else {
         return update(store, {
-          // chats: { $set: action.payload },
-          isLoading: { $set: false }
+          isLoading: { $set: false },
+          chatsLoadingError: { $set: 'No chats loaded' },
         });
       }
     //-------------------
     case CHATS_LOADING_ERROR:
-      console.log('ERROR_CHATS_LOADING payload:', action.payload.error)
+      console.log('ERROR_CHATS_LOADING payload:', action.payload)
       return update(store, {
         isLoading: { $set: false },
-        chatsLoadingError: { $set: action.payload.error },
+        chatsLoadingError: { $set: action.payload.toString() },
       });
     //-------------------
     default:

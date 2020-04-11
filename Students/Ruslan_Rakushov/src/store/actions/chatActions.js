@@ -98,7 +98,7 @@ export const loadChats = (email) => ({
       'Authorization': '',
     },
     body: JSON.stringify({
-      email: email,
+      email: email
     }),
     types: [
       CHATS_LOADING_START,
