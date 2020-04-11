@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import Router from '../../Router/Router.jsx';
+import Header from '../Header/Header.jsx';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
@@ -15,13 +16,17 @@ class Layout extends React.Component {
   
   render() {
     return (
-      <div>Layout</div>
+      <div>
+        <Header />
+        <div>Layout</div>
+        <Router />
+      </div>
     )
   }
 }
   
 // Проверка типов пропсов
-// Layout.PropTypes = {
+// Layout.propTypes = {
 //   prop1: PropTypes.string.isRequired,
 // }
 
