@@ -3,7 +3,7 @@ const User = require('../Models/user');
 module.exports = {
   async update(req, res) {
     try {
-      const user = await User.findOne({ email: req.body.email });
+      const user = await User.findOne({ email: req.email });
       user.name = req.body.name;
       user.age = req.body.age;
       await user.save();

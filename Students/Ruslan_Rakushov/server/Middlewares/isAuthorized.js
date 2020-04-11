@@ -11,13 +11,14 @@ const isAuthorized = async (req, res, next) => {
     const data = jwt.verify(token, JWT_KEY);
     const user = await User.findOne({
       _id: data._id,
-      email: req.body.email,
+      email: data.email,
       token: token,
     });
     if (!user) {
       throw new Error("You are not authorized!");
     }
     req.token = token;
+    req.email = data.email;
     next();
   } catch (err) {
     res.status(401).json({ error: 'Authorization error: ' + err.message });
