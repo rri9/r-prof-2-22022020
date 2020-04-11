@@ -5,6 +5,9 @@ import Header from '../Header/Header.jsx';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
+import { loadChats } from '../../store/actions/chatActions.js';
+
+import './Layout.css';
 
 class Layout extends React.Component {
   // Констуктор нужен для задания локального state или привязки обработчика событий
@@ -13,12 +16,14 @@ class Layout extends React.Component {
   //   this.state = {};
   // }
 
-  
+  componentDidMount() {
+    this.props.loadChats('1@1.ru'); //FIX hardcoded email
+  }
+
   render() {
     return (
-      <div>
+      <div className='layout'>
         <Header />
-        <div>Layout</div>
         <Router />
       </div>
     )
@@ -26,9 +31,9 @@ class Layout extends React.Component {
 }
   
 // Проверка типов пропсов
-// Layout.propTypes = {
-//   prop1: PropTypes.string.isRequired,
-// }
+Layout.propTypes = {
+  // loadChats: PropTypes.func.isRequired,
+}
 
 // Значения пропсов по умолчанию
 // Layout.defaultProps = {
@@ -37,6 +42,8 @@ class Layout extends React.Component {
   
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  loadChats,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);
