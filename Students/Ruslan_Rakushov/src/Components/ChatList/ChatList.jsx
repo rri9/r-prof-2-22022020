@@ -58,29 +58,31 @@ class ChatList extends React.Component {
   render() {
     const { chats, currentChatId, isLoading, chatsLoadingError } = this.props;
     const listsArr = [];
-    chats.forEach(chat => {
-      const blinkClass = chatWithNewMsg === chat._id ? 'blink' : '';
-      listsArr.push(
-        <ListItem
-          className={blinkClass}
-          button
-          selected={currentChatId === chat._id}
-          onClick={() => this.handleListItemClick(chat._id)}
-          key={chat._id}
-          disableGutters
-        >
-            <ListItemIcon className='item-icon'>
-              <AssistantIcon />
-            </ListItemIcon>
-            <ListItemText primary={`${chat.title}`} />
-            <ListItemIcon
-              className='del-icon'
-              onClick={(evt) => this.handleDelItemClick(evt, chat._id)}>
-              <DelIcon />
-            </ListItemIcon>
-        </ListItem>
-      );
-    });
+    if (!!chats || chats.length > 0) {
+      chats.forEach(chat => {
+        const blinkClass = chatWithNewMsg === chat._id ? 'blink' : '';
+        listsArr.push(
+          <ListItem
+            className={blinkClass}
+            button
+            selected={currentChatId === chat._id}
+            onClick={() => this.handleListItemClick(chat._id)}
+            key={chat._id}
+            disableGutters
+          >
+              <ListItemIcon className='item-icon'>
+                <AssistantIcon />
+              </ListItemIcon>
+              <ListItemText primary={`${chat.title}`} />
+              <ListItemIcon
+                className='del-icon'
+                onClick={(evt) => this.handleDelItemClick(evt, chat._id)}>
+                <DelIcon />
+              </ListItemIcon>
+          </ListItem>
+        );
+      });
+    };
 
     return (
       <div className='chat-list'>

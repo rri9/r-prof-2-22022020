@@ -25,7 +25,6 @@ export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 //       'Authorization': '',
 //     },
 //     body: JSON.stringify({
-//       email: email,
 //       chat: {
 //         title: title,
 //       },
@@ -57,9 +56,6 @@ export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 //       'Content-Type': 'application/json',
 //       'Authorization': '',
 //     },
-//     body: JSON.stringify({
-//       email: email,
-//     }),
 //     types: [
 //       CHAT_DEL_START,
 //       {
@@ -88,7 +84,7 @@ export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 //   chatId,
 // });
 
-export const loadChats = (email) => ({
+export const loadChats = () => ({
   [RSAA]: {
     endpoint: '/api/chats',
     method: 'GET',
@@ -97,9 +93,6 @@ export const loadChats = (email) => ({
       'Content-Type': 'application/json',
       'Authorization': '',
     },
-    body: JSON.stringify({
-      email: email
-    }),
     types: [
       CHATS_LOADING_START,
       {

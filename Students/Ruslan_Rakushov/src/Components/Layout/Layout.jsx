@@ -17,7 +17,7 @@ class Layout extends React.Component {
   // }
 
   componentDidMount() {
-    this.props.loadChats('1@1.ru'); //FIX hardcoded email
+    this.props.loadChats();
   }
 
   render() {
