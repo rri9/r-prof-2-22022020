@@ -84,10 +84,10 @@ export default function chatReducers(store = initialStore, action) {
       }
     //-------------------
     case CHATS_LOADING_ERROR:
-      console.log('ERROR_CHATS_LOADING payload:', action.payload)
+      console.log('ERROR_CHATS_LOADING payload:', action.payload.error)
       return update(store, {
         isLoading: { $set: false },
-        chatsLoadingError: { $set: action.payload.toString() },
+        chatsLoadingError: { $set: action.payload.error },
       });
     //-------------------
     default:
