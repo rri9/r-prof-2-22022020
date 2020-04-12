@@ -6,7 +6,7 @@ import {
 const initialStore = {
   user: {},
   isLoading: false,
-  userLoadingError: '',
+  userLoginError: '',
 };
 
 export default function userReducers(store = initialStore, action) {
@@ -19,14 +19,14 @@ export default function userReducers(store = initialStore, action) {
     case USER_LOGIN_SUCCESS:
       return update(store, {
         isLoading: { $set: false },
-        userLoadingError: { $set: '' },
+        userLoginError: { $set: '' },
         user: { $set: action.payload},
       });
     //-------------------
     case USER_LOGIN_ERROR:
       return update(store, {
         isLoading: { $set: false },
-        userLoadingError: { $set: action.payload },
+        userLoginError: { $set: action.payload },
       });
     //-------------------
     default:

@@ -73,7 +73,7 @@ class Login extends React.Component {
         align='center'
       >Авторизация</Typography>
 
-      {this.props.userLoadingError && <p className="error-message">{this.props.userLoadingError}</p>}
+      {this.props.userLoginError && <p className="error-message">{this.props.userLoginError}</p>}
 
       <form className='login-form'>
         <TextField
@@ -123,12 +123,12 @@ class Login extends React.Component {
 
 Login.propTypes = {
   user: PropTypes.object,
-  userLoadingError: PropTypes.string,
+  userLoginError: PropTypes.string,
 }
   
 const mapStateToProps = ({ userReducers }) => ({
   user: userReducers.user,
-  userLoadingError: userReducers.userLoadingError,
+  userLoginError: userReducers.userLoginError,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
