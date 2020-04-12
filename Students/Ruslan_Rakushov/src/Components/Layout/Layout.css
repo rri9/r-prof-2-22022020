@@ -28,3 +28,15 @@ body,
     justify-content: flex-start;
   }
 }
+
+.content-to-center {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.error-message {
+  color: darkred;
+  background-color: lightgoldenrodyellow;
+  text-align: center;
+  font-style: italic;
+}
