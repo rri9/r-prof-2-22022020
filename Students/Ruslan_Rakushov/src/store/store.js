@@ -1,6 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
+import thunk from 'redux-thunk';
 
 import initReducers from './reducers/index.js';
 import middlewares from './middlewares/index.js';
@@ -16,7 +17,8 @@ function initStore() {
     compose(
       applyMiddleware(
         routerMiddleware(history),
-        ...middlewares
+        ...middlewares,
+        thunk,
       ),
       window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
     ),
