@@ -14,6 +14,7 @@ router.post('/registration', async (req, res) => {
     const user = new User(req.body);
     user.token = '';
     await user.save();
+    // TODO Надо ли отправлять что-то кроме статуса после регистрации?
     user.password = '';
     res.status(201).json({ user });
   } catch (err) {

@@ -34,9 +34,28 @@ body,
   justify-content: space-evenly;
 }
 
+/* //TODO Сообщения в всплывающие окна? */
+/* //TODO лоадер поверх всего? */
 .error-message {
   color: darkred;
   background-color: lightgoldenrodyellow;
   text-align: center;
   font-style: italic;
+}
+
+.success-message {
+  color: darkgreen;
+  background-color: lightgreen;
+  text-align: center;
+  font-style: italic;
+}
+
+.loading-circle {
+  align-self: center;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
 }

@@ -22,6 +22,8 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
+  //TODO Добавить поле expiredIn и не хранить токен на сервере?
+  //TODO Либо Периодическое удаление токенов пользователей (добавить дату выдачи)
   const token = jwt.sign({ _id: user._id, email: user.email }, JWT_KEY);
   user.token = token;
   await user.save();
