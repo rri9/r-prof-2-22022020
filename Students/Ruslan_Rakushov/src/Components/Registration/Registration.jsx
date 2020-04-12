@@ -8,7 +8,7 @@ import { push } from "connected-react-router";
 import { registration } from '../../store/actions/userActions.js';
 
 // UI
-import { TextField, Typography, Button } from '@material-ui/core';
+import { TextField, Typography, Button, CircularProgress } from '@material-ui/core';
 import './Registration.css';
 
 class Registration extends React.Component {
@@ -68,6 +68,7 @@ class Registration extends React.Component {
   }
   
   render() {
+    const { userRegistrationError, isLoading } = this.props;
     return (
       <div className='register-container'>
       <Typography
@@ -75,7 +76,8 @@ class Registration extends React.Component {
         align='center'
       >Регистрация</Typography>
         
-      {this.props.userRegistrationError && <p className='error-message'> {this.props.userRegistrationError} </p>}
+      {userRegistrationError && <p className='error-message'> {userRegistrationError} </p>}
+      {isLoading && <div className='loading-circle'><CircularProgress /></div>}
       
       <form className='register-form'>
         <TextField
@@ -153,10 +155,12 @@ class Registration extends React.Component {
 
 Registration.propTypes = {
   userRegistrationError: PropTypes.string,
+  isLoading: PropTypes.bool,
 }
 
 const mapStateToProps = ({ userReducers }) => ({
   userRegistrationError: userReducers.userRegistrationError,
+  isLoading: userReducers.isLoading,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
