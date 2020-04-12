@@ -1,4 +1,4 @@
-import { RSAA, getJSON } from "redux-api-middleware";
+import { push } from "connected-react-router";
 
 export const CHATS_LOADING_START = '@@chat/CHATS_LOADING_START';
 export const CHATS_LOADING_SUCCESS = '@@chat/CHATS_LOADING_SUCCESS';
@@ -84,29 +84,41 @@ export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 //   chatId,
 // });
 
-export const loadChats = () => ({
-  [RSAA]: {
-    endpoint: '/api/chats',
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': '',
-    },
-    types: [
-      CHATS_LOADING_START,
-      {
-        type: CHATS_LOADING_SUCCESS,
-        payload: (action, state, res) => {
-          return getJSON(res).then(json => json);
-        },
+export const loadChats = (token) => {
+  return async (dispatch) => {
+    dispatch(loadChatsStart());
+
+    const response = await fetch('/api/chats', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-      {
-        type: CHATS_LOADING_ERROR,
-        payload: (action, state, res) => {
-          return getJSON(res).then(json => json);
-        },
-      },
-    ],
-  },
+    });
+
+    const result = await response.json();
+
+    if (response.status === 200) {
+      dispatch(loadChatsSuccess(result));
+    } else {
+      dispatch(loadChatsError(result.error));
+      if (result.error.startsWith('Authorization error')) {
+        dispatch(push('/'));
+      }
+    }
+  };
+};
+
+export const loadChatsStart = () => ({
+  type: CHATS_LOADING_START,
+});
+
+export const loadChatsSuccess = (chats) => ({
+  type: CHATS_LOADING_SUCCESS,
+  payload: chats
+});
+
+export const loadChatsError = (error) => ({
+  type: CHATS_LOADING_ERROR,
+  payload: error
 });

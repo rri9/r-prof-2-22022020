@@ -5,7 +5,6 @@ import Header from '../Header/Header.jsx';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { loadChats } from '../../store/actions/chatActions.js';
 
 import './Layout.css';
 
@@ -16,9 +15,7 @@ class Layout extends React.Component {
   //   this.state = {};
   // }
 
-  componentDidMount() {
-    this.props.loadChats();
-  }
+  componentDidMount() {}
 
   render() {
     return (
@@ -32,7 +29,7 @@ class Layout extends React.Component {
   
 // Проверка типов пропсов
 Layout.propTypes = {
-  // loadChats: PropTypes.func.isRequired,
+  // prop1: PropTypes.string.isRequired,
 }
 
 // Значения пропсов по умолчанию
@@ -43,7 +40,6 @@ Layout.propTypes = {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  loadChats,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

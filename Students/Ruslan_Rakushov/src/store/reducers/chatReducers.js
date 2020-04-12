@@ -1,10 +1,10 @@
 import update from 'immutability-helper';
 import {
   CHATS_LOADING_START, CHATS_LOADING_SUCCESS, CHATS_LOADING_ERROR,
-  CHAT_ADD_START, CHAT_ADD_SUCCESS, CHAT_ADD_ERROR,
-  CHAT_DEL_START, CHAT_DEL_SUCCESS, CHAT_DEL_ERROR,
-  CHAT_BLINK,
-  CHAT_SET_CURRENT,
+  // CHAT_ADD_START, CHAT_ADD_SUCCESS, CHAT_ADD_ERROR,
+  // CHAT_DEL_START, CHAT_DEL_SUCCESS, CHAT_DEL_ERROR,
+  // CHAT_BLINK,
+  // CHAT_SET_CURRENT,
 } from '../actions/chatActions.js';
 
 const initialStore = {
@@ -84,10 +84,9 @@ export default function chatReducers(store = initialStore, action) {
       }
     //-------------------
     case CHATS_LOADING_ERROR:
-      console.log('ERROR_CHATS_LOADING payload:', action.payload.error)
       return update(store, {
         isLoading: { $set: false },
-        chatsLoadingError: { $set: action.payload.error },
+        chatsLoadingError: { $set: action.payload },
       });
     //-------------------
     default:

@@ -14,6 +14,7 @@ import DelIcon from '@material-ui/icons/Delete';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
+import { loadChats } from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
@@ -46,6 +47,9 @@ class ChatList extends React.Component {
   //   this.props.delChat(id);
   // };
 
+  componentDidMount() {
+    this.props.loadChats(this.props.user.token);
+  }
   // componentDidUpdate(prevProps, prevState) {
   //   //TODO Вынести в отдельную функцию мигание чата
   //   if(this.props.chatWithNewMsg) {
@@ -60,7 +64,8 @@ class ChatList extends React.Component {
     const listsArr = [];
     if (!!chats || chats.length > 0) {
       chats.forEach(chat => {
-        const blinkClass = chatWithNewMsg === chat._id ? 'blink' : '';
+        // const blinkClass = chatWithNewMsg === chat._id ? 'blink' : '';
+        const blinkClass = ''; //FIX 
         listsArr.push(
           <ListItem
             className={blinkClass}
@@ -134,20 +139,24 @@ ChatList.propTypes = {
   isLoading: PropTypes.bool,
   chatsLoadingError: PropTypes.string,
   currentChatId: PropTypes.string,
+  loadChats: PropTypes.func,
+  user: PropTypes.object,
 }
 
 ChatList.defaultProps = {
 }
 
-const mapStateToProps = ({ chatReducers }) => ({
+const mapStateToProps = ({ chatReducers, userReducers }) => ({
   chats: chatReducers.chats,
   isLoading: chatReducers.isLoading,
   chatsLoadingError: chatReducers.chatsLoadingError,
   currentChatId: chatReducers.currentChatId,
+  user: userReducers.user,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
+    loadChats,
     // addChat,
     // delChat,
     // blinkChat,
