@@ -66,6 +66,7 @@ class Login extends React.Component {
   }
 
   render() {
+    const { userLoginError, userRegistrationMessage, isLoading } = this.props;
     return (
       <div className='login-container'>
       <Typography
@@ -73,7 +74,9 @@ class Login extends React.Component {
         align='center'
       >Авторизация</Typography>
 
-      {this.props.userLoginError && <p className="error-message">{this.props.userLoginError}</p>}
+      {userLoginError && <p className="error-message">{userLoginError}</p>}
+      {userRegistrationMessage && <p className='success-message'> {userRegistrationMessage} </p>}
+      {isLoading && <div className='loading-circle'><CircularProgress /></div>}
 
       <form className='login-form'>
         <TextField
@@ -124,11 +127,13 @@ class Login extends React.Component {
 Login.propTypes = {
   user: PropTypes.object,
   userLoginError: PropTypes.string,
+  userRegistrationMessage: PropTypes.string,
 }
   
 const mapStateToProps = ({ userReducers }) => ({
   user: userReducers.user,
   userLoginError: userReducers.userLoginError,
+  userRegistrationMessage: userReducers.userRegistrationMessage,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
