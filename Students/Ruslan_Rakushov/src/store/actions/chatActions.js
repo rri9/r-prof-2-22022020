@@ -8,9 +8,9 @@ export const CHAT_ADD_START = '@@chat/CHAT_ADD_START';
 export const CHAT_ADD_SUCCESS = '@@chat/CHAT_ADD_SUCCESS';
 export const CHAT_ADD_ERROR = '@@chat/CHAT_ADD_ERROR';
 
-// export const CHAT_DEL_START = '@@chat/CHAT_DEL_START';
-// export const CHAT_DEL_SUCCESS = '@@chat/CHAT_DEL_SUCCESS';
-// export const CHAT_DEL_ERROR = '@@chat/CHAT_DEL_ERROR';
+export const CHAT_DEL_START = '@@chat/CHAT_DEL_START';
+export const CHAT_DEL_SUCCESS = '@@chat/CHAT_DEL_SUCCESS';
+export const CHAT_DEL_ERROR = '@@chat/CHAT_DEL_ERROR';
 
 // export const CHAT_BLINK = '@@chat/CHAT_BLINK';
 export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
@@ -52,6 +52,8 @@ export const setCurrentChatId = (chatId) => ({
   chatId,
 });
 
+//------------------------------------------------------------
+
 export const loadChats = (token) => {
   return async (dispatch) => {
     dispatch(loadChatsStart());
@@ -76,7 +78,6 @@ export const loadChats = (token) => {
     }
   };
 };
-
 export const loadChatsStart = () => ({
   type: CHATS_LOADING_START,
 });
@@ -88,7 +89,9 @@ export const loadChatsError = (error) => ({
   type: CHATS_LOADING_ERROR,
   payload: error
 });
+
 //------------------------------------------------------------
+
 export const addChat = (title, token) => {
   return async (dispatch) => {
     dispatch(addChatStart());
@@ -120,7 +123,6 @@ export const addChat = (title, token) => {
     }
   };
 };
-
 export const addChatStart = () => ({
   type: CHAT_ADD_START,
 });
@@ -130,5 +132,45 @@ export const addChatSuccess = (chatId, title) => ({
 });
 export const addChatError = (error) => ({
   type: CHAT_ADD_ERROR,
+  payload: error
+});
+
+//------------------------------------------------------------
+
+export const delChat = (id, token) => {
+  return async (dispatch) => {
+    dispatch(delChatStart());
+
+    const response = await fetch(`/api/chat/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const result = await response.json();
+
+    if (response.status === 200) {
+      dispatch(delChatSuccess(id, result.message));
+      //TODO !!! Переключить на другой чат
+      dispatch(setCurrentChatId(''));
+    } else {
+      dispatch(delChatError(result.error));
+      if (result.error.startsWith('Authorization error')) {
+        dispatch(push('/'));
+      }
+    }
+  };
+};
+export const delChatStart = () => ({
+  type: CHAT_DEL_START,
+});
+export const delChatSuccess = (id, message) => ({
+  type: CHAT_DEL_SUCCESS,
+  payload: { id, message }
+});
+export const delChatError = (error) => ({
+  type: CHAT_DEL_ERROR,
   payload: error
 });

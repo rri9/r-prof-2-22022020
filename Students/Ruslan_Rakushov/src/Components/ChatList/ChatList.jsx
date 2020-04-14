@@ -14,7 +14,7 @@ import DelIcon from '@material-ui/icons/Delete';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { loadChats, addChat, setCurrentChatId } from '../../store/actions/chatActions.js';
+import { loadChats, addChat, delChat, setCurrentChatId } from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
@@ -44,10 +44,10 @@ class ChatList extends React.Component {
       newChatName: '',
     });
   };
-  // handleDelItemClick = (event, id) => {
-  //   event.stopPropagation();
-  //   this.props.delChat(id);
-  // };
+  handleDelItemClick = (event, id) => {
+    event.stopPropagation();
+    this.props.delChat(id, this.props.user.token);
+  };
 
   componentDidMount() {
     this.props.loadChats(this.props.user.token);
@@ -62,7 +62,7 @@ class ChatList extends React.Component {
   // };
 
   render() {
-    const { chats, currentChatId, isLoading, chatsLoadingError } = this.props;
+    const { chats, currentChatId, isLoading, chatsLoadingError, chatMessage } = this.props;
     const listsArr = [];
     if (!!chats || chats.length > 0) {
       chats.forEach(chat => {
@@ -108,6 +108,7 @@ class ChatList extends React.Component {
             (listsArr.length) ? listsArr : <div>Чатов пока нет...</div> 
           }
           
+          {/* //TODO Убирать через n сек. {chatMessage && <div>{chatMessage}</div>} */}
           <Divider />
           <ListItem>
             <TextField
@@ -141,6 +142,7 @@ ChatList.propTypes = {
   isLoading: PropTypes.bool,
   chatsLoadingError: PropTypes.string,
   currentChatId: PropTypes.string,
+  chatMessage: PropTypes.string,
   loadChats: PropTypes.func,
   user: PropTypes.object,
 }
@@ -153,6 +155,7 @@ const mapStateToProps = ({ chatReducers, userReducers }) => ({
   isLoading: chatReducers.isLoading,
   chatsLoadingError: chatReducers.chatsLoadingError,
   currentChatId: chatReducers.currentChatId,
+  chatMessage: chatReducers.chatMessage,
   user: userReducers.user,
 });
 
@@ -160,7 +163,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
   {
     loadChats,
     addChat,
-    // delChat,
+    delChat,
     // blinkChat,
     push,
     setCurrentChatId,

@@ -2,7 +2,7 @@ import update from 'immutability-helper';
 import {
   CHATS_LOADING_START, CHATS_LOADING_SUCCESS, CHATS_LOADING_ERROR,
   CHAT_ADD_START, CHAT_ADD_SUCCESS, CHAT_ADD_ERROR,
-  // CHAT_DEL_START, CHAT_DEL_SUCCESS, CHAT_DEL_ERROR,
+  CHAT_DEL_START, CHAT_DEL_SUCCESS, CHAT_DEL_ERROR,
   // CHAT_BLINK,
   CHAT_SET_CURRENT,
 } from '../actions/chatActions.js';
@@ -17,6 +17,7 @@ const initialStore = {
   currentChatId: undefined,
   isLoading: false,
   chatsLoadingError: '',
+  chatMessage: '',
   searchText: '',
   isMessageLoading: false,
   messageLoadingError: '',
@@ -55,7 +56,9 @@ export default function chatReducers(store = initialStore, action) {
     //-----------------------------------------
     case CHAT_SET_CURRENT:
       return update(store, {
-        currentChatId: {$set: action.chatId}
+        currentChatId: { $set: action.chatId },
+        chatsLoadingError: { $set: '' },
+        messageLoadingError: { $set: '' },
       });
     //-----------------------------------------
     case CHATS_LOADING_START:
@@ -89,10 +92,9 @@ export default function chatReducers(store = initialStore, action) {
       return update(store, {
         isLoading: { $set: true },
         chatsLoadingError: { $set: '' },
+        chatMessage: { $set: '' },
       });
     case CHAT_ADD_SUCCESS:
-      console.log(action);
-      
       return update(store, {
         chats: { $push: [{
           _id: action.payload.chatId,
@@ -102,11 +104,36 @@ export default function chatReducers(store = initialStore, action) {
         },
         isLoading: { $set: false },
         chatsLoadingError: { $set: '' },
+        chatMessage: { $set: action.payload.message },
       });
     case CHAT_ADD_ERROR:
       return update(store, {
         isLoading: { $set: false },
         chatsLoadingError: { $set: action.payload },
+        chatMessage: { $set: '' },
+      });
+    //-----------------------------------------
+    case CHAT_DEL_START:
+      return update(store, {
+        isLoading: { $set: true },
+        chatsLoadingError: { $set: '' },
+        chatMessage: { $set: '' },
+      });
+    case CHAT_DEL_SUCCESS:
+      {
+        const currentChatIndex = store.chats.findIndex(chat => chat._id === action.payload.id);
+        return update(store, {
+          chats: { $splice: [[currentChatIndex, 1]] },
+          isLoading: { $set: false },
+          chatsLoadingError: { $set: '' },
+          chatMessage: { $set: action.payload.message },
+        });
+      }
+    case CHAT_DEL_ERROR:
+      return update(store, {
+        isLoading: { $set: false },
+        chatsLoadingError: { $set: action.payload },
+        chatMessage: { $set: '' },
       });
     //-----------------------------------------
     case MESSAGE_ADD_START:

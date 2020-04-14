@@ -72,7 +72,7 @@ export const delMessage = (messageId, currentChatId, token) => {
     const result = await response.json();
 
     if (response.status === 200) {
-      dispatch(delMessageSuccess(messageId, currentChatId));
+      dispatch(delMessageSuccess(messageId, currentChatId)); //TODO result.message
     } else {
       dispatch(delMessageError(result.error));
       if (result.error.startsWith('Authorization error')) {
