@@ -15,7 +15,7 @@ module.exports = {
     try {
       const chat = new Chat(req.body.chat);
       await chat.save();
-      res.status(201).json({ chatId: chat._id });
+      res.status(201).json({ chatId: chat._id, message: 'Add chat success' });
     } catch (err) {
       res.status(500).json({ error: `Error adding chat: ${err.message}` });
     }
