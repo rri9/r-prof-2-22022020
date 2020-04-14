@@ -47,7 +47,7 @@ module.exports = {
       const chat = await Chat.findOne({ _id: req.body.chatId });
       await chat.messages.pull(req.body.messageId);
       await chat.save();
-      res.status(200).send();
+      res.status(200).json({message: 'Delete message success'});
     } catch (err) {
       res.status(500).json({ error: `Error deleting message: ${err.message}` });
     }
