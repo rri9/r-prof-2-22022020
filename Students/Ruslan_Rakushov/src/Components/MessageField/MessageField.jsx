@@ -37,6 +37,8 @@ class MessageField extends React.Component {
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
       this.handleSendMsg(evt.target.value, this.props.user._id, this.props.user.name);
+    } else if (evt.keyCode === 27) {
+      this.setState({ [evt.target.name]: '' });
     } else {
       this.setState({ [evt.target.name]: evt.target.value });
     }
