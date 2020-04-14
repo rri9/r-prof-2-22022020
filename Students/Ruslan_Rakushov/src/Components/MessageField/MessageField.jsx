@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import {
-  sendMessage,
-  // delMessage,
-} from '../../store/actions/messageActions.js';
+import { sendMessage, delMessage } from '../../store/actions/messageActions.js';
 // UI
 import {IconButton, TextField, Tooltip, CircularProgress } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
@@ -25,15 +22,16 @@ class MessageField extends React.Component {
   }
 
   handleSendMsg = (message, senderId, sender) => {
-    const { currentChatId } = this.props;
-    this.props.sendMessage(message, senderId, sender, currentChatId, this.props.user.token);
+    const { currentChatId, user } = this.props;
+    this.props.sendMessage(message, senderId, sender, currentChatId, user.token);
     this.setState({
       msgText: '',
     });
   };
 
-  handleDelMsg = (dataId) => {
-    // this.props.delMessage(dataId);
+  handleDelMsg = (messageId) => {
+    const { currentChatId, user } = this.props;
+    this.props.delMessage(messageId, currentChatId, user.token);
   };
 
   handleChange = (evt) => {
@@ -186,7 +184,7 @@ const mapStateToProps = ({ chatReducers, userReducers }) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
-  // delMessage,
+  delMessage,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
