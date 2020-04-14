@@ -14,7 +14,7 @@ import DelIcon from '@material-ui/icons/Delete';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { loadChats, setCurrentChatId } from '../../store/actions/chatActions.js';
+import { loadChats, addChat, setCurrentChatId } from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
@@ -29,19 +29,21 @@ class ChatList extends React.Component {
     this.props.setCurrentChatId(index);
     this.props.push(`/chat/${index}/`);
   };
-  // handleChange = (evt) => {
-  //   if (evt.keyCode === 13) {
-  //     this.handleNewChat(evt.target.value);
-  //   } else {
-  //     this.setState({ [evt.target.name]: evt.target.value });
-  //   }
-  // };
-  // handleNewChat = (title) => {
-  //   this.props.addChat(title);
-  //   this.setState({
-  //     newChatName: '',
-  //   });
-  // };
+  handleChange = (evt) => {
+    if (evt.keyCode === 13) {
+      this.handleNewChat(evt.target.value);
+    } else if (evt.keyCode === 27) {
+      this.setState({ [evt.target.name]: '' });
+    } else {
+      this.setState({ [evt.target.name]: evt.target.value });
+    }
+  };
+  handleNewChat = (title) => {
+    this.props.addChat(title, this.props.user.token);
+    this.setState({
+      newChatName: '',
+    });
+  };
   // handleDelItemClick = (event, id) => {
   //   event.stopPropagation();
   //   this.props.delChat(id);
@@ -157,7 +159,7 @@ const mapStateToProps = ({ chatReducers, userReducers }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
     loadChats,
-    // addChat,
+    addChat,
     // delChat,
     // blinkChat,
     push,
