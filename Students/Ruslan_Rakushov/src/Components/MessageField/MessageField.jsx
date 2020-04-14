@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { sendMessage, delMessage } from '../../store/actions/messageActions.js';
+import { blinkChat } from '../../store/actions/chatActions.js';
 // UI
 import {IconButton, TextField, Tooltip, CircularProgress } from '@material-ui/core';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
@@ -61,7 +62,7 @@ class MessageField extends React.Component {
     if (!chats) {
       return [];
     }
-    for (let i = 0; i < chats.length; i++) {
+    for (let i = 0; i < chats.length; i++) { //TODO arr.findIndex
       if (chats[i]._id === currentChatId) {
         msgs = chats[i].messages;
         break;
@@ -86,9 +87,22 @@ class MessageField extends React.Component {
     this.setFocusOnInput();
   };
 
-  componentDidUpdate() {
-      this.scrollToBottom();
-      this.setFocusOnInput();
+  componentDidUpdate(prevProps) {
+    this.scrollToBottom();
+    this.setFocusOnInput();
+    // FIX Мигание чата с новым сообщением - исправить, так не заработает...
+    if (!prevProps.chats.length) {
+      return;
+    }
+    const { chats: prevChats, currentChatId } = prevProps;
+    const { chats, blinkChat, user } = this.props;
+    const prevChatIndex = prevChats.findIndex(chat => chat._id === currentChatId);
+    const currentChatIndex = chats.findIndex(chat => chat._id === currentChatId);
+    const msgArr = chats[currentChatIndex].messages;
+    if (prevChats[prevChatIndex].messages.length < msgArr.length
+    && msgArr[msgArr.length-1].senderId !== user._id) {
+      blinkChat(currentChatId);
+    }
   };
 
   render() {
@@ -182,11 +196,13 @@ const mapStateToProps = ({ chatReducers, userReducers }) => ({
   isMessageLoading: chatReducers.isMessageLoading,
   messageLoadingError: chatReducers.messageLoadingError,
   user: userReducers.user,
+
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   sendMessage,
   delMessage,
+  blinkChat,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

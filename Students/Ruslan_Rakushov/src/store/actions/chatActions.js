@@ -12,40 +12,12 @@ export const CHAT_DEL_START = '@@chat/CHAT_DEL_START';
 export const CHAT_DEL_SUCCESS = '@@chat/CHAT_DEL_SUCCESS';
 export const CHAT_DEL_ERROR = '@@chat/CHAT_DEL_ERROR';
 
-// export const CHAT_BLINK = '@@chat/CHAT_BLINK';
+export const CHAT_BLINK_START = '@@chat/CHAT_BLINK_START';
+export const CHAT_BLINK_END = '@@chat/CHAT_BLINK_END';
+
 export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 
-// export const delChat = (chatId, email) => ({
-//   [RSAA]: {
-//     endpoint: `/api/chat/${chatId}`,
-//     method: 'DELETE',
-//     credentials: 'include',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': '',
-//     },
-//     types: [
-//       CHAT_DEL_START,
-//       {
-//         type: CHAT_DEL_SUCCESS,
-//         payload: (action, state, res) => {
-//           return getJSON(res).then(json => json);
-//         },
-//       },
-//       {
-//         type: CHAT_DEL_ERROR,
-//         payload: (action, state, res) => {
-//           return getJSON(res).then(json => json);
-//         },
-//       },
-//     ],
-//   },
-// });
-
-// export const blinkChat = (chatId) => ({
-//   type: CHAT_BLINK,
-//   chatId,
-// });
+//------------------------------------------------------------
 
 export const setCurrentChatId = (chatId) => ({
   type: CHAT_SET_CURRENT,
@@ -113,7 +85,6 @@ export const addChat = (title, token) => {
 
     if (response.status === 201) {
       dispatch(addChatSuccess(result.chatId, title));
-      // dispatch(push(`/chat/${result.chatId}/`));
       dispatch(setCurrentChatId(result.chatId));
     } else {
       dispatch(addChatError(result.error));
@@ -153,7 +124,6 @@ export const delChat = (id, token) => {
 
     if (response.status === 200) {
       dispatch(delChatSuccess(id, result.message));
-      //TODO !!! Переключить на другой чат
       dispatch(setCurrentChatId(''));
     } else {
       dispatch(delChatError(result.error));
@@ -173,4 +143,23 @@ export const delChatSuccess = (id, message) => ({
 export const delChatError = (error) => ({
   type: CHAT_DEL_ERROR,
   payload: error
+});
+
+//------------------------------------------------------------
+
+export const blinkChat = (id) => {
+  return (dispatch) => {
+    dispatch(blinkChatStart(id));
+    setTimeout(() => {
+      dispatch(blinkChatEnd(id));
+    }, 3000);
+  }
+}
+export const blinkChatStart = (id) => ({
+  type: CHAT_BLINK_START,
+  payload: id
+});
+export const blinkChatEnd = (id) => ({
+  type: CHAT_BLINK_END,
+  payload: id
 });

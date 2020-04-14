@@ -52,22 +52,16 @@ class ChatList extends React.Component {
   componentDidMount() {
     this.props.loadChats(this.props.user.token);
   }
-  // componentDidUpdate(prevProps, prevState) {
-  //   //TODO Вынести в отдельную функцию мигание чата
-  //   if(this.props.chatWithNewMsg) {
-  //     setTimeout(() => {
-  //       this.props.blinkChat(null);
-  //     }, 1500);
-  //   }
-  // };
 
   render() {
-    const { chats, currentChatId, isLoading, chatsLoadingError, chatMessage } = this.props;
+    const {
+      chats, currentChatId, isLoading, chatsLoadingError, chatsWithNewMsg, chatMessage
+    } = this.props;
     const listsArr = [];
     if (!!chats || chats.length > 0) {
       chats.forEach(chat => {
-        // const blinkClass = chatWithNewMsg === chat._id ? 'blink' : '';
-        const blinkClass = ''; //FIX 
+        let shouldBlink = chatsWithNewMsg.includes(chat._id);
+        const blinkClass = shouldBlink ? 'blink' : '';
         listsArr.push(
           <ListItem
             className={blinkClass}
@@ -143,6 +137,7 @@ ChatList.propTypes = {
   chatsLoadingError: PropTypes.string,
   currentChatId: PropTypes.string,
   chatMessage: PropTypes.string,
+  chatsWithNewMsg: PropTypes.array,
   loadChats: PropTypes.func,
   user: PropTypes.object,
 }
@@ -156,6 +151,7 @@ const mapStateToProps = ({ chatReducers, userReducers }) => ({
   chatsLoadingError: chatReducers.chatsLoadingError,
   currentChatId: chatReducers.currentChatId,
   chatMessage: chatReducers.chatMessage,
+  chatsWithNewMsg: chatReducers.chatsWithNewMsg,
   user: userReducers.user,
 });
 

@@ -3,7 +3,7 @@ import {
   CHATS_LOADING_START, CHATS_LOADING_SUCCESS, CHATS_LOADING_ERROR,
   CHAT_ADD_START, CHAT_ADD_SUCCESS, CHAT_ADD_ERROR,
   CHAT_DEL_START, CHAT_DEL_SUCCESS, CHAT_DEL_ERROR,
-  // CHAT_BLINK,
+  CHAT_BLINK_START, CHAT_BLINK_END,
   CHAT_SET_CURRENT,
 } from '../actions/chatActions.js';
 import {
@@ -13,7 +13,7 @@ import {
 
 const initialStore = {
   chats: [],
-  // chatWithNewMsg: null,
+  chatsWithNewMsg: [],
   currentChatId: undefined,
   isLoading: false,
   chatsLoadingError: '',
@@ -25,42 +25,13 @@ const initialStore = {
 
 export default function chatReducers(store = initialStore, action) {
   switch (action.type) {
-    // case BLINK_CHAT:
-    //   return update(store, {
-    //     chatWithNewMsg: {$set: action.chatId}
-    //   });
-    //-----------------------------------------
-    // case DEL_CHAT:
-    //   if (action.result !== 1) break;
-      
-    //   let newCurrentChatId = null;
-    //   for (let i = 0; i < store.chats.length; i++) {
-    //     if (store.chats[i]._id !== action.chatId) {
-    //       newCurrentChatId = store.chats[i]._id
-    //       break;
-    //     }
-    //   }
-    //   const index = store.chats.findIndex(chat => (chat._id === action.chatId));
-      
-    //   if (newCurrentChatId) {
-    //     return update(store, {
-    //       chats: { $splice: [[index, 1]] },
-    //       currentChatId: { $set: newCurrentChatId },
-    //     });
-    //   } else {
-    //     return update(store, {
-    //       chats: { $splice: [[index, 1]] },
-    //       currentChatId: { $set: '' },
-    //     });
-    //   }
-    //-----------------------------------------
     case CHAT_SET_CURRENT:
       return update(store, {
         currentChatId: { $set: action.chatId },
         chatsLoadingError: { $set: '' },
         messageLoadingError: { $set: '' },
       });
-    //-----------------------------------------
+//-----------------------------------------
     case CHATS_LOADING_START:
       return update(store, {
         isLoading: { $set: true }
@@ -87,7 +58,7 @@ export default function chatReducers(store = initialStore, action) {
         isLoading: { $set: false },
         chatsLoadingError: { $set: action.payload },
       });
-    //-----------------------------------------
+//-----------------------------------------
     case CHAT_ADD_START:
       return update(store, {
         isLoading: { $set: true },
@@ -112,7 +83,7 @@ export default function chatReducers(store = initialStore, action) {
         chatsLoadingError: { $set: action.payload },
         chatMessage: { $set: '' },
       });
-    //-----------------------------------------
+//-----------------------------------------
     case CHAT_DEL_START:
       return update(store, {
         isLoading: { $set: true },
@@ -135,7 +106,7 @@ export default function chatReducers(store = initialStore, action) {
         chatsLoadingError: { $set: action.payload },
         chatMessage: { $set: '' },
       });
-    //-----------------------------------------
+//-----------------------------------------
     case MESSAGE_ADD_START:
       return update(store, {
         isMessageLoading: { $set: true },
@@ -165,7 +136,7 @@ export default function chatReducers(store = initialStore, action) {
         isMessageLoading: { $set: false },
         messageLoadingError: { $set: action.payload },
       });
-    //-----------------------------------------
+//-----------------------------------------
     case MESSAGE_DEL_START:
       return update(store, {
         isMessageLoading: { $set: true },
@@ -192,7 +163,15 @@ export default function chatReducers(store = initialStore, action) {
         isMessageLoading: { $set: false },
         messageLoadingError: { $set: action.payload },
       });
-    
+//-----------------------------------------
+    case CHAT_BLINK_START:
+      return update(store, { chatsWithNewMsg: { $push: [action.payload] } });
+    case CHAT_BLINK_END:
+      {
+        const blinkingChatIdIndex = store.chatsWithNewMsg.indexOf(action.payload);
+        return update(store, { chatsWithNewMsg: { $splice: [[blinkingChatIdIndex, 1]] } });
+      }
+      
     default:
       return store;
   }
