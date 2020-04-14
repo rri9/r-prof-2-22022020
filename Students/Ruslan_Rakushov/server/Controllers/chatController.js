@@ -36,7 +36,7 @@ module.exports = {
       const message = new Message(req.body.message);
       chat.messages.push(message);
       await chat.save();
-      res.status(200).send();
+      res.status(200).json({messageId: message._id});
     } catch (err) {
       res.status(500).json({ error: `Error adding message: ${err.message}` });
     }
