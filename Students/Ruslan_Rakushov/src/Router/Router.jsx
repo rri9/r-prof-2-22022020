@@ -1,8 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Login from '../Components/Login/Login.jsx';
-import ChatList from '../Components/ChatList/ChatList.jsx';
 import Registration from '../Components/Registration/Registration.jsx';
+import ChatList from '../Components/ChatList/ChatList.jsx';
+import MessageField from '../Components/MessageField/MessageField.jsx';
 
 export default class Router extends React.Component {
   render() {
@@ -11,7 +12,10 @@ export default class Router extends React.Component {
         <Route exact path='/' component={Login} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/registration' component={Registration} />
-        <Route exact path='/chats' component={ ChatList }/>
+        <Route exact path='/chats'>
+          <ChatList />
+          <MessageField />
+        </Route>
       </Switch>
     );
   }

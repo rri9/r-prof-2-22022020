@@ -1,0 +1,48 @@
+.message-field-wrapper {
+  width: 69%;
+}
+.message-field {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 70px);
+  max-height: 75vh;
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: lightgrey;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.send-msg-field {
+  width: 100%;
+  margin: 10px 0px;
+  display: flex;
+}
+.send-msg-field button {
+  border-radius: 5px;
+}
+.send-text {
+  width: inherit;
+}
+.send-btn {
+  padding: 8px;
+}
+.loading-circle {
+  align-self: center;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 600px){
+  .message-field-wrapper {
+    width: 100%;
+    height: calc(100% - 55px);
+  }
+}
+
+.center {
+  text-align: center;
+}
