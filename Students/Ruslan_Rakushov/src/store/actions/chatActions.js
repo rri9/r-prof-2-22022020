@@ -4,16 +4,16 @@ export const CHATS_LOADING_START = '@@chat/CHATS_LOADING_START';
 export const CHATS_LOADING_SUCCESS = '@@chat/CHATS_LOADING_SUCCESS';
 export const CHATS_LOADING_ERROR = '@@chat/CHATS_LOADING_ERROR';
 
-export const CHAT_ADD_START = '@@chat/CHAT_ADD_START';
-export const CHAT_ADD_SUCCESS = '@@chat/CHAT_ADD_SUCCESS';
-export const CHAT_ADD_ERROR = '@@chat/CHAT_ADD_ERROR';
+// export const CHAT_ADD_START = '@@chat/CHAT_ADD_START';
+// export const CHAT_ADD_SUCCESS = '@@chat/CHAT_ADD_SUCCESS';
+// export const CHAT_ADD_ERROR = '@@chat/CHAT_ADD_ERROR';
 
-export const CHAT_DEL_START = '@@chat/CHAT_DEL_START';
-export const CHAT_DEL_SUCCESS = '@@chat/CHAT_DEL_SUCCESS';
-export const CHAT_DEL_ERROR = '@@chat/CHAT_DEL_ERROR';
+// export const CHAT_DEL_START = '@@chat/CHAT_DEL_START';
+// export const CHAT_DEL_SUCCESS = '@@chat/CHAT_DEL_SUCCESS';
+// export const CHAT_DEL_ERROR = '@@chat/CHAT_DEL_ERROR';
 
-export const CHAT_BLINK = '@@chat/CHAT_BLINK';
-export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
+// export const CHAT_BLINK = '@@chat/CHAT_BLINK';
+// export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 
 // export const addChat = (title, email) => ({
 //   [RSAA]: {

@@ -6,6 +6,9 @@ import {
   // CHAT_BLINK,
   // CHAT_SET_CURRENT,
 } from '../actions/chatActions.js';
+import {
+  MESSAGE_ADD_START, MESSAGE_ADD_SUCCESS, MESSAGE_ADD_ERROR,
+} from '../actions/messageActions.js';
 
 const initialStore = {
   chats: [],
@@ -13,11 +16,14 @@ const initialStore = {
   currentChatId: undefined,
   isLoading: false,
   chatsLoadingError: '',
+  searchText: '',
+  isMessageLoading: false,
+  messageLoadingError: '',
 };
 
 export default function chatReducers(store = initialStore, action) {
   switch (action.type) {
-    //-------------------
+    // -------------------
     // case ADD_CHAT:
     //   let newId = action.chatId;
     //   if (!newId) break;
@@ -27,12 +33,12 @@ export default function chatReducers(store = initialStore, action) {
     //     ]},
     //     currentChatId: { $set: newId },
     //   });
-    //-------------------
+    // -------------------
     // case BLINK_CHAT:
     //   return update(store, {
     //     chatWithNewMsg: {$set: action.chatId}
     //   });
-    //-------------------
+    // -------------------
     // case DEL_CHAT:
     //   if (action.result !== 1) break;
       
@@ -56,17 +62,16 @@ export default function chatReducers(store = initialStore, action) {
     //       currentChatId: { $set: '' },
     //     });
     //   }
-    //-------------------
+    // -------------------
     // case SET_CURRENT_CHAT:
     //   return update(store, {
     //     currentChatId: {$set: action.chatId}
     //   });
-    //-------------------
+    // -------------------
     case CHATS_LOADING_START:
       return update(store, {
         isLoading: { $set: true }
       });
-    //-------------------
     case CHATS_LOADING_SUCCESS:
       const currentChatId = action.payload.length ? action.payload[0]._id : undefined;
       if (currentChatId) {
@@ -82,13 +87,39 @@ export default function chatReducers(store = initialStore, action) {
           chatsLoadingError: { $set: 'No chats loaded' },
         });
       }
-    //-------------------
     case CHATS_LOADING_ERROR:
       return update(store, {
         isLoading: { $set: false },
         chatsLoadingError: { $set: action.payload },
       });
     //-------------------
+    case MESSAGE_ADD_START:
+      return update(store, {
+        isMessageLoading: { $set: true },
+        messageLoadingError: { $set: '' },
+      });
+    case MESSAGE_ADD_SUCCESS:
+      const currentChatIndex = store.chats.findIndex(chat => chat._id === action.payload.currentChatId);
+      if (currentChatIndex < 0) return store;
+      return update(store, {
+        chats: {
+          [currentChatIndex]: {
+            messages: { $push: [{
+                _id: action.payload.messageId,
+                senderId: action.payload.senderId,
+                sender: action.payload.sender,
+                text: action.payload.message
+            }]}
+          }
+        },
+        isMessageLoading: { $set: false },
+        messageLoadingError: { $set: '' },
+      });
+    case MESSAGE_ADD_ERROR:
+      return update(store, {
+        isMessageLoading: { $set: false },
+        messageLoadingError: { $set: action.payload },
+      });
     default:
       return store;
   }
