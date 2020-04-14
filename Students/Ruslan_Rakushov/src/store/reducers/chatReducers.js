@@ -4,7 +4,7 @@ import {
   // CHAT_ADD_START, CHAT_ADD_SUCCESS, CHAT_ADD_ERROR,
   // CHAT_DEL_START, CHAT_DEL_SUCCESS, CHAT_DEL_ERROR,
   // CHAT_BLINK,
-  // CHAT_SET_CURRENT,
+  CHAT_SET_CURRENT,
 } from '../actions/chatActions.js';
 import {
   MESSAGE_ADD_START, MESSAGE_ADD_SUCCESS, MESSAGE_ADD_ERROR,
@@ -64,10 +64,10 @@ export default function chatReducers(store = initialStore, action) {
     //     });
     //   }
     // -------------------
-    // case SET_CURRENT_CHAT:
-    //   return update(store, {
-    //     currentChatId: {$set: action.chatId}
-    //   });
+    case CHAT_SET_CURRENT:
+      return update(store, {
+        currentChatId: {$set: action.chatId}
+      });
     // -------------------
     case CHATS_LOADING_START:
       return update(store, {

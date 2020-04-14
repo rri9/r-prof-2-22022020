@@ -16,6 +16,10 @@ export default class Router extends React.Component {
           <ChatList />
           <MessageField />
         </Route>
+        <Route exact path='/chat/:chatId/' >
+          <ChatList />
+          <MessageField />
+        </Route>
       </Switch>
     );
   }

@@ -14,7 +14,7 @@ import DelIcon from '@material-ui/icons/Delete';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { loadChats } from '../../store/actions/chatActions.js';
+import { loadChats, setCurrentChatId } from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
@@ -25,10 +25,10 @@ class ChatList extends React.Component {
       newChatName: '',
     };
   }
-  // handleListItemClick = (index) => {
-  //   this.props.setCurrentChatId(index);
-  //   this.props.push(`/chat/${index}/`);
-  // };
+  handleListItemClick = (index) => {
+    this.props.setCurrentChatId(index);
+    this.props.push(`/chat/${index}/`);
+  };
   // handleChange = (evt) => {
   //   if (evt.keyCode === 13) {
   //     this.handleNewChat(evt.target.value);
@@ -160,8 +160,8 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     // addChat,
     // delChat,
     // blinkChat,
-    // push,
-    // setCurrentChatId,
+    push,
+    setCurrentChatId,
   },
   dispatch);
 

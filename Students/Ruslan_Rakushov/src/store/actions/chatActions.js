@@ -13,7 +13,7 @@ export const CHATS_LOADING_ERROR = '@@chat/CHATS_LOADING_ERROR';
 // export const CHAT_DEL_ERROR = '@@chat/CHAT_DEL_ERROR';
 
 // export const CHAT_BLINK = '@@chat/CHAT_BLINK';
-// export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
+export const CHAT_SET_CURRENT = '@@chat/CHAT_SET_CURRENT';
 
 // export const addChat = (title, email) => ({
 //   [RSAA]: {
@@ -79,10 +79,10 @@ export const CHATS_LOADING_ERROR = '@@chat/CHATS_LOADING_ERROR';
 //   chatId,
 // });
 
-// export const setCurrentChatId = (chatId) => ({
-//   type: CHAT_SET_CURRENT,
-//   chatId,
-// });
+export const setCurrentChatId = (chatId) => ({
+  type: CHAT_SET_CURRENT,
+  chatId,
+});
 
 export const loadChats = (token) => {
   return async (dispatch) => {
