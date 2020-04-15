@@ -4,6 +4,10 @@ export const USER_LOGIN_START = '@@profile/USER_LOGIN_START';
 export const USER_LOGIN_SUCCESS = '@@profile/USER_LOGIN_SUCCESS';
 export const USER_LOGIN_ERROR = '@@profile/USER_LOGIN_ERROR';
 
+export const USER_LOGOUT_START = '@@profile/USER_LOGOUT_START';
+export const USER_LOGOUT_SUCCESS = '@@profile/USER_LOGOUT_SUCCESS';
+export const USER_LOGOUT_ERROR = '@@profile/USER_LOGOUT_ERROR';
+
 export const USER_REGISTRATION_START = '@@profile/USER_REGISTRATION_START';
 export const USER_REGISTRATION_SUCCESS = '@@profile/USER_REGISTRATION_SUCCESS';
 export const USER_REGISTRATION_ERROR = '@@profile/USER_REGISTRATION_ERROR';
@@ -17,7 +21,6 @@ export const login = (email, password) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': '', // TODO При наличии токена - сразу авторизовать
       },
       body: JSON.stringify({ email: email, password: password })
     });
@@ -40,6 +43,41 @@ export const loginSuccess = (user) => ({
 });
 export const loginError = (error) => ({
   type: USER_LOGIN_ERROR,
+  payload: error
+});
+
+//----------logout
+export const logout = (email, token) => {
+  return async (dispatch) => {
+    dispatch(logoutStart());
+
+    let response = await fetch('/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ email: email })
+    });
+    let result = await response.json();
+
+    if (response.status === 200) {
+      dispatch(logoutSuccess(result.message));
+      dispatch(push('/login'));
+    } else {
+      dispatch(logoutError(result.error));
+    }
+  };
+};
+export const logoutStart = () => ({
+  type: USER_LOGOUT_START,
+});
+export const logoutSuccess = (message) => ({
+  type: USER_LOGOUT_SUCCESS,
+  payload: message
+});
+export const logoutError = (error) => ({
+  type: USER_LOGOUT_ERROR,
   payload: error
 });
 

@@ -2,6 +2,7 @@ import update from 'immutability-helper';
 import {
   USER_LOGIN_START, USER_LOGIN_SUCCESS, USER_LOGIN_ERROR,
   USER_REGISTRATION_START, USER_REGISTRATION_SUCCESS, USER_REGISTRATION_ERROR,
+  USER_LOGOUT_START, USER_LOGOUT_SUCCESS, USER_LOGOUT_ERROR,
 } from '../actions/userActions.js';
 
 const initialStore = {
@@ -32,7 +33,7 @@ export default function userReducers(store = initialStore, action) {
         userLoginError: { $set: action.payload },
         userRegistrationMessage: { $set: '' },
       });
-    //-------------------
+//--------------------------------------------------------------
     case USER_REGISTRATION_START:
       return update(store, {
         isLoading: { $set: true },
@@ -49,7 +50,25 @@ export default function userReducers(store = initialStore, action) {
         isLoading: { $set: false },
         userRegistrationError: { $set: action.payload },
       });
-    //-------------------
+//--------------------------------------------------------------
+    case USER_LOGOUT_START:
+      return update(store, {
+        isLoading: { $set: true },
+        userLoginError: { $set: '' },
+      });
+    case USER_LOGOUT_SUCCESS:
+      return update(store, {
+        user: { $set: {} },
+        isLoading: { $set: false },
+        userLoginError: { $set: '' },
+      });
+    case USER_LOGOUT_ERROR:
+      return update(store, {
+        user: { $set: {}},
+        isLoading: { $set: false },
+        userLoginError: { $set: action.payload },
+      });
+//--------------------------------------------------------------
     default:
       return store;
   }
