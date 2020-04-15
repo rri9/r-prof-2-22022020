@@ -4,7 +4,8 @@ import { push } from "connected-react-router";
 
 // UI
 import {
-  AppBar, Toolbar, IconButton, Typography, Badge, TextField, 
+  AppBar, Toolbar, IconButton, Typography, Badge, TextField,
+  Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -15,6 +16,7 @@ import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import { setSearchText } from '../../store/actions/messageActions.js';
+import { logout } from '../../store/actions/userActions.js';
 
 const styles = {
   appbar: {
@@ -50,7 +52,33 @@ class Header extends React.Component {
     this.state = {
       isSearchVisible: false,
       searchText: '',
+      isUserMenuVisible: false,
     };
+    this.anchorMenuRef = React.createRef();
+  }
+
+  handleAccBtnClick = () => {
+    this.setState({
+      isUserMenuVisible: !this.state.isUserMenuVisible,
+    });
+  }
+  handleUserMenuClose = (evt) => {
+    this.setState({
+      isUserMenuVisible: false,
+    });
+    const { user } = this.props;
+    switch (evt.target.id) {
+      case 'profile':
+        this.props.push('/profile');
+        break;
+      case 'chats':
+        this.props.push('/chats');
+        break;
+      case 'logout':
+        this.props.logout(user.email, user.token);
+        break;
+    }
+    this.props.push
   }
 
   handleSeachBtnClick = () => {
@@ -80,7 +108,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { chats, currentChatId, user } = this.props;
+    const { chats, currentChatId, user, pathname } = this.props;
     let currentChatIndex = null;
     let currentChatTitle = '';
     if (currentChatId) {
@@ -97,18 +125,23 @@ class Header extends React.Component {
             ReactGram &copy; {currentChatId && <>{currentChatTitle}</>}
           </Typography>
           <div style={styles.rightMenu}>
-            <IconButton aria-label="search" color="inherit"
-              onClick={this.handleSeachBtnClick}
-            >
-              <Badge color='secondary' variant='dot' invisible={!this.props.searchText}>
-                <SearchIcon/>
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="account" color="inherit"
-              onClick={this.handleAccBtnClick}>
-              <AccountCircle/>
-            </IconButton>
-            {!!user && <>{user.name}</>}
+          {pathname.includes('chat')
+            && <IconButton aria-label="search" color="inherit"
+                  onClick={this.handleSeachBtnClick}
+                >
+                  <Badge color='secondary' variant='dot' invisible={!this.props.searchText}>
+                    <SearchIcon />
+                  </Badge>
+              </IconButton>
+          }
+          {!!user.token && <>
+              <IconButton aria-label="account" color="inherit"
+                onClick={this.handleAccBtnClick}
+                ref={this.anchorMenuRef}>
+                <AccountCircle />
+              </IconButton>
+              <>{user.name}</>
+          </>}
           </div>
         </Toolbar>
         {this.state.isSearchVisible &&
@@ -132,6 +165,26 @@ class Header extends React.Component {
             </IconButton>
           </div>
         }
+        <Popper open={this.state.isUserMenuVisible} anchorEl={this.anchorMenuRef.current} role={undefined} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={(evt) => this.handleUserMenuClose(evt)}>
+                  <MenuList id="menu-list-grow">
+                    {!pathname.includes('profile')
+                      && <MenuItem id='profile' onClick={(evt) => this.handleUserMenuClose(evt)}>Profile</MenuItem>}
+                    {!pathname.includes('chat')
+                      && <MenuItem id='chats' onClick={(evt) => this.handleUserMenuClose(evt)}>Chats</MenuItem>}
+                    <MenuItem id='logout' onClick={(evt) => this.handleUserMenuClose(evt)}>Logout</MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </AppBar>
     );
   };
@@ -142,21 +195,26 @@ Header.propTypes = {
   chats: PropTypes.arrayOf(PropTypes.object),
   currentChatId: PropTypes.string,
   searchText: PropTypes.string,
+  pathname: PropTypes.string,
   setSearchText: PropTypes.func,
+  logout: PropTypes.func,
 }
 
 Header.defaultProps = {
 }
 
-const mapStateToProps = ({ chatReducers, userReducers }) => ({
+const mapStateToProps = ({ chatReducers, userReducers, router }) => ({
   user: userReducers.user,
   chats: chatReducers.chats,
   currentChatId: chatReducers.currentChatId,
   searchText: chatReducers.searchText,
+  pathname: router.location.pathname,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   setSearchText,
+  push,
+  logout,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

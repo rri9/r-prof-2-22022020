@@ -4,6 +4,7 @@ import Login from '../Components/Login/Login.jsx';
 import Registration from '../Components/Registration/Registration.jsx';
 import ChatList from '../Components/ChatList/ChatList.jsx';
 import MessageField from '../Components/MessageField/MessageField.jsx';
+import Profile from '../Components/Profile/Profile.jsx';
 
 export default class Router extends React.Component {
   render() {
@@ -20,6 +21,7 @@ export default class Router extends React.Component {
           <ChatList />
           <MessageField />
         </Route>
+        <Route exact path='/profile' component={Profile} />
       </Switch>
     );
   }
