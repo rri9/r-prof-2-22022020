@@ -6,6 +6,8 @@ export const MESSAGE_DEL_START = '@@message/MESSAGE_DEL_START';
 export const MESSAGE_DEL_SUCCESS = '@@message/MESSAGE_DEL_SUCCESS';
 export const MESSAGE_DEL_ERROR = '@@message/MESSAGE_DEL_ERROR';
 
+export const SEARCH_TEXT_SET = '@@message/SEARCH_TEXT_SET';
+
 export const sendMessage = (message, senderId, sender, currentChatId, token) => {
   return async (dispatch) => {
     dispatch(sendMessageStart());
@@ -81,17 +83,21 @@ export const delMessage = (messageId, currentChatId, token) => {
     }
   };
 };
-
 export const delMessageStart = () => ({
   type: MESSAGE_DEL_START,
 });
-
 export const delMessageSuccess = (messageId, currentChatId) => ({
   type: MESSAGE_DEL_SUCCESS,
   payload: { messageId, currentChatId }
 });
-
 export const delMessageError = (error) => ({
   type: MESSAGE_DEL_ERROR,
   payload: error
 });
+
+//---------------------------------
+
+export const setSearchText = (str) => ({
+  type: SEARCH_TEXT_SET,
+  str
+})

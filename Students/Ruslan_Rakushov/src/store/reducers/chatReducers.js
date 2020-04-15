@@ -9,6 +9,7 @@ import {
 import {
   MESSAGE_ADD_START, MESSAGE_ADD_SUCCESS, MESSAGE_ADD_ERROR,
   MESSAGE_DEL_START, MESSAGE_DEL_SUCCESS, MESSAGE_DEL_ERROR,
+  SEARCH_TEXT_SET, 
 } from '../actions/messageActions.js';
 
 const initialStore = {
@@ -171,6 +172,11 @@ export default function chatReducers(store = initialStore, action) {
         const blinkingChatIdIndex = store.chatsWithNewMsg.indexOf(action.payload);
         return update(store, { chatsWithNewMsg: { $splice: [[blinkingChatIdIndex, 1]] } });
       }
+//-----------------------------------------
+    case SEARCH_TEXT_SET:
+      return update(store, {
+        searchText: { $set: action.str}
+      });
       
     default:
       return store;

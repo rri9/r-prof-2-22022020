@@ -9,10 +9,12 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
+import { setSearchText } from '../../store/actions/messageActions.js';
 
 const styles = {
   appbar: {
@@ -23,14 +25,23 @@ const styles = {
   rightMenu: {
     marginLeft: 'auto',
   },
-  searchField: {
+  searchContainer: {
     position: 'absolute',
     right: '0px',
     bottom: '-25px',
     backgroundColor: 'lightgrey',
     opacity: '.9',
-    width: '245px',
+    width: '265px',
   },
+  searchField: {
+    width: '100%'
+  },
+  searchBtn: {
+    padding: '0',
+    margin: '7px 7px 0 0',
+    position: 'absolute',
+    right: '0',
+  }
 };
 
 class Header extends React.Component {
@@ -38,6 +49,7 @@ class Header extends React.Component {
     super(props);
     this.state = {
       isSearchVisible: false,
+      searchText: '',
     };
   }
 
@@ -48,16 +60,21 @@ class Header extends React.Component {
   };
 
   handleSearch = (str) => {
-    // this.props.setSearchText(str);
+    this.props.setSearchText(str);
   };
 
   handleChange = (evt) => {
     if (evt.keyCode === 13) {
-      this.handleSearch(evt.target.value);
+      this.handleSearch(this.state.searchText);
     } else if (evt.keyCode === 27) {
       this.handleSearch('');
       this.setState({
         isSearchVisible: !this.state.isSearchVisible,
+        searchText: '',
+      });
+    } else {
+      this.setState({
+        searchText: evt.target.value
       });
     }
   };
@@ -83,7 +100,9 @@ class Header extends React.Component {
             <IconButton aria-label="search" color="inherit"
               onClick={this.handleSeachBtnClick}
             >
-              <SearchIcon/>
+              <Badge color='secondary' variant='dot' invisible={!this.props.searchText}>
+                <SearchIcon/>
+              </Badge>
             </IconButton>
             <IconButton aria-label="account" color="inherit"
               onClick={this.handleAccBtnClick}>
@@ -93,16 +112,25 @@ class Header extends React.Component {
           </div>
         </Toolbar>
         {this.state.isSearchVisible &&
-          <TextField
-          name='searchText'
-          style={styles.searchField}
-          size='small'
-          variant='outlined'
-          autoFocus
-          label='Enter - поиск, Esc - отмена'
-          onChange = {this.handleChange}
-          onKeyUp = {this.handleChange}
-          />
+          <div style={styles.searchContainer}>
+            <TextField
+            name='searchText'
+            value={this.state.searchText}
+            style={styles.searchField}
+            size='small'
+            variant='outlined'
+            autoFocus
+            label='Enter - поиск, Esc - отмена'
+            onChange = {this.handleChange}
+            onKeyUp = {this.handleChange}
+            />
+            <IconButton 
+            style={styles.searchBtn}
+            onClick={() => this.handleSearch(this.state.searchText)}
+            >
+              <SendOutlinedIcon />
+            </IconButton>
+          </div>
         }
       </AppBar>
     );
@@ -113,6 +141,8 @@ Header.propTypes = {
   user: PropTypes.object,
   chats: PropTypes.arrayOf(PropTypes.object),
   currentChatId: PropTypes.string,
+  searchText: PropTypes.string,
+  setSearchText: PropTypes.func,
 }
 
 Header.defaultProps = {
@@ -122,8 +152,11 @@ const mapStateToProps = ({ chatReducers, userReducers }) => ({
   user: userReducers.user,
   chats: chatReducers.chats,
   currentChatId: chatReducers.currentChatId,
+  searchText: chatReducers.searchText,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  setSearchText,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
