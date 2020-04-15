@@ -63,6 +63,13 @@ class Header extends React.Component {
   };
 
   render() {
+    const { chats, currentChatId, user } = this.props;
+    let currentChatIndex = null;
+    let currentChatTitle = '';
+    if (currentChatId) {
+      currentChatIndex = chats.findIndex(chat => chat._id === currentChatId);
+      currentChatTitle = chats[currentChatIndex].title;
+    }
     return (
       <AppBar style={styles.appbar}>
         <Toolbar>
@@ -70,8 +77,7 @@ class Header extends React.Component {
             <MenuIcon />
           </IconButton> */}
           <Typography variant="h5">
-            ReactGram &copy;
-            {/* ReactGram &copy; {currentChatTitle} */}
+            ReactGram &copy; {currentChatId && <>{currentChatTitle}</>}
           </Typography>
           <div style={styles.rightMenu}>
             <IconButton aria-label="search" color="inherit"
@@ -83,7 +89,7 @@ class Header extends React.Component {
               onClick={this.handleAccBtnClick}>
               <AccountCircle/>
             </IconButton>
-            {/* {profile.userName} */}
+            {!!user && <>{user.name}</>}
           </div>
         </Toolbar>
         {this.state.isSearchVisible &&
@@ -104,12 +110,19 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
+  user: PropTypes.object,
+  chats: PropTypes.arrayOf(PropTypes.object),
+  currentChatId: PropTypes.string,
 }
 
 Header.defaultProps = {
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({ chatReducers, userReducers }) => ({
+  user: userReducers.user,
+  chats: chatReducers.chats,
+  currentChatId: chatReducers.currentChatId,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
