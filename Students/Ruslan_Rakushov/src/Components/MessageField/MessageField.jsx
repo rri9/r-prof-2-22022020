@@ -78,7 +78,7 @@ class MessageField extends React.Component {
   }
 
   getFilteredMsgsInChat(msgs, filterStr) {
-    const regexp = new RegExp(filterStr);
+    const regexp = new RegExp(filterStr, 'i');
     const msgsArr = [];
     msgs.forEach((msg) => {
       if (regexp.test(msg.text)) {
