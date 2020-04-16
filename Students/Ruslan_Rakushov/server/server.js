@@ -3,6 +3,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const http = require('http');
+const socketIO = require('socket.io');
 
 const isAuthorized = require('./Middlewares/isAuthorized');
 const authorization = require('./Router/authorization');
@@ -18,7 +20,6 @@ mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
-  // useCreateIndex: true, // FIX Is it necessary for auth?
 })
   .then(() => { console.log('DB connected') })
   .then(() => { start() })
@@ -26,6 +27,15 @@ mongoose.connect(uri, {
 
 function start() {
   const app = express();
+
+  // WebSockets
+  const server = http.Server(app);
+  const io = socketIO(server);
+  app.use((req, res, next) => {
+    req.io = io;
+    next();
+  });
+
   app.use(express.json());
   app.use(cookieParser());
   // app.use((req, res, next) => {
@@ -51,7 +61,7 @@ function start() {
     res.send('Server is up!');
   });
 
-  app.listen(port, () => {
+  server.listen(port, () => {
     console.log(`Server listening on port ${port}...`);
   });
 }
