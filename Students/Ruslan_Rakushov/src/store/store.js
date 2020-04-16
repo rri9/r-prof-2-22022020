@@ -9,6 +9,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import initReducers from './reducers/index.js';
 import middlewares from './middlewares/index.js';
 
+//FIX Сохранять только user из userReducers 
 const rootPersistConfig = {
   key: 'ReactGram_v2',
   storage,
