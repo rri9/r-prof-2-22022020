@@ -64,7 +64,7 @@ export const loadChatsError = (error) => ({
 
 //------------------------------------------------------------
 
-export const addChat = (title, token) => {
+export const addChat = (title, userId, token) => {
   return async (dispatch) => {
     dispatch(addChatStart());
 
@@ -78,6 +78,7 @@ export const addChat = (title, token) => {
         chat: {
           title: title
         },
+        userId,
       }),
     });
 
@@ -108,7 +109,7 @@ export const addChatError = (error) => ({
 
 //------------------------------------------------------------
 
-export const delChat = (id, token) => {
+export const delChat = (id, userId, token) => {
   return async (dispatch) => {
     dispatch(delChatStart());
 
@@ -118,11 +119,15 @@ export const delChat = (id, token) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        userId,
+      }),
     });
 
     const result = await response.json();
 
     if (response.status === 200) {
+      dispatch(push(`/chats`));
       dispatch(delChatSuccess(id, result.message));
       dispatch(setCurrentChatId(''));
     } else {

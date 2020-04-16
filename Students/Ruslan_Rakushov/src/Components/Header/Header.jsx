@@ -113,7 +113,7 @@ class Header extends React.Component {
     let currentChatTitle = '';
     if (currentChatId) {
       currentChatIndex = chats.findIndex(chat => chat._id === currentChatId);
-      currentChatTitle = chats[currentChatIndex].title;
+      currentChatIndex >=0 ? currentChatTitle = chats[currentChatIndex].title : '';
     }
     return (
       <AppBar style={styles.appbar}>

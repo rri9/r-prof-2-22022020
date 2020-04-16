@@ -27,8 +27,14 @@ const initialStore = {
 export default function chatReducers(store = initialStore, action) {
   switch (action.type) {
     case CHAT_SET_CURRENT:
+      let newCurrentChatId = '';
+      if (action.chatId !== '') {
+        newCurrentChatId = action.chatId;
+      } else if (store.chats.length > 0) {
+        newCurrentChatId = store.chats[0]._id;
+      }
       return update(store, {
-        currentChatId: { $set: action.chatId },
+        currentChatId: { $set: newCurrentChatId },
         chatsLoadingError: { $set: '' },
         messageLoadingError: { $set: '' },
       });

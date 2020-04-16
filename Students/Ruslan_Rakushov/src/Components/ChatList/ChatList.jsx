@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { push } from "connected-react-router";
+import socketIOclient from 'socket.io-client';
 
 // UI
 import {
@@ -14,7 +15,10 @@ import DelIcon from '@material-ui/icons/Delete';
 //redux
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { loadChats, addChat, delChat, setCurrentChatId } from '../../store/actions/chatActions.js';
+import {
+  loadChats, addChat, delChat, setCurrentChatId,
+  addChatSuccess, delChatSuccess, blinkChat,
+} from '../../store/actions/chatActions.js';
 
 import './ChatList.css';
 
@@ -24,6 +28,7 @@ class ChatList extends React.Component {
     this.state = {
       newChatName: '',
     };
+    this.socket = socketIOclient('http://localhost:3300');
   }
   handleListItemClick = (index) => {
     this.props.setCurrentChatId(index);
@@ -39,18 +44,30 @@ class ChatList extends React.Component {
     }
   };
   handleNewChat = (title) => {
-    this.props.addChat(title, this.props.user.token);
+    this.props.addChat(title, this.props.user._id, this.props.user.token);
     this.setState({
       newChatName: '',
     });
   };
   handleDelItemClick = (event, id) => {
     event.stopPropagation();
-    this.props.delChat(id, this.props.user.token);
+    this.props.delChat(id, this.props.user._id, this.props.user.token);
   };
 
   componentDidMount() {
     this.props.loadChats(this.props.user.token);
+    this.socket.on('chatAdd', chat => {
+      if (chat.userId !== this.props.user._id) {
+        this.props.addChatSuccess(chat.chatId, chat.title);
+        this.props.blinkChat(chat.chatId);
+      }
+    });
+    this.socket.on('chatDel', chat => {
+      if (chat.userId !== this.props.user._id) {
+        this.props.setCurrentChatId('');
+        this.props.delChatSuccess(chat.chatId, '');
+      }
+    })
   }
 
   render() {
@@ -140,6 +157,9 @@ ChatList.propTypes = {
   chatsWithNewMsg: PropTypes.array,
   loadChats: PropTypes.func,
   user: PropTypes.object,
+  addChatSuccess: PropTypes.func,
+  delChatSuccess: PropTypes.func,
+  blinkChat: PropTypes.func,
 }
 
 ChatList.defaultProps = {
@@ -163,6 +183,9 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     // blinkChat,
     push,
     setCurrentChatId,
+    addChatSuccess,
+    delChatSuccess,
+    blinkChat,
   },
   dispatch);
 
