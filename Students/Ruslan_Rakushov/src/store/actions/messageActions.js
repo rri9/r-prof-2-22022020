@@ -55,7 +55,7 @@ export const sendMessageError = (error) => ({
   payload: error
 });
 //---------------------------------
-export const delMessage = (messageId, currentChatId, token) => {
+export const delMessage = (messageId, currentChatId, userId, token) => {
   return async (dispatch) => {
     dispatch(delMessageStart());
 
@@ -67,7 +67,8 @@ export const delMessage = (messageId, currentChatId, token) => {
       },
       body: JSON.stringify({
         chatId: currentChatId,
-        messageId: messageId
+        messageId: messageId,
+        userId,
       }),
     });
 
